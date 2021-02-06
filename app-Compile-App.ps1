@@ -5,7 +5,7 @@ Import-Module Microsoft.PowerShell.Utility
 $compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse alc.exe | select -First 1
 $compPath = $compilator.PSParentPath
 
-$paramRules    = @("/ruleset:""$Workspace$('\_ForNav.ruleset.json')""")
+$paramRules    = @("/ruleset:""$Workspace$('\ps-bc-utils\_ForNav.ruleset.json')""")
 $paramNoWarn   = @("/nowarn:AL0603")
 $paramAnalyzer = @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.CodeCop.dll')")
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.AppSourceCop.dll')")

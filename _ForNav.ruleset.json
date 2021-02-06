@@ -1,0 +1,112 @@
+{
+    "name": "ForNAV",
+    "description": "ForNAV Rules",
+    "generalAction": "Hidden",
+    "rules": [
+        {
+            "id": "BL0254",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0269",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0273",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0299",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0432",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0452",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0457",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0482",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0486",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0509",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0523",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0547",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0551",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0600",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0601",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0602",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0603",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0604",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0606",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0615",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        },
+        {
+            "id": "BL0667",
+            "action": "Hidden",
+            "justification": "Not possible to solve"
+        }
+    ]
+}
