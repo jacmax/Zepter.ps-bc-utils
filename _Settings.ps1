@@ -1,5 +1,10 @@
-$Workspace = 'C:\DEVELOPER'
-$AppFolder = 'C:\DEVELOPER\APP\'
+if (Test-Path 'D:\DEV-EXT' -PathType Container) {
+    $Workspace = 'D:\DEV-EXT'
+    $AppFolder = 'D:\DEV-EXT\APP\'
+} else {
+    $Workspace = 'C:\DEVELOPER'
+    $AppFolder = 'C:\DEVELOPER\APP\'
+}
 
 $SymbolFolder = '.alpackages'
 

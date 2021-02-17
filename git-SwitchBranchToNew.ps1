@@ -1,6 +1,6 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
-$ToBranch = 'JAM-update-app-json-file-20210206'
+$ToBranch = 'JAM-update-ZS7.01.01-20210217'
 
 $currentLocation = Get-Location
 foreach ($Target in $TargetRepos) {
