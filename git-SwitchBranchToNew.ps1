@@ -1,6 +1,7 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
-$ToBranch = 'JAM-update-BC17-21-20210223'
+$ToBranch = 'JAM-update-Commission-20210224'
+#Assembly BOM error
 #Repr Contract: "Commissions Calculated" cannot be found
 
 $currentLocation = Get-Location
