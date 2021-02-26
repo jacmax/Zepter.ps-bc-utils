@@ -25,22 +25,34 @@
 			"path": "bc-sales-contracts\\Sales Contracts - Test"
 		},
 		{
-			"path": "bc-personal-vouchers\\Personal Vouchers - App"
-		},
-		{
-			"path": "bc-personal-vouchers\\Personal Vouchers - Test"
-		},
-		{
 			"path": "bc-advance-payments\\Payments - App"
 		},
 		{
 			"path": "bc-advance-payments\\Payments - Test"
 		},
 		{
+			"path": "bc-personal-vouchers\\Personal Vouchers - App"
+		},
+		{
+			"path": "bc-personal-vouchers\\Personal Vouchers - Test"
+		},
+		{
+			"path": "bc-samples\\Samples - App"
+		},
+		{
+			"path": "bc-samples\\Samples - Test"
+		},
+		{
 			"path": "bc-commissions\\Commission - App"
 		},
 		{
 			"path": "bc-commissions\\Commission - Test"
+		},
+		{
+			"path": "bc-service\\Service - App"
+		},
+		{
+			"path": "bc-service\\Service - Test"
 		},
 		{
 			"path": "bc-gdpr\\GDPR - App"
@@ -55,23 +67,11 @@
 			"path": "bc-import-purchases\\Import Purchase Documents - Test"
 		},
 		{
-			"path": "bc-samples\\Samples - App"
-		},
-		{
-			"path": "bc-samples\\Samples - Test"
-		},
-		{
-			"path": "bc-service\\Service - App"
-		},
-		{
-			"path": "bc-service\\Service - Test"
-		},
-		{
 			"path": "ps-bc-utils"
 		}
 	],
 	"settings": {
-	    "al.ruleSetPath": "C:\\DEVELOPER\\_ForNav.ruleset.json",
+	    "al.ruleSetPath": "D:\\DEV-EXT\\ps-bc-utils\\_ForNav.ruleset.json",
 		"al.codeAnalyzers": ["${AppSourceCop}"]
 	}
 }
