@@ -8,6 +8,8 @@ if (Test-Path 'D:\DEV-EXT' -PathType Container) {
 
 $SymbolFolder = '.alpackages'
 
+$dotNetProbingPaths = "D:\DEV-BASEAPP\BC170-ProgramFiles","D:\DEV-BASEAPP\BC170-ProgramFilesX86","C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8","C:\Windows\assembly"
+
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | where{$_.PSParentPath -like "*App*"}
 
 $TargetRepos = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName

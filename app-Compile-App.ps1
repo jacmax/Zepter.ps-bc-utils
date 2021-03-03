@@ -11,6 +11,10 @@ $paramAnalyzer = @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamic
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.AppSourceCop.dll')")
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.UICop.dll')")
 
+foreach ($element in $dotNetProbingPaths) {
+    $assemblyProbingPaths += @("/assemblyProbingPaths:$element")
+}
+
 $currentPath = Get-Location
 
 $extensions = @()
@@ -72,6 +76,7 @@ foreach ($extension in $extensions) {
     write-Host $paramRules
     write-Host $paramOut
     write-Host $paramAnalyzer
+    write-Host $assemblyProbingPaths
     write-Host '==='
 
     foreach ($Dependency in $AppJson.dependencies) {
@@ -88,7 +93,7 @@ foreach ($extension in $extensions) {
     }
     write-Host ''
     write-Host '>>> START Compiling' -ForegroundColor green
-    & $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $paramNoWarn | Write-Verbose
+    & $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn | Write-Verbose
     # | Write-Verbose
     
     $TranslationFile = Get-ChildItem -path $ExtensionApp
