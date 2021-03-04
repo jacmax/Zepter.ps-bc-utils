@@ -15,10 +15,14 @@ foreach ($element in $dotNetProbingPaths) {
     $assemblyProbingPaths += @("/assemblyProbingPaths:$element")
 }
 
+Remove-Item -Path $(Join-Path $AppFolder '*') -Filter "Zepter IT_ZS*.app"
+
 $currentPath = Get-Location
 
 $extensions = @()
 foreach ($Target in $Targets) {
+    #Remove-Item -Path $(Join-Path $(Join-Path $Target $SymbolFolder) '*') -Filter "Zepter IT_ZS*.app"
+
     #Get app.json
     $AppJson = Get-ObjectFromJSON (Join-Path $target "app.json")
 
