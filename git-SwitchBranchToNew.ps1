@@ -1,6 +1,6 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
-$ToBranch = 'JAM-update-Customer-Item-20210304'
+$ToBranch = 'JAM-update-Calendar-SalesProgram-20210304'
 #$ToBranch = 'JAM-update-develop-17.4-20210301'
 #Assembly BOM error
 #Repr Contract: "Commissions Calculated" cannot be found
