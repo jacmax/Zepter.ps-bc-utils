@@ -15,6 +15,6 @@ docker cp "D:\DEV-EXT\APP\Zepter IT_ZS Sample_0.1.0.0.app" c24:/AppZS/
 docker cp "D:\DEV-EXT\APP\Zepter IT_ZS Service_0.1.0.0.app" c24:/AppZS/
 
 docker cp "D:\DEV-EXT\APP\ZITBC170.flf" c24:/AppZS/
-docker cp "D:\DEV-EXT\ps-bc-utils\InstallApp-Docker.ps1" c24:/AppZS/
+docker cp "D:\DEV-EXT\ps-bc-utils\Docker-InstallApp.ps1" c24:/AppZS/
 
 docker start c24 

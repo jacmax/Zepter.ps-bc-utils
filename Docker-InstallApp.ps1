@@ -39,7 +39,7 @@ Start-NAVServerInstance -ServerInstance BC
 #############
 # Uninstall #
 #############
-<#
+
 Uninstall-NAVApp -ServerInstance BC -Name "AMC Banking 365 Fundamentals" -Version 17.0.16993.0
 Uninstall-NAVApp -ServerInstance BC -Name "Company Hub" -Version 17.0.16993.0
 Uninstall-NAVApp -ServerInstance BC -Name "Essential Business Headlines" -Version 17.0.16993.0
@@ -51,7 +51,7 @@ Uninstall-NAVApp -ServerInstance BC -Name "WorldPay Payments Standard" -Version 
 Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_APIV2_" -Version 17.0.16993.0
 Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_APIV1_" -Version 17.0.16993.0
 Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_ClientAddIns_" -Version 17.0.16993.0
-#>
+Uninstall-NAVApp -ServerInstance BC -Name "Application" -Version 17.0.16993.0
 
 Get-NAVAppInfo -ServerInstance BC -Tenant Default | Where Name -like 'ZS*' | Uninstall-NAVApp -ServerInstance BC -Tenant Default -Force
 
@@ -81,7 +81,7 @@ Uninstall-NAVApp -ServerInstance BC170 -Name "Base Application" -Version 17.0.16
 ####################
 # Base Application #
 ####################
-<#
+
 Uninstall-NAVApp -ServerInstance BC -Name "Base Application" -Version 17.0.16993.1
 Unpublish-NAVApp -ServerInstance BC -Name "Base Application" -Version 17.0.16993.1
 
@@ -102,7 +102,7 @@ Install-NAVApp -ServerInstance BC -Name "WorldPay Payments Standard" -Version 17
 Install-NAVApp -ServerInstance BC -Name "_Exclude_APIV2_" -Version 17.0.16993.0
 Install-NAVApp -ServerInstance BC -Name "_Exclude_APIV1_" -Version 17.0.16993.0
 Install-NAVApp -ServerInstance BC -Name "_Exclude_ClientAddIns_" -Version 17.0.16993.0
-#>
+
 
 ##############
 # Extensions #
