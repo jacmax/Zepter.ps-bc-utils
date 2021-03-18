@@ -1,3 +1,9 @@
+param ($loadbaseapp)
+
+if ($loadbaseapp -eq $null) {
+	$loadbaseapp = $false
+}
+
 Import-Module 'C:\Program Files\Microsoft Dynamics NAV\170\Service\NavAdminTool.ps1'
 
 function InstallExtension
@@ -40,18 +46,20 @@ Start-NAVServerInstance -ServerInstance BC
 # Uninstall #
 #############
 
-Uninstall-NAVApp -ServerInstance BC -Name "AMC Banking 365 Fundamentals" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "Company Hub" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "Essential Business Headlines" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "Late Payment Prediction" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "PayPal Payments Standard" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "Sales and Inventory Forecast" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "Send To Email Printer" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "WorldPay Payments Standard" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_APIV2_" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_APIV1_" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_ClientAddIns_" -Version 17.0.16993.0
-Uninstall-NAVApp -ServerInstance BC -Name "Application" -Version 17.0.16993.0
+if ($loadbaseapp -eq $true) {
+	Uninstall-NAVApp -ServerInstance BC -Name "AMC Banking 365 Fundamentals" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "Company Hub" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "Essential Business Headlines" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "Late Payment Prediction" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "PayPal Payments Standard" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "Sales and Inventory Forecast" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "Send To Email Printer" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "WorldPay Payments Standard" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_APIV2_" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_APIV1_" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "_Exclude_ClientAddIns_" -Version 17.0.16993.0
+	Uninstall-NAVApp -ServerInstance BC -Name "Application" -Version 17.0.16993.0
+}
 
 Get-NAVAppInfo -ServerInstance BC -Tenant Default | Where Name -like 'ZS*' | Uninstall-NAVApp -ServerInstance BC -Tenant Default -Force
 
@@ -64,7 +72,7 @@ Unpublish-NAVApp -ServerInstance BC -Name 'ZS Personal Voucher' -Version 0.1.0.0
 Unpublish-NAVApp -ServerInstance BC -Name 'ZS Payment' -Version 0.1.0.0
 Unpublish-NAVApp -ServerInstance BC -Name 'ZS Sales Contract' -Version 0.1.0.0
 Unpublish-NAVApp -ServerInstance BC -Name 'ZS Representative' -Version 0.1.0.0
-Unpublish-NAVApp -ServerInstance BC -Name 'ZS Sales Item' -Version 0.1.0.0
+Unpublish-NAVApp -ServerInstance BC -Name 'ZS Sales Item' -Version 0.1.0.1
 Unpublish-NAVApp -ServerInstance BC -Name 'ZS Common' -Version 0.1.0.0
 
 #Unpublish-NAVApp -ServerInstance BC170 -Name 'Designer_31940ea7-4480-4e99-94fd-04f9b8463a48' -Version 1.0.0.0	
@@ -82,33 +90,34 @@ Uninstall-NAVApp -ServerInstance BC170 -Name "Base Application" -Version 17.0.16
 # Base Application #
 ####################
 
-Uninstall-NAVApp -ServerInstance BC -Name "Base Application" -Version 17.0.16993.1
-Unpublish-NAVApp -ServerInstance BC -Name "Base Application" -Version 17.0.16993.1
+if ($loadbaseapp -eq $true) {
+	Uninstall-NAVApp -ServerInstance BC -Name "Base Application" -Version 17.0.16993.1
+	Unpublish-NAVApp -ServerInstance BC -Name "Base Application" -Version 17.0.16993.1
 
-Publish-NAVApp          -ServerInstance BC -Path 'C:\AppZS\Microsoft_Base Application_17.0.16993.1.app' -SkipVerification
-Sync-NAVApp             -ServerInstance BC -Name 'Base Application' -Version 17.0.16993.1 -Mode ForceSync -Tenant 'Default' -Force
-Start-NAVAppDataUpgrade -ServerInstance BC -Name 'Base Application' -Version 17.0.16993.1 -Tenant 'Default'
-Install-NAVApp          -ServerInstance BC -Name "Base Application" -Version 17.0.16993.1
-Install-NAVApp          -ServerInstance BC -Name "Application" -Version 17.0.16993.0
+	Publish-NAVApp          -ServerInstance BC -Path 'C:\AppZS\Microsoft_Base Application_17.0.16993.1.app' -SkipVerification
+	Sync-NAVApp             -ServerInstance BC -Name 'Base Application' -Version 17.0.16993.1 -Mode ForceSync -Tenant 'Default' -Force
+	#Start-NAVAppDataUpgrade -ServerInstance BC -Name 'Base Application' -Version 17.0.16993.1 -Tenant 'Default'
+	Install-NAVApp          -ServerInstance BC -Name "Base Application" -Version 17.0.16993.1
+	Install-NAVApp          -ServerInstance BC -Name "Application" -Version 17.0.16993.0
 
-Install-NAVApp -ServerInstance BC -Name "AMC Banking 365 Fundamentals" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "Company Hub" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "Essential Business Headlines" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "Late Payment Prediction" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "PayPal Payments Standard" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "Sales and Inventory Forecast" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "Send To Email Printer" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "WorldPay Payments Standard" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "_Exclude_APIV2_" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "_Exclude_APIV1_" -Version 17.0.16993.0
-Install-NAVApp -ServerInstance BC -Name "_Exclude_ClientAddIns_" -Version 17.0.16993.0
-
+	Install-NAVApp -ServerInstance BC -Name "AMC Banking 365 Fundamentals" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "Company Hub" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "Essential Business Headlines" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "Late Payment Prediction" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "PayPal Payments Standard" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "Sales and Inventory Forecast" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "Send To Email Printer" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "WorldPay Payments Standard" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "_Exclude_APIV2_" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "_Exclude_APIV1_" -Version 17.0.16993.0
+	Install-NAVApp -ServerInstance BC -Name "_Exclude_ClientAddIns_" -Version 17.0.16993.0
+}
 
 ##############
 # Extensions #
 ##############
 InstallExtension -instance 'BC' -name 'ZS Common'           -version '0.1.0.0' -path 'C:\AppZS\Zepter IT_ZS Common_0.1.0.0.app'
-InstallExtension -instance 'BC' -name 'ZS Sales Item'       -version '0.1.0.0' -path 'C:\AppZS\Zepter IT_ZS Sales Item_0.1.0.0.app'
+InstallExtension -instance 'BC' -name 'ZS Sales Item'       -version '0.1.0.1' -path 'C:\AppZS\Zepter IT_ZS Sales Item_0.1.0.1.app'
 InstallExtension -instance 'BC' -name 'ZS Representative'   -version '0.1.0.0' -path 'C:\AppZS\Zepter IT_ZS Representative_0.1.0.0.app'
 InstallExtension -instance 'BC' -name 'ZS Sales Contract'   -version '0.1.0.0' -path 'C:\AppZS\Zepter IT_ZS Sales Contract_0.1.0.0.app'
 InstallExtension -instance 'BC' -name 'ZS Payment'          -version '0.1.0.0' -path 'C:\AppZS\Zepter IT_ZS Payment_0.1.0.0.app'
