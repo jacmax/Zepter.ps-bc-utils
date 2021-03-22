@@ -131,8 +131,8 @@ InstallExtension -instance 'BC' -name 'ZS Service'          -version '0.1.0.0' -
 ####################
 # Restart Services #
 ###############################################################################################################
-$fn = "C:\AppZS\ZITBC170.flf";
-Import-NAVServerLicense -ServerInstance BC -LicenseFile $fn
+#$fn = "C:\AppZS\ZITBC170.flf";
+#Import-NAVServerLicense -ServerInstance BC -LicenseFile $fn
 Sync-NAVTenant -ServerInstance BC -Mode ForceSync -Force
 
 #Restart-NAVServerInstance -ServerInstance BC170

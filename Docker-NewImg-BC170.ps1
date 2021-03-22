@@ -57,16 +57,22 @@ $artifactURL = Get-BcArtifactUrl -type sandbox -country it -version 17.0
 
 $artifactUrl = Get-BCArtifactUrl -type OnPrem -country it -select Latest
 $artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.0
+
+Get-BcContainerEventLog -containerName it-bc170-test to retrieve a snapshot of the event log from the container
+Get-BcContainerDebugInfo -containerName it-bc170-test to get debug information about the container
+Enter-BcContainer -containerName it-bc170-test to open a PowerShell prompt inside the container
+Remove-BcContainer -containerName it-bc170-test to remove the container again
+docker logs it-bc170-test to retrieve information about URL's again
 #>
 
-#$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.0
-#$ContainerName = "it-bc170"
+$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.0
+$ContainerName = "it-bc170"
 
 #$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.4
 #$ContainerName = "it-bc174"
 
-$artifactURL = Get-BcArtifactUrl -type OnPrem -country w1 -version 17.4
-$ContainerName = "w1-bc174"
+#$artifactURL = Get-BcArtifactUrl -type OnPrem -country w1 -version 17.4
+#$ContainerName = "w1-bc174"
 
 $ContainerLicFile = "c:\ProgramData\BcContainerHelper\ZITBC170.flf"
 $credential = $null
