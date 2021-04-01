@@ -65,14 +65,14 @@ Remove-BcContainer -containerName it-bc170-test to remove the container again
 docker logs it-bc170-test to retrieve information about URL's again
 #>
 
-$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.0
-$ContainerName = "it-bc170"
+#$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.0
+#$ContainerName = "it-bc170"
 
-#$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.4
-#$ContainerName = "it-bc174"
+$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.5
+$ContainerName = "it-bc175"
 
-#$artifactURL = Get-BcArtifactUrl -type OnPrem -country w1 -version 17.4
-#$ContainerName = "w1-bc174"
+#$artifactURL = Get-BcArtifactUrl -type OnPrem -country w1 -version 17.5
+#$ContainerName = "w1-bc175"
 
 $ContainerLicFile = "c:\ProgramData\BcContainerHelper\ZITBC170.flf"
 $credential = $null
