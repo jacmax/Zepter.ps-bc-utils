@@ -68,13 +68,16 @@ docker logs it-bc170-test to retrieve information about URL's again
 #$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.0
 #$ContainerName = "it-bc170"
 
-$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.5
-$ContainerName = "it-bc175"
+#$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 17.5
+#$ContainerName = "it-bc175"
 
 #$artifactURL = Get-BcArtifactUrl -type OnPrem -country w1 -version 17.5
 #$ContainerName = "w1-bc175"
 
-$ContainerLicFile = "c:\ProgramData\BcContainerHelper\ZITBC170.flf"
+$artifactURL = Get-BcArtifactUrl -type OnPrem -country it -version 18.0
+$ContainerName = "it-bc180"
+
+$ContainerLicFile = "c:\ProgramData\BcContainerHelper\ZITBC180.flf"
 $credential = $null
 $password = ConvertTo-SecureString 'ZitP@ssword1' -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential ('admin', $password)
