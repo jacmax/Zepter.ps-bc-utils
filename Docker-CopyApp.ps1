@@ -52,6 +52,7 @@ docker cp "D:\$Workspace\APP\Zepter IT_ZS Service_$ServiceAppVer.app" "$($Docker
 
 docker cp "D:\$Workspace\APP\ZITBC180.flf" "$($DockerID):/AppZS/"
 docker cp "D:\DEV-EXT\ps-bc-utils\Docker-InstallApp.ps1" "$($DockerID):/AppZS/"
+docker cp "D:\DEV-EXT\ps-bc-utils\NavInstallTool.ps1" "$($DockerID):/AppZS/"
 docker cp "D:\DEV-EXT\ps-bc-utils\Docker-Database-CRONUS.ps1" "$($DockerID):/AppZS/"
 docker cp "D:\DEV-EXT\ps-bc-utils\Docker-Database-NAV-ITA-TEST-180.ps1" "$($DockerID):/AppZS/"
 

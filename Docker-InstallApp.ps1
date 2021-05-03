@@ -8,83 +8,7 @@ if ($null -eq $installbaseapp) {
 }
 
 Import-Module 'C:\Program Files\Microsoft Dynamics NAV\180\Service\NavAdminTool.ps1'
-
-function InstallExtension
-{
-    param ($instance, $name, $version, $path)
-    #Write-Host -ForegroundColor Yellow "$instance"
-    Write-Host -ForegroundColor Yellow "$name $version ... "
-    #Write-Host -ForegroundColor Yellow "$path"
-    $oldErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = 'Stop'
-    Try
-    {
-        Try
-        {      
-            Publish-NAVApp          -ServerInstance "$instance" -Path "$path" -SkipVerification
-        }
-        Catch {}
-        Sync-NAVApp             -ServerInstance "$instance" -Name "$name" -Version "$version" -Mode ForceSync -Tenant 'Default' -force 
-        Try
-        {      
-            Start-NAVAppDataUpgrade -ServerInstance "$instance" -Name "$name" -Version "$version" -Tenant 'Default' 
-        }
-        Catch
-        {
-            Install-NAVApp          -ServerInstance "$instance" -Name "$name" -Version "$version"
-        }    
-    }
-    Catch
-    {
-        $ErrorMessage = $_.Exception.Message
-        $FailedItem = $_.Exception.ItemName
-        Write-Host -ForegroundColor Red "Instalation of $name on $instance failed! $ErrorMessage"
-        Write-Host -ForegroundColor Yellow "$FailedItem"
-        Break
-    }
-    Finally
-    {
-        Write-Host -ForegroundColor Yellow "Installed"
-        Write-Host
-        $ErrorActionPreference = $oldErrorActionPreference
-    }
-}
-
-function UnpublishExtension
-{
-    param ($Instance, $Name)
-    $oldErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = 'Stop'
-    Try
-    {
-        Get-NAVAppInfo -ServerInstance $Instance -Tenant Default -TenantSpecificPrope | `
-            Where Name -like $Name | `
-            ForEach-Object {
-                Try
-                {
-                    #Write-Host -ForegroundColor Green "$instance"
-                    Write-Host -ForegroundColor Green $_.Name $_.Version " ... " -NoNewline
-                    Unpublish-NAVApp -ServerInstance $Instance -Name $_.Name -Version $_.Version
-                }
-                Finally
-                {
-                    Write-Host -ForegroundColor Green "Unpublished"
-                }
-            }
-    }
-    Catch
-    {
-        $ErrorMessage = $_.Exception.Message
-        $FailedItem = $_.Exception.ItemName
-        Write-Host -ForegroundColor Red "Unpublished of $name on $instance failed! $ErrorMessage"
-        Write-Host -ForegroundColor Yellow "$FailedItem"
-        Break
-    }
-    Finally
-    {
-        $ErrorActionPreference = $oldErrorActionPreference
-    }
-}
+Import-Module 'C:\AppZS\NavInstallTool.ps1'
 
 Write-Host
 Write-Host -ForegroundColor Yellow "Load Base App: $loadbaseapp"
@@ -171,9 +95,9 @@ if ($loadbaseapp -eq $true) {
 	Uninstall-NAVApp -ServerInstance BC -Name "Application"
 }
 
-Get-NAVAppInfo -ServerInstance BC -Tenant Default | `
-    Where Name -like 'ZS*' | `
-    Uninstall-NAVApp -ServerInstance BC -Tenant Default -Force
+#Get-NAVAppInfo -ServerInstance BC -Tenant Default | `
+#    Where Name -like 'ZS*' | `
+#    Uninstall-NAVApp -ServerInstance BC -Tenant Default -Force
 
 Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | `
     Where Name -like 'ZS*' | `
@@ -195,6 +119,8 @@ UnpublishExtension -Instance BC -Name 'ZS Sales Contract'
 UnpublishExtension -Instance BC -Name 'ZS Representative'
 UnpublishExtension -Instance BC -Name 'ZS Sales Item'
 UnpublishExtension -Instance BC -Name 'ZS Common'
+
+Write-Host -ForegroundColor Yellow "Unpublish ZS Extensions end  ..."
 
 ###############################################################################################################
 # Base Application #
@@ -226,7 +152,7 @@ if ($loadbaseapp -eq $true) {
 ###############################################################################################################
 # Extensions #
 ##############
-Write-Host
+Write-Host -ForegroundColor Yellow "Install ZS Extensions start ..."
 Write-Host '=========='
 Write-Host 'Installing'
 Write-Host '=========='
@@ -242,16 +168,23 @@ InstallExtension -instance 'BC' -name 'ZS Commission'       -version $Commission
 InstallExtension -instance 'BC' -name 'ZS Import Purchase'  -version $ImportPurchaseAppVer  -path "C:\AppZS\Zepter IT_ZS Import Purchase_$ImportPurchaseAppVer.app"
 InstallExtension -instance 'BC' -name 'ZS Sample'           -version $SampleAppVer          -path "C:\AppZS\Zepter IT_ZS Sample_$SampleAppVer.app"
 InstallExtension -instance 'BC' -name 'ZS Service'          -version $ServiceAppVer         -path "C:\AppZS\Zepter IT_ZS Service_$ServiceAppVer.app"
+Write-Host -ForegroundColor Yellow "Install ZS Extensions end ..."
+
+#######################
+# Zepter Soft License #
+#######################
+$fn = "C:\AppZS\ZITBC180.flf";
+Import-NAVServerLicense -ServerInstance BC -LicenseFile $fn
 
 ###############################################################################################################
 # Restart Services #
 ####################
-
-$fn = "C:\AppZS\ZITBC180.flf";
-Import-NAVServerLicense -ServerInstance BC -LicenseFile $fn
-
+Write-Host -ForegroundColor Yellow "Restart services start ..."
 Sync-NAVTenant -ServerInstance BC -Mode ForceSync -Force
+
 Restart-NAVServerInstance -ServerInstance BC
+
+Write-Host -ForegroundColor Yellow "Restart services end ..."
 
 Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | `
     Where Name -like 'ZS*' | `
