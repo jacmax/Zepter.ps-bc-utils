@@ -9,6 +9,7 @@ if ($null -eq $installbaseapp) {
 
 Import-Module 'C:\Program Files\Microsoft Dynamics NAV\180\Service\NavAdminTool.ps1'
 Import-Module 'C:\AppZS\NavInstallTool.ps1'
+Import-Module 'C:\AppZS\NavExtensions.ps1'
 
 Write-Host
 Write-Host -ForegroundColor Yellow "Load Base App: $loadbaseapp"
@@ -16,19 +17,22 @@ Write-Host -ForegroundColor Yellow "Install Base App: $installbaseapp"
 
 if ($installbaseapp -eq '18.0') {
 	Write-Host -ForegroundColor Yellow '>> 18.0'
+
     $BaseAppVerOld         = '18.0.23013.23795'
     $BaseAppVer            = '18.0.23013.23796'
-    $CommonAppVer          = '0.1.0.1'
-    $SalesItemAppVer       = '0.1.0.1'
-    $RepresentativeAppVer  = '0.1.0.0'
-    $SalesContractAppVer   = '0.1.0.1'
-    $PaymentAppVer         = '0.1.0.0'
-    $PersonalVoucherAppVer = '0.1.0.1'
-    $CommissionAppVer      = '0.1.0.3'
-    $GDPRAppVer            = '0.1.0.1'
-    $ImportPurchaseAppVer  = '0.1.0.1'
-    $SampleAppVer          = '0.1.0.0'
-    $ServiceAppVer         = '0.1.0.2'
+
+    $CommonAppVer          = (GetNavExtensions | Where-Object name -eq 'Common').version
+    $SalesItemAppVer       = (GetNavExtensions | Where-Object name -eq 'SalesItem').version
+    $RepresentativeAppVer  = (GetNavExtensions | Where-Object name -eq 'Representative').version
+    $SalesContractAppVer   = (GetNavExtensions | Where-Object name -eq 'SalesContract').version
+    $PaymentAppVer         = (GetNavExtensions | Where-Object name -eq 'Payment').version
+    $PersonalVoucherAppVer = (GetNavExtensions | Where-Object name -eq 'PersonalVoucher').version
+    $CommissionAppVer      = (GetNavExtensions | Where-Object name -eq 'Commission').version
+    $GDPRAppVer            = (GetNavExtensions | Where-Object name -eq 'GDPR').version
+    $ImportPurchaseAppVer  = (GetNavExtensions | Where-Object name -eq 'ImportPurchase').version
+    $SampleAppVer          = (GetNavExtensions | Where-Object name -eq 'Sample').version
+    $ServiceAppVer         = (GetNavExtensions | Where-Object name -eq 'Service').version
+    #$ITIntegration         = (GetNavExtensions | Where-Object name -eq 'ITIntegration').version
 } elseif ($installbaseapp -eq '18.2') { 
 	Write-Host -ForegroundColor Yellow '>> 18.5'
     $BaseAppVer            = '18.0.23013.23796'
@@ -61,7 +65,9 @@ if ($installbaseapp -eq '18.0') {
 
 Start-NAVServerInstance -ServerInstance BC
 
-Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | Sort-Object -Property Name, Version | Format-Table Name, Version, IsInstalled, IsPublished
+Get-NAVAppInfo -ServerInstance $BCServerInstance -Tenant Default -TenantSpecificPrope | `
+    Sort-Object -Property Name, Version | `
+    Format-Table Name, Version, IsInstalled, IsPublished
 
 ###############################################################################################################
 # Uninstall Extensions #
@@ -95,19 +101,19 @@ if ($loadbaseapp -eq $true) {
 	Uninstall-NAVApp -ServerInstance BC -Name "Application"
 }
 
-#Get-NAVAppInfo -ServerInstance BC -Tenant Default | `
-#    Where Name -like 'ZS*' | `
-#    Uninstall-NAVApp -ServerInstance BC -Tenant Default -Force
+Write-Host -ForegroundColor Magenta "Unpublish ZS Extensions start  ..."
 
 Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | `
     Where Name -like 'ZS*' | `
     Sort-Object -Property Name, Version | `
     Format-Table Name, Version, IsInstalled, IsPublished
 
+Write-Host -ForegroundColor Yellow "Unpublish ZS Extensions start ..."
 Write-Host '============'
 Write-Host 'Unpublishing'
 Write-Host '============'
 Write-Host
+UnpublishExtension -Instance BC -Name 'JAM-Test-001'
 UnpublishExtension -Instance BC -Name 'ZS Service'
 UnpublishExtension -Instance BC -Name 'ZS Sample'
 UnpublishExtension -Instance BC -Name 'ZS Import Purchase'
@@ -120,7 +126,9 @@ UnpublishExtension -Instance BC -Name 'ZS Representative'
 UnpublishExtension -Instance BC -Name 'ZS Sales Item'
 UnpublishExtension -Instance BC -Name 'ZS Common'
 
-Write-Host -ForegroundColor Yellow "Unpublish ZS Extensions end  ..."
+Write-Host
+Write-Host -ForegroundColor Magenta "Unpublish ZS Extensions end  ..."
+Write-Host
 
 ###############################################################################################################
 # Base Application #
@@ -152,7 +160,9 @@ if ($loadbaseapp -eq $true) {
 ###############################################################################################################
 # Extensions #
 ##############
-Write-Host -ForegroundColor Yellow "Install ZS Extensions start ..."
+Write-Host
+Write-Host -ForegroundColor Magenta "Install ZS Extensions start ..."
+Write-Host
 Write-Host '=========='
 Write-Host 'Installing'
 Write-Host '=========='
@@ -168,7 +178,10 @@ InstallExtension -instance 'BC' -name 'ZS Commission'       -version $Commission
 InstallExtension -instance 'BC' -name 'ZS Import Purchase'  -version $ImportPurchaseAppVer  -path "C:\AppZS\Zepter IT_ZS Import Purchase_$ImportPurchaseAppVer.app"
 InstallExtension -instance 'BC' -name 'ZS Sample'           -version $SampleAppVer          -path "C:\AppZS\Zepter IT_ZS Sample_$SampleAppVer.app"
 InstallExtension -instance 'BC' -name 'ZS Service'          -version $ServiceAppVer         -path "C:\AppZS\Zepter IT_ZS Service_$ServiceAppVer.app"
-Write-Host -ForegroundColor Yellow "Install ZS Extensions end ..."
+Write-Host
+Write-Host -ForegroundColor Magenta "Install ZS Extensions end ..."
+Write-Host
+Write-Host
 
 #######################
 # Zepter Soft License #
@@ -179,11 +192,11 @@ Import-NAVServerLicense -ServerInstance BC -LicenseFile $fn
 ###############################################################################################################
 # Restart Services #
 ####################
+Write-Host
 Write-Host -ForegroundColor Yellow "Restart services start ..."
 Sync-NAVTenant -ServerInstance BC -Mode ForceSync -Force
 
 Restart-NAVServerInstance -ServerInstance BC
-
 Write-Host -ForegroundColor Yellow "Restart services end ..."
 
 Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | `

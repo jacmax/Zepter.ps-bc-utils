@@ -21,6 +21,7 @@ if ($BCVersion -eq 'BC180') {
     $FileLicense = "\\plpnavw101\c$\NAV\Licenses\ZIT\ZITBC180.flf";
 }	
 Import-Module 'C:\NAV\Powershell\NavInstallTool.ps1'
+Import-Module 'C:\NAV\Powershell\NavExtensions.ps1'
 
 
 if ($InstallBaseApp -eq $null) {
@@ -36,20 +37,23 @@ if ($InstallBaseApp -eq $True) {
 
 Start-NAVServerInstance -ServerInstance $BCServerInstance
 
-Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | Sort-Object -Property Name, Version | Format-Table Name, Version, IsInstalled, IsPublished
+Get-NAVAppInfo -ServerInstance $BCServerInstance -Tenant Default -TenantSpecificPrope | `
+    Sort-Object -Property Name, Version | `
+    Format-Table Name, Version, IsInstalled, IsPublished
 
+Write-Host -ForegroundColor Magenta "Unpublish ZS Extensions start  ..."
 
-Write-Host -ForegroundColor Yellow "Unpublish ZS Extensions start  ..."
-Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | `
+Get-NAVAppInfo -ServerInstance $BCServerInstance -Tenant Default -TenantSpecificPrope | `
     Where Name -like 'ZS*' | `
     Sort-Object -Property Name, Version | `
     Format-Table Name, Version, IsInstalled, IsPublished
 
+Write-Host -ForegroundColor Yellow "Unpublish ZS Extensions start ..."
 Write-Host '============'
 Write-Host 'Unpublishing'
 Write-Host '============'
 Write-Host
-#UnpublishExtension -Instance $BCServerInstance -Name 'JAM-Test-001' -Version 1.0.0.0
+#UnpublishExtension -Instance $BCServerInstance -Name 'JAM-Test-001'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Integration IT'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Service'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Sample'
@@ -63,12 +67,13 @@ UnpublishExtension -Instance $BCServerInstance -Name 'ZS Representative'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Sales Item'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Common'
 
-Write-Host -ForegroundColor Yellow "Unpublish ZS Extensions end  ..."
+Write-Host
+Write-Host -ForegroundColor Magenta "Unpublish ZS Extensions end  ..."
+Write-Host
 
 ###############################################################################################################
 # Base Application #
 ####################
-
 if ($InstallBaseApp -eq $True) {
 	Write-Host -ForegroundColor Yellow "Uninstall Bases Application start ..."
 #	Uninstall-NAVApp -ServerInstance $BCServerInstance -Name "Base Application" -Version 18.0.23013.23795
@@ -92,40 +97,59 @@ if ($InstallBaseApp -eq $True) {
 ###############################################################################################################
 # Extensions #
 ##############
-Write-Host -ForegroundColor Yellow "Install ZS Extensions start ..."
+Write-Host
+Write-Host -ForegroundColor Magenta "Install ZS Extensions start ..."
+Write-Host
 Write-Host '=========='
 Write-Host 'Installing'
 Write-Host '=========='
 Write-Host
-InstallExtension -instance $BCServerInstance -name 'ZS Common'           -version '0.1.0.1' -path (Join-path $InstallFolder 'Zepter IT_ZS Common_0.1.0.1.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Sales Item'       -version '0.1.0.1' -path (Join-path $InstallFolder 'Zepter IT_ZS Sales Item_0.1.0.1.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Representative'   -version '0.1.0.0' -path (Join-path $InstallFolder 'Zepter IT_ZS Representative_0.1.0.0.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Sales Contract'   -version '0.1.0.1' -path (Join-path $InstallFolder 'Zepter IT_ZS Sales Contract_0.1.0.1.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Payment'          -version '0.1.0.0' -path (Join-path $InstallFolder 'Zepter IT_ZS Payment_0.1.0.0.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Personal Voucher' -version '0.1.0.1' -path (Join-path $InstallFolder 'Zepter IT_ZS Personal Voucher_0.1.0.1.app')
-InstallExtension -instance $BCServerInstance -name 'ZS GDPR'             -version '0.1.0.1' -path (Join-path $InstallFolder 'Zepter IT_ZS GDPR_0.1.0.1.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Commission'       -version '0.1.0.0' -path (Join-path $InstallFolder 'Zepter IT_ZS Commission_0.1.0.0.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Import Purchase'  -version '0.1.0.0' -path (Join-path $InstallFolder 'Zepter IT_ZS Import Purchase_0.1.0.0.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Sample'           -version '0.1.0.0' -path (Join-path $InstallFolder 'Zepter IT_ZS Sample_0.1.0.0.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Service'          -version '0.1.0.0' -path (Join-path $InstallFolder 'Zepter IT_ZS Service_0.1.0.0.app')
-InstallExtension -instance $BCServerInstance -name 'ZS Integration IT'   -version '0.1.0.0' -path (Join-path $InstallFolder 'Zepter IT_ZS Integration IT_0.1.0.0.app')
-Write-Host -ForegroundColor Yellow "Install ZS Extensions end ..."
+$ver = (GetNavExtensions | Where-Object name -eq 'Common').version
+InstallExtension -instance $BCServerInstance -name 'ZS Common'           -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Common_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Sales Item').version
+InstallExtension -instance $BCServerInstance -name 'ZS Sales Item'       -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Sales Item_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Representative').version
+InstallExtension -instance $BCServerInstance -name 'ZS Representative'   -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Representative_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Sales Contract').version
+InstallExtension -instance $BCServerInstance -name 'ZS Sales Contract'   -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Sales Contract_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Payment').version
+InstallExtension -instance $BCServerInstance -name 'ZS Payment'          -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Payment_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Personal Voucher').version
+InstallExtension -instance $BCServerInstance -name 'ZS Personal Voucher' -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Personal Voucher_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'GDPR').version
+InstallExtension -instance $BCServerInstance -name 'ZS GDPR'             -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS GDPR_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Commission').version
+InstallExtension -instance $BCServerInstance -name 'ZS Commission'       -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Commission_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Import Purchase').version
+InstallExtension -instance $BCServerInstance -name 'ZS Import Purchase'  -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Import Purchase_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Sample').version
+InstallExtension -instance $BCServerInstance -name 'ZS Sample'           -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Sample_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'Service').version
+InstallExtension -instance $BCServerInstance -name 'ZS Service'          -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Service_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'ITIntegration').version
+InstallExtension -instance $BCServerInstance -name 'ZS Integration IT'   -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Integration IT_$($ver).app")
+Write-Host
+Write-Host -ForegroundColor Magenta "Install ZS Extensions end ..."
+Write-Host
+Write-Host
 
 #######################
 # Zepter Soft License #
 #######################
 Import-NAVServerLicense -ServerInstance $BCServerInstance -LicenseFile $FileLicense
 
-####################
-# Restart Services #
 ###############################################################################################################
+# Restart Services #
+####################
+Write-Host
 Write-Host -ForegroundColor Yellow "Restart services start ..."
 Sync-NAVTenant -ServerInstance $BCServerInstance -Mode ForceSync -Force
 
 Restart-NAVServerInstance -ServerInstance $BCServerInstance
-
 Restart-NAVServerInstance -ServerInstance $BCServerInstance2
 Write-Host -ForegroundColor Yellow "Restart services end ..."
+
 Get-NAVAppInfo -ServerInstance $BCServerInstance -Tenant Default -TenantSpecificPrope | `
-	Sort-Object -Property Name, Version | `
-	Format-Table Name, Version, IsInstalled, IsPublished 
+    Where Name -like 'ZS*' | `
+    Sort-Object -Property Name, Version | `
+    Format-Table Name, Version, IsInstalled, IsPublished
