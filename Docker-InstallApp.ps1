@@ -65,7 +65,7 @@ if ($installbaseapp -eq '18.0') {
 
 Start-NAVServerInstance -ServerInstance BC
 
-Get-NAVAppInfo -ServerInstance $BCServerInstance -Tenant Default -TenantSpecificPrope | `
+Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | `
     Sort-Object -Property Name, Version | `
     Format-Table Name, Version, IsInstalled, IsPublished
 
@@ -96,12 +96,10 @@ if ($loadbaseapp -eq $true) {
     Uninstall-NAVApp -ServerInstance BC -Name "Simplified Bank Statement Import"
     Uninstall-NAVApp -ServerInstance BC -Name "Universal Print Integration (Preview)"
 
-    Uninstall-NAVApp -ServerInstance BC -Name "JAM-Test-001"
+    #Uninstall-NAVApp -ServerInstance BC -Name "JAM-Test-001"
     
 	Uninstall-NAVApp -ServerInstance BC -Name "Application"
 }
-
-Write-Host -ForegroundColor Magenta "Unpublish ZS Extensions start  ..."
 
 Get-NAVAppInfo -ServerInstance BC -Tenant Default -TenantSpecificPrope | `
     Where Name -like 'ZS*' | `
@@ -136,7 +134,7 @@ Write-Host
 
 if ($loadbaseapp -eq $true) {
 	Uninstall-NAVApp -ServerInstance BC -Name "Base Application" -Version $BaseAppVerOld
-	Unpublish-NAVApp -ServerInstance BC -Name "Base Application" -Version $BaseAppVer
+	Unpublish-NAVApp -ServerInstance BC -Name "Base Application" -Version $BaseAppVerOld
 	Publish-NAVApp   -ServerInstance BC -Path "C:\AppZS\Microsoft_Base Application_$BaseAppVer.app" -SkipVerification
 	Sync-NAVApp      -ServerInstance BC -Name 'Base Application' -Version $BaseAppVer -Mode ForceSync -Tenant 'Default' -Force
 	Start-NAVAppDataUpgrade -ServerInstance BC -Name 'Base Application' -Version $BaseAppVer -Tenant 'Default'
@@ -166,7 +164,7 @@ Write-Host
 Write-Host '=========='
 Write-Host 'Installing'
 Write-Host '=========='
-Write-Host
+Write-Host 
 InstallExtension -instance 'BC' -name 'ZS Common'           -version $CommonAppVer          -path "C:\AppZS\Zepter IT_ZS Common_$CommonAppVer.app"
 InstallExtension -instance 'BC' -name 'ZS Sales Item'       -version $SalesItemAppVer       -path "C:\AppZS\Zepter IT_ZS Sales Item_$SalesItemAppVer.app"
 InstallExtension -instance 'BC' -name 'ZS Representative'   -version $RepresentativeAppVer  -path "C:\AppZS\Zepter IT_ZS Representative_$RepresentativeAppVer.app"
