@@ -8,7 +8,7 @@ if (Test-Path 'D:\DEV-EXT' -PathType Container) {
 
 $SymbolFolder = '.alpackages'
 
-$dotNetProbingPaths = "D:\DEV-BASEAPP\BC180-ProgramFiles","D:\DEV-BASEAPP\BC180-ProgramFilesX86","C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8","C:\Windows\assembly"
+$dotNetProbingPaths = "d:\DEV-EXT\bc-common\Common - App\.netpackages","D:\DEV-BASEAPP\BC180-ProgramFiles","D:\DEV-BASEAPP\BC180-ProgramFilesX86","C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8","C:\Windows\assembly"
 
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | where{$_.PSParentPath -like "*App*"}
 
