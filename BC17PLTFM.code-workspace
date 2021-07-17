@@ -25,10 +25,10 @@
 			"path": "bc-sales-contracts\\Sales Contracts - Test"
 		},
 		{
-			"path": "bc-advance-payments\\Payments - App"
+			"path": "bc-payments\\Payments - App"
 		},
 		{
-			"path": "bc-advance-payments\\Payments - Test"
+			"path": "bc-payments\\Payments - Test"
 		},
 		{
 			"path": "bc-personal-vouchers\\Personal Vouchers - App"
@@ -61,10 +61,22 @@
 			"path": "bc-gdpr\\GDPR - Test"
 		},
 		{
-			"path": "bc-import-purchases\\Import Purchase Documents - App"
+			"path": "bc-import-purchases\\Import Purchases - App"
 		},
 		{
-			"path": "bc-import-purchases\\Import Purchase Documents - Test"
+			"path": "bc-import-purchases\\Import Purchases - Test"
+		},
+		{
+			"path": "bc-integration-it\\Integration IT - App"
+		},
+		{
+			"path": "bc-holding-reports\\Holding Reports - App"
+		},
+		{
+			"path": "bc-holding-reports\\Holding Reports - Test"
+		},
+		{
+			"path": "bc-sandbox-jam\\Sandbox - App"
 		},
 		{
 			"path": "ps-bc-utils"
