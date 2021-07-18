@@ -12,7 +12,7 @@ function GetNavExtensions {
             [pscustomobject]@{name="Commission"      ;version= '0.1.0.5'},
             [pscustomobject]@{name="GDPR"            ;version= '0.1.0.1'},
             [pscustomobject]@{name="ImportPurchase"  ;version= '0.1.0.1'},
-            [pscustomobject]@{name="Sample"          ;version= '0.1.0.0'},
+            [pscustomobject]@{name="Sample"          ;version= '0.1.0.1'},
             [pscustomobject]@{name="Service"         ;version= '0.1.0.3'},
             [pscustomobject]@{name="HoldingReport"   ;version= '0.1.0.0'},
             [pscustomobject]@{name="ITIntegration"   ;version= '0.1.0.2'}
