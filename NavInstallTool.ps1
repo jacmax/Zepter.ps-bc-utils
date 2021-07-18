@@ -1,11 +1,11 @@
-Import-Module 'C:\Program Files\Microsoft Dynamics NAV\180\Service\NavAdminTool.ps1'
+Import-Module 'C:\Program Files\Microsoft Dynamics 365 Business Central\180\Service\NavAdminTool.ps1'
 
 function InstallExtension
 {
     param ($instance, $name, $version, $path)
     #Write-Host -ForegroundColor Yellow "$instance"
     Write-Host -ForegroundColor Yellow "$name $version ... "
-    Write-Host -ForegroundColor Yellow "$path"
+    #Write-Host -ForegroundColor Yellow "$path"
     $oldErrorActionPreference = $ErrorActionPreference
     $ErrorActionPreference = 'Stop'
     Try

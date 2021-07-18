@@ -6,6 +6,11 @@ if ($BCVersion -eq $null) {
   Exit;
 }
 
+if ($InstallBaseApp -eq $null) {
+    $InstallBaseApp = $false;
+}
+
+
 if ($BCVersion -eq 'BC170') {
 	Import-Module 'C:\Program Files\Microsoft Dynamics 365 Business Central\170\Service\NavAdminTool.ps1'
 	$BCServerInstance  = 'N170_ITA_TEST_17510_TOOL'
@@ -24,7 +29,7 @@ Import-Module 'C:\NAV\Powershell\NavInstallTool.ps1'
 Import-Module 'C:\NAV\Powershell\NavExtensions.ps1'
 
 
-if ($InstallBaseApp -eq $null) {
+if ($InstallBaseApp -eq $False) {
   Write-Host '';
   Write-Host -ForegroundColor Red 'Instalation without Base Application'; 
   Write-Host '';
@@ -53,8 +58,11 @@ Write-Host '============'
 Write-Host 'Unpublishing'
 Write-Host '============'
 Write-Host
-#UnpublishExtension -Instance $BCServerInstance -Name 'JAM-Test-001'
+UnpublishExtension -Instance $BCServerInstance -Name 'ZS-JAM-Test-001'
+UnpublishExtension -Instance $BCServerInstance -Name 'ZS-JLY-Test-001'
+UnpublishExtension -Instance $BCServerInstance -Name 'ZS Sandbox JAM'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Integration IT'
+UnpublishExtension -Instance $BCServerInstance -Name 'ZS Holding Report'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Service'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Sample'
 UnpublishExtension -Instance $BCServerInstance -Name 'ZS Import Purchase'
@@ -76,14 +84,19 @@ Write-Host
 ####################
 if ($InstallBaseApp -eq $True) {
 	Write-Host -ForegroundColor Yellow "Uninstall Bases Application start ..."
-#	Uninstall-NAVApp -ServerInstance $BCServerInstance -Name "Base Application" -Version 18.0.23013.23795
-	Uninstall-NAVApp -ServerInstance $BCServerInstance -Name "Base Application" -Version 18.0.23013.23796 -Force	
+    $verOld = (GetNavExtensions | Where-Object name -eq 'BaseAppOld').version
+	Uninstall-NAVApp -ServerInstance $BCServerInstance -Name "Base Application" -Version $verOld -Force	
 	Write-Host -ForegroundColor Yellow "Uninstall Bases Application end ..."
-	Write-Host -ForegroundColor Yellow "Install Bases Application start ..."
-#	Publish-NAVApp   -ServerInstance $BCServerInstance -Path 'Z:\APP\BC180\Microsoft_Base Application_18.0.23013.23796.app' -SkipVerification
-#	Sync-NAVApp      -ServerInstance $BCServerInstance -Name 'Base Application' -Version 18.0.23013.23796 -Mode ForceSync -Tenant 'Default' -Force
-#	Start-NAVAppDataUpgrade -ServerInstance $BCServerInstance -Name 'Base Application' -Version 18.0.23013.23796 -Tenant 'Default'
-	Install-NAVApp   -ServerInstance $BCServerInstance -Name "Base Application" -Version 18.0.23013.23796 -Tenant 'Default'
+	
+    Write-Host -ForegroundColor Yellow "Install Bases Application start ..."
+    $verNew = (GetNavExtensions | Where-Object name -eq 'BaseApp').version
+	if ($verOld -lt $verNew)
+    {
+        Publish-NAVApp   -ServerInstance $BCServerInstance -Path (Join-path $InstallFolder "Microsoft_Base Application_$($verNew).app") -SkipVerification
+	    Sync-NAVApp      -ServerInstance $BCServerInstance -Name 'Base Application' -Version $verNew -Mode ForceSync -Tenant 'Default' -Force
+	    Start-NAVAppDataUpgrade -ServerInstance $BCServerInstance -Name 'Base Application' -Version $verNew -Tenant 'Default'
+	    Install-NAVApp   -ServerInstance $BCServerInstance -Name "Base Application" -Version $verNew -Tenant 'Default'
+    }
 	Get-NAVAppInfo -ServerInstance $BCServerInstance -Tenant Default -TenantSpecificProperties | `
 		Where {`
 		$_.Version -Match "^18.*" -and `
@@ -106,26 +119,28 @@ Write-Host '=========='
 Write-Host
 $ver = (GetNavExtensions | Where-Object name -eq 'Common').version
 InstallExtension -instance $BCServerInstance -name 'ZS Common'           -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Common_$($ver).app")
-$ver = (GetNavExtensions | Where-Object name -eq 'Sales Item').version
+$ver = (GetNavExtensions | Where-Object name -eq 'SalesItem').version
 InstallExtension -instance $BCServerInstance -name 'ZS Sales Item'       -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Sales Item_$($ver).app")
 $ver = (GetNavExtensions | Where-Object name -eq 'Representative').version
 InstallExtension -instance $BCServerInstance -name 'ZS Representative'   -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Representative_$($ver).app")
-$ver = (GetNavExtensions | Where-Object name -eq 'Sales Contract').version
+$ver = (GetNavExtensions | Where-Object name -eq 'SalesContract').version
 InstallExtension -instance $BCServerInstance -name 'ZS Sales Contract'   -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Sales Contract_$($ver).app")
 $ver = (GetNavExtensions | Where-Object name -eq 'Payment').version
 InstallExtension -instance $BCServerInstance -name 'ZS Payment'          -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Payment_$($ver).app")
-$ver = (GetNavExtensions | Where-Object name -eq 'Personal Voucher').version
+$ver = (GetNavExtensions | Where-Object name -eq 'PersonalVoucher').version
 InstallExtension -instance $BCServerInstance -name 'ZS Personal Voucher' -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Personal Voucher_$($ver).app")
 $ver = (GetNavExtensions | Where-Object name -eq 'GDPR').version
 InstallExtension -instance $BCServerInstance -name 'ZS GDPR'             -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS GDPR_$($ver).app")
 $ver = (GetNavExtensions | Where-Object name -eq 'Commission').version
 InstallExtension -instance $BCServerInstance -name 'ZS Commission'       -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Commission_$($ver).app")
-$ver = (GetNavExtensions | Where-Object name -eq 'Import Purchase').version
+$ver = (GetNavExtensions | Where-Object name -eq 'ImportPurchase').version
 InstallExtension -instance $BCServerInstance -name 'ZS Import Purchase'  -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Import Purchase_$($ver).app")
 $ver = (GetNavExtensions | Where-Object name -eq 'Sample').version
 InstallExtension -instance $BCServerInstance -name 'ZS Sample'           -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Sample_$($ver).app")
 $ver = (GetNavExtensions | Where-Object name -eq 'Service').version
 InstallExtension -instance $BCServerInstance -name 'ZS Service'          -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Service_$($ver).app")
+$ver = (GetNavExtensions | Where-Object name -eq 'HoldingReport').version
+InstallExtension -instance $BCServerInstance -name 'ZS Holding Report'   -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Holding Report_$($ver).app")
 $ver = (GetNavExtensions | Where-Object name -eq 'ITIntegration').version
 InstallExtension -instance $BCServerInstance -name 'ZS Integration IT'   -version $ver -path (Join-path $InstallFolder "Zepter IT_ZS Integration IT_$($ver).app")
 Write-Host
