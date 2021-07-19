@@ -3,7 +3,7 @@ function GetNavExtensions {
         @(
             [pscustomobject]@{name="BaseAppOld"      ;version= '18.0.23013.23797'},
             [pscustomobject]@{name="BaseApp"         ;version= '18.0.23013.23798'},
-            [pscustomobject]@{name="Common"          ;version= '0.1.0.2'},
+            [pscustomobject]@{name="Common"          ;version= '0.1.0.3'},
             [pscustomobject]@{name="SalesItem"       ;version= '0.1.0.2'},
             [pscustomobject]@{name="Representative"  ;version= '0.1.0.1'},
             [pscustomobject]@{name="SalesContract"   ;version= '0.1.0.3'},
