@@ -112,4 +112,6 @@ foreach ($extension in $extensions) {
     write-Host ''
 }
 
+Copy-Item (Join-path $PSScriptRoot 'NavExtensions.ps1') -Destination $AppFolder
+
 Set-Location $currentPath
