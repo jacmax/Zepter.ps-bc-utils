@@ -141,7 +141,9 @@ Export-NAVApplicationObject `
 
 $files = Get-ChildItem -Path $WorkSubPath -Filter '*.txt' -Recurse
 foreach ($file in $files) {
-	Find-InTextFile -FilePath $file.FullName
+	if ($file.Length -gt 0) {
+		Find-InTextFile -FilePath $file.FullName
+	}
 }    
 
 $WorkSubPath = Join-Path (Join-Path $WorkPath "export2al") "zs-migration"
@@ -153,7 +155,6 @@ Export-NAVApplicationObject `
 -Force `
 -verbose
 
-$WorkSubPath = Join-Path (Join-Path $WorkPath "export2al") "zs-migration"
 Export-NAVApplicationObject `
 -DatabaseServer $ServerName `
 -DatabaseName $DatabaseName `
@@ -164,7 +165,9 @@ Export-NAVApplicationObject `
 
 $files = Get-ChildItem -Path $WorkSubPath -Filter '*.txt' -Recurse
 foreach ($file in $files) {
-	Find-InTextFile -FilePath $file.FullName
+	if ($file.Length -gt 0) {
+		Find-InTextFile -FilePath $file.FullName
+	}
 }    
 
 $WorkSubPath = Join-Path (Join-Path $WorkPath "export2al") "zs-it"
@@ -178,7 +181,9 @@ Export-NAVApplicationObject `
 
 $files = Get-ChildItem -Path $WorkSubPath -Filter '*.txt' -Recurse
 foreach ($file in $files) {
-	Find-InTextFile -FilePath $file.FullName
+	if ($file.Length -gt 0) {
+		Find-InTextFile -FilePath $file.FullName
+	}
 }    
 
 $WorkSubPath = Join-Path (Join-Path $WorkPath "export2al") "zs-tool"
@@ -192,7 +197,9 @@ Export-NAVApplicationObject `
 
 $files = Get-ChildItem -Path $WorkSubPath -Filter '*.txt' -Recurse
 foreach ($file in $files) {
-	Find-InTextFile -FilePath $file.FullName
+	if ($file.Length -gt 0) {
+		Find-InTextFile -FilePath $file.FullName
+	}
 }    
 
 
