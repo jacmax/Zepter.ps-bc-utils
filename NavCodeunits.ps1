@@ -2098,7 +2098,7 @@ function GetNavCodeunits {
         ('Codeunit 20003982;','Codeunit "ZS Dimension CaptionClass Mgmt";'),
         ('Codeunit 20003989;','Codeunit "Sales Invoice-Cancel";'),
         ('Codeunit 20003990;','Codeunit "EventLogMgt";'),
-        ('Codeunit 20003991;','Codeunit "TextFileImportMgt";'),
+        ('Codeunit 20003991;','Codeunit "ZS Text File Import Mgt.";'),
         ('Codeunit 20003994;','Codeunit "Post Detailed G/L Entry";'),
         ('Codeunit 20003996;','Codeunit "Contract Entry-Edit";'),
         ('Codeunit 20003999;','Codeunit "Show Field Change Log";'),
