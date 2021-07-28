@@ -266,3 +266,34 @@ Move-Item -Path $WorkSubPathSrc -Destination $WorkSubPath
 $WorkSubPathSrc = Join-Path (Join-Path $WorkPath "baseapplication") "*.Report.al"
 $WorkSubPath = Join-Path (Join-Path $WorkPath "baseapplication") "Report"
 Move-Item -Path $WorkSubPathSrc -Destination $WorkSubPath
+
+New-Item -Path (Join-Path $WorkPath "zeptersoft") -Name "Table" -ItemType "directory"
+New-Item -Path (Join-Path $WorkPath "zeptersoft") -Name "Page" -ItemType "directory"
+New-Item -Path (Join-Path $WorkPath "zeptersoft") -Name "Codeunit" -ItemType "directory"
+New-Item -Path (Join-Path $WorkPath "zeptersoft") -Name "Report" -ItemType "directory"
+New-Item -Path (Join-Path $WorkPath "zeptersoft") -Name "XmlPort" -ItemType "directory"
+
+$WorkSubPathSrc = Join-Path (Join-Path $WorkPath "zeptersoft") "*.Table.al"
+$WorkSubPath = Join-Path (Join-Path $WorkPath "zeptersoft") "Table"
+Move-Item -Path $WorkSubPathSrc -Destination $WorkSubPath
+
+$WorkSubPathSrc = Join-Path (Join-Path $WorkPath "zeptersoft") "*.Page.al"
+$WorkSubPath = Join-Path (Join-Path $WorkPath "zeptersoft") "Page"
+Move-Item -Path $WorkSubPathSrc -Destination $WorkSubPath
+
+$WorkSubPathSrc = Join-Path (Join-Path $WorkPath "zeptersoft") "*.Codeunit.al"
+$WorkSubPath = Join-Path (Join-Path $WorkPath "zeptersoft") "Codeunit"
+Move-Item -Path $WorkSubPathSrc -Destination $WorkSubPath
+
+$WorkSubPathSrc = Join-Path (Join-Path $WorkPath "zeptersoft") "*.Report.al"
+$WorkSubPath = Join-Path (Join-Path $WorkPath "zeptersoft") "Report"
+Move-Item -Path $WorkSubPathSrc -Destination $WorkSubPath
+
+$WorkSubPathSrc = Join-Path (Join-Path $WorkPath "zeptersoft") "*.rdlc"
+$WorkSubPath = Join-Path (Join-Path $WorkPath "zeptersoft") "Report"
+Move-Item -Path $WorkSubPathSrc -Destination $WorkSubPath
+
+$WorkSubPathSrc = Join-Path (Join-Path $WorkPath "zeptersoft") "*.XmlPort.al"
+$WorkSubPath = Join-Path (Join-Path $WorkPath "zeptersoft") "XmlPort"
+Move-Item -Path $WorkSubPathSrc -Destination $WorkSubPath
+
