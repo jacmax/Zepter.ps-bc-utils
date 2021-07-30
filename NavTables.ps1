@@ -5206,6 +5206,7 @@ function GetNavTables {
         ('Record 2000000200)','Record "NAV App Tenant Operation")'),
         ('Record 2000000201)','Record "NAV App Setting")'),
         ('Table20003990','"Event Log"'),
+        ('Table20004203','"ZS Pmt. Ctr. Ledger Entry"'),
 		('Table20004222','"Pmt. Return Wksh. Line"'),
         ('Table2000000026','"Integer"'),
         ('Record 2000000007','Record "Date"'),
