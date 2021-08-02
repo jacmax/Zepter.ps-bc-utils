@@ -2197,7 +2197,7 @@ function GetNavCodeunits {
         ('Codeunit 20004370;','Codeunit "Rep. Jnl.-Check Line";'),
         ('Codeunit 20004371;','Codeunit "Rep. Jnl.-Post Line";'),
         ('Codeunit 20004372;','Codeunit "Rep. Jnl.-Post Batch";'),
-        ('Codeunit 20004373;','Codeunit "RepJnlMgt";'),
+        ('Codeunit 20004373;','Codeunit "Rep. Jnl. Mgt.";'),
         ('Codeunit 20004374;','Codeunit "Rep. Jnl.-Post";'),
         ('Codeunit 20004375;','Codeunit "Rep. Jnl.-Post+Print";'),
         ('Codeunit 20004376;','Codeunit "Rep. Reg.-Show Rep. Ledger";'),
