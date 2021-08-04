@@ -2111,7 +2111,7 @@ function GetNavCodeunits {
         ('Codeunit 20004006;','Codeunit "Release Sales Contract";'),
         ('Codeunit 20004007;','Codeunit "Contract-Create Order";'),
         ('Codeunit 20004008;','Codeunit "Sales Contr. Pmt. Sched. Mgt.";'),
-        ('Codeunit 20004009;','Codeunit "SalesCtrArchiveManagement";'),
+        ('Codeunit 20004009;','Codeunit "Sales Ctr. Archive Mgt.";'),
         ('Codeunit 20004010;','Codeunit "Find Sales Contract";'),
         ('Codeunit 20004011;','Codeunit "SalesContractRentAllStatusMgt";'),
         ('Codeunit 20004012;','Codeunit "Contract-Set Correction Mode";'),
