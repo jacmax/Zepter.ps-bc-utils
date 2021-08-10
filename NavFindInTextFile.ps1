@@ -1,5 +1,5 @@
-Import-Module 'c:\Nav\EXPORT.PTM.BC14\NavTables.ps1'
-Import-Module 'c:\Nav\EXPORT.PTM.BC14\NavCodeunits.ps1'
+Import-Module 'c:\Nav\NavTables.ps1'
+Import-Module 'c:\Nav\NavCodeunits.ps1'
 
 function Find-InTextFile {
     <#
