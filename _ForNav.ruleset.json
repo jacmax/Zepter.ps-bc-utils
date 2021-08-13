@@ -12,6 +12,11 @@
             "id": "AL0254",
             "action": "Hidden",
             "justification": "Will be solved in the future"
+        },
+        {
+            "id": "AL0605",
+            "action": "Error",
+            "justification": "Will be solved in the future"
         }
     ]
 }
