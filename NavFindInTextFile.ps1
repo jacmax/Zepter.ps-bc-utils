@@ -1,5 +1,6 @@
 Import-Module 'c:\Nav\NavTables.ps1'
 Import-Module 'c:\Nav\NavCodeunits.ps1'
+Import-Module 'c:\Nav\NavXMLports.ps1'
 
 function Find-InTextFile {
     <#
@@ -34,8 +35,9 @@ function Find-InTextFile {
     }
     process {
         try {
-			$tables = GetNavTables
-			$codeunits = GetNavCodeunits
+            $tables = GetNavTables
+            $codeunits = GetNavCodeunits
+            $xmlports = GetNavXMLports
             foreach ($File in $FilePath) {
                 if ($NewFilePath) {
                     if ((Test-Path -Path $NewFilePath -PathType 'Leaf') -and $Force.IsPresent) {
@@ -71,6 +73,12 @@ function Find-InTextFile {
                         $i = $i + 1
                         Write-Progress -Activity "Updating codeunit names" -Status "Progress:" -PercentComplete ($i/$Codeunits.count*100)
                         $string = $string.replace($codeunit[0],$codeunit[1])
+                    }
+                    $i = 0
+                    foreach ($xmlport in $Xmlports) {
+                        $i = $i + 1
+                        Write-Progress -Activity "Updating xmlport names" -Status "Progress:" -PercentComplete ($i/$Xmlports.count*100)
+                        $string = $string.replace($xmlport[0],$xmlport[1])
                     }
                     $string | Add-Content -Path "$File.tmp" -Force
                     Remove-Item -Path $File
