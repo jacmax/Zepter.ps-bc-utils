@@ -17,6 +17,11 @@
             "id": "AL0605",
             "action": "Error",
             "justification": "Will be solved in the future"
+        },
+        {
+            "id": "AL0607",
+            "action": "Info",
+            "justification": "Will be solved in the future"
         }
     ]
 }

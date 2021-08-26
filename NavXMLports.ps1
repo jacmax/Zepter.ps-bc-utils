@@ -108,4 +108,5 @@ function GetNavXMLports {
         ('RunObject=XMLport 20004261','RunObject=XMLport "Supporting Turnover Import"'),
         ('RunObject=XMLport 20004281','RunObject=XMLport "Report 2x Imp/Exp Item Data"'),
         ('RunObject=XMLport 20004290','RunObject=XMLport "HASS Order Import"')
+    Return $XMLports
 }

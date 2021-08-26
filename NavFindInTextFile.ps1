@@ -1,4 +1,5 @@
 Import-Module 'c:\Nav\NavTables.ps1'
+Import-Module 'c:\Nav\NavZSTables.ps1'
 Import-Module 'c:\Nav\NavCodeunits.ps1'
 Import-Module 'c:\Nav\NavXMLports.ps1'
 
@@ -27,7 +28,8 @@ function Find-InTextFile {
         [Parameter(ParameterSetName = 'NewFile')]
         [ValidateScript({ Test-Path -Path ($_ | Split-Path -Parent) -PathType 'Container' })]
         [string]$NewFilePath,
-        [Parameter(ParameterSetName = 'NewFile')]
+        [Parameter(ParameterSetName = 'SystemBC14')]
+		[boolean]$SystemBC14,
         [switch]$Force
     )
     begin {
@@ -35,9 +37,18 @@ function Find-InTextFile {
     }
     process {
         try {
-            $tables = GetNavTables
-            $codeunits = GetNavCodeunits
-            $xmlports = GetNavXMLports
+			if ($SystemBC14)
+			{
+				$tables = GetNavZSTables
+				$codeunits = $null
+				$xmlports = $null
+			}
+			else
+			{
+				$tables = GetNavTables
+				$codeunits = GetNavCodeunits
+				$xmlports = GetNavXMLports
+			}
             foreach ($File in $FilePath) {
                 if ($NewFilePath) {
                     if ((Test-Path -Path $NewFilePath -PathType 'Leaf') -and $Force.IsPresent) {
@@ -61,23 +72,27 @@ function Find-InTextFile {
                     }
                 } else {
                     #(Get-Content $File) -replace $Find, $Replace | Add-Content -Path "$File.tmp" -Force
+					Write-Host "Update $File";
                     $string = (Get-Content $File)
                     $i = 0
                     foreach ($table in $Tables) {
+						#Write-Host "[$i] Table: $($table[0]) $($table[1])";
                         $i = $i + 1
-                        Write-Progress -Activity "Updating record names" -Status "Progress:" -PercentComplete ($i/$Tables.count*100)
+                        Write-Progress -Activity "Updating record names: $File" -Status "Progress:" -PercentComplete ($i/$Tables.count*100)
                         $string = $string.replace($table[0],$table[1])
                     }
                     $i = 0
                     foreach ($codeunit in $Codeunits) {
+						#Write-Host "[$i] Codeunit: $($codeunit[0]) $($codeunit[1])";
                         $i = $i + 1
-                        Write-Progress -Activity "Updating codeunit names" -Status "Progress:" -PercentComplete ($i/$Codeunits.count*100)
+                        Write-Progress -Activity "Updating codeunit names: $File" -Status "Progress:" -PercentComplete ($i/$Codeunits.count*100)
                         $string = $string.replace($codeunit[0],$codeunit[1])
                     }
                     $i = 0
                     foreach ($xmlport in $Xmlports) {
+						#Write-Host "[$i] XMLport: $($xmlport[0]) $($xmlport[1])";
                         $i = $i + 1
-                        Write-Progress -Activity "Updating xmlport names" -Status "Progress:" -PercentComplete ($i/$Xmlports.count*100)
+                        Write-Progress -Activity "Updating xmlport names: $File" -Status "Progress:" -PercentComplete ($i/$Xmlports.count*100)
                         $string = $string.replace($xmlport[0],$xmlport[1])
                     }
                     $string | Add-Content -Path "$File.tmp" -Force
