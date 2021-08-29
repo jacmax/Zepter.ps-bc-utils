@@ -15,7 +15,7 @@ function GetNavExtensions {
             [pscustomobject]@{name="Sample"          ;version= '0.1.0.1'},
             [pscustomobject]@{name="Service"         ;version= '0.1.0.3'},
             [pscustomobject]@{name="HoldingReport"   ;version= '0.1.0.0'},
-            [pscustomobject]@{name="ITIntegration"   ;version= '0.1.0.2'}
+            [pscustomobject]@{name="ITIntegration"   ;version= '0.1.0.4'}
         )
     return $NavExtension
 }
