@@ -29,7 +29,7 @@
 
 	$ExportFile = (Join-Path $WorkPath "$($NavVer)-Z$($Country).txt")
 	$ExportLogFile = (Join-Path $WorkPath "$($NavVer)-Z$($Country).ExportLog.txt")
-	$ExportFilter = "Id=<18031000|>18033000&<2000000000"
+	$ExportFilter = "Id=<2000000000"
 	
 	Write-Host $NavVer -ForegroundColor Green
 	
@@ -39,6 +39,7 @@
 			-DatabaseServer $ServerName `
 			-DatabaseName $DatabaseName `
 			-Path $ExportFile `
+			-LogPath $ExportLogFile `
 			-ExportToNewSyntax `
 			-ExportTxtSkipUnlicensed `
 			-Filter $ExportFilter `
