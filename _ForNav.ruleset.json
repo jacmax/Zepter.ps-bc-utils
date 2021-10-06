@@ -14,13 +14,23 @@
             "justification": "Will be solved in the future"
         },
         {
+            "id": "AL0603",
+            "action": "Hidden",
+            "justification": "Will be solved in the future"
+        },
+        {
             "id": "AL0605",
             "action": "Error",
             "justification": "Will be solved in the future"
         },
         {
             "id": "AL0607",
-            "action": "Info",
+            "action": "Hidden",
+            "justification": "Will be solved in the future"
+        },
+        {
+            "id": "AL0667",
+            "action": "Hidden",
             "justification": "Will be solved in the future"
         }
     ]

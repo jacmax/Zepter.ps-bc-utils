@@ -55,6 +55,11 @@ foreach ($Target in $Targets) {
     }
 }
 
+$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Personal Voucher'
+$extension."Quantity Dependency" += 2
+$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS GDPR'
+$extension."Quantity Dependency" += 2
+
 $extensions = $extensions | Sort-Object -Property 'Quantity Dependency' -Descending
 $extensions | Format-Table
 
