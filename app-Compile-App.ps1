@@ -26,30 +26,32 @@ foreach ($Target in $Targets) {
     #Get app.json
     $AppJson = Get-ObjectFromJSON (Join-Path $target "app.json")
 
-    $object = New-Object -TypeName PSObject
-    $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
-    $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value $Target
-    $object | Add-Member -Name 'Quantity Dependency' -MemberType Noteproperty -Value 0
+    if ($AppJson.application -eq '18.0.0.0') {
+        $object = New-Object -TypeName PSObject
+        $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
+        $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value $Target
+        $object | Add-Member -Name 'Quantity Dependency' -MemberType Noteproperty -Value 0
 
-    $extension = $extensions | Where-Object -Property Name -eq -Value $object.Name
-    if (!($extension)) {
-        $extensions += $object
-    } else {
-        $extension.Folder = $Target
-    }
+        $extension = $extensions | Where-Object -Property Name -eq -Value $object.Name
+        if (!($extension)) {
+            $extensions += $object
+        } else {
+            $extension.Folder = $Target
+        }
 
-    foreach ($Dependency in $AppJson.dependencies) {
-        if ($Dependency.publisher -eq 'Zepter IT') {
-            $object = New-Object -TypeName PSObject
-            $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $Dependency.name
-            $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value ''
-            $object | Add-Member -Name 'Quantity Dependency' -MemberType Noteproperty -Value 1
+        foreach ($Dependency in $AppJson.dependencies) {
+            if ($Dependency.publisher -eq 'Zepter IT') {
+                $object = New-Object -TypeName PSObject
+                $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $Dependency.name
+                $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value ''
+                $object | Add-Member -Name 'Quantity Dependency' -MemberType Noteproperty -Value 1
 
-            $extension = $extensions | Where-Object -Property Name -eq -Value $object.Name
-            if ($extension) {
-                $extension."Quantity Dependency" += 1
-            } else {
-                $extensions += $object
+                $extension = $extensions | Where-Object -Property Name -eq -Value $object.Name
+                if ($extension) {
+                    $extension."Quantity Dependency" += 1
+                } else {
+                    $extensions += $object
+                }
             }
         }
     }
