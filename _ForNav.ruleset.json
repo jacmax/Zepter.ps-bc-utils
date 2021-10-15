@@ -9,14 +9,9 @@
             "justification": "Not possible to solve"
         },
         {
-            "id": "AL0254",
-            "action": "Hidden",
-            "justification": "Will be solved in the future"
-        },
-        {
             "id": "AL0603",
             "action": "Hidden",
-            "justification": "Will be solved in the future"
+            "justification": "Option,Integer,Enum. Will be solved in the future"
         },
         {
             "id": "AL0605",
@@ -31,7 +26,7 @@
         {
             "id": "AL0667",
             "action": "Hidden",
-            "justification": "Will be solved in the future"
+            "justification": "Import is deprecated. Will be solved in the future"
         }
     ]
 }

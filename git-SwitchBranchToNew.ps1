@@ -1,6 +1,6 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
-$ToBranch = 'JAM-Update-AppJson-20210812'
+$ToBranch = 'JAM-Update-AppJson-20211015'
 #Update gitignore setup 20210319
 #$ToBranch = 'JAM-update-develop-17.4-20210301'
 #Assembly BOM error
