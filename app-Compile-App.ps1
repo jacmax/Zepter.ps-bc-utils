@@ -7,6 +7,7 @@ $compPath = $compilator.PSParentPath
 
 $paramRules    = @("/ruleset:""$Workspace$('\ps-bc-utils\_ForNav.ruleset.json')""")
 $paramNoWarn   = @("/nowarn:AL0603")
+$paramNoWarn   += @("/nowarn:AL0605")
 $paramAnalyzer = @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.CodeCop.dll')")
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.AppSourceCop.dll')")
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.UICop.dll')")
@@ -26,7 +27,7 @@ foreach ($Target in $Targets) {
     #Get app.json
     $AppJson = Get-ObjectFromJSON (Join-Path $target "app.json")
 
-    if ($AppJson.application -eq '18.0.0.0') {
+    if ($AppJson.application -eq '19.0.0.0') {
         $object = New-Object -TypeName PSObject
         $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
         $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value $Target
@@ -104,6 +105,7 @@ foreach ($extension in $extensions) {
     }
     write-Host ''
     write-Host '>>> START Compiling' -ForegroundColor green
+    Write-Host $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn  -ForegroundColor Blue
     & $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn | Write-Verbose
     # | Write-Verbose
     

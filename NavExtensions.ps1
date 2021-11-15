@@ -1,21 +1,21 @@
 function GetNavExtensions {
     $NavExtension =
         @(
-            [pscustomobject]@{name="BaseAppOld"      ;version= '18.0.23013.23798'},
-            [pscustomobject]@{name="BaseApp"         ;version= '18.0.23013.23799'},
-            [pscustomobject]@{name="Common"          ;version= '0.1.0.9'},
-            [pscustomobject]@{name="SalesItem"       ;version= '0.1.0.4'},
-            [pscustomobject]@{name="Representative"  ;version= '0.1.0.5'},
-            [pscustomobject]@{name="SalesContract"   ;version= '0.1.0.9'},
-            [pscustomobject]@{name="Payment"         ;version= '0.1.0.6'},
-            [pscustomobject]@{name="PersonalVoucher" ;version= '0.1.0.2'},
-            [pscustomobject]@{name="Commission"      ;version= '0.1.0.8'},
-            [pscustomobject]@{name="GDPR"            ;version= '0.1.0.1'},
-            [pscustomobject]@{name="ImportPurchase"  ;version= '0.1.0.1'},
-            [pscustomobject]@{name="Sample"          ;version= '0.1.0.1'},
-            [pscustomobject]@{name="Service"         ;version= '0.1.0.3'},
-            [pscustomobject]@{name="HoldingReport"   ;version= '0.1.0.0'},
-            [pscustomobject]@{name="ITIntegration"   ;version= '0.1.0.4'}
+            [pscustomobject]@{name="BaseAppOld"      ;version= '19.0.29894.30693'},
+            [pscustomobject]@{name="BaseApp"         ;version= '19.0.29894.30694'},
+            [pscustomobject]@{name="Common"          ;version= '19.1.0.9'},
+            [pscustomobject]@{name="SalesItem"       ;version= '19.1.0.4'},
+            [pscustomobject]@{name="Representative"  ;version= '19.1.0.5'},
+            [pscustomobject]@{name="SalesContract"   ;version= '19.1.0.9'},
+            [pscustomobject]@{name="Payment"         ;version= '19.1.0.6'},
+            [pscustomobject]@{name="PersonalVoucher" ;version= '19.1.0.2'},
+            [pscustomobject]@{name="Commission"      ;version= '19.1.0.8'},
+            [pscustomobject]@{name="GDPR"            ;version= '19.1.0.1'},
+            [pscustomobject]@{name="ImportPurchase"  ;version= '19.1.0.2'},
+            [pscustomobject]@{name="Sample"          ;version= '19.1.0.1'},
+            [pscustomobject]@{name="Service"         ;version= '19.1.0.3'},
+            [pscustomobject]@{name="HoldingReport"   ;version= '19.1.0.1'},
+            [pscustomobject]@{name="ITIntegration"   ;version= '19.1.0.4'}
         )
     return $NavExtension
 }
