@@ -18,4 +18,5 @@ $dotNetProbingPaths =
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | where{$_.PSParentPath -like "*App*"}
 
 $TargetRepos = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName
-$Targets = $AppJsons.directory.fullname
+$Targets = $AppJsons.directory.FullName
+$AppJsons.Parent.FullName
