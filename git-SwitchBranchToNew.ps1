@@ -1,6 +1,7 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
-$ToBranch = 'JAM-Update-TableNameRenamed-202111'
+$ToBranch = 'JAM-Built-19.1.0.14'
+$CommitMsg = 'Update built 19.1.0.14'
 #Update gitignore setup 20210319
 #$ToBranch = 'JAM-update-develop-17.4-20210301'
 #Assembly BOM error
@@ -15,6 +16,8 @@ foreach ($Target in $AppJsons) {
             Set-Location $TargetGit
             write-host $TargetGit -ForegroundColor Green
             & git checkout -q -b "$ToBranch"
+            & git add *
+            & git commit -m "$CommitMsg"
         }
     }
 }
