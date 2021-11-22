@@ -1,11 +1,8 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
-$ToBranch = 'JAM-Built-19.1.0.14'
-$CommitMsg = 'Update built 19.1.0.14'
-#Update gitignore setup 20210319
-#$ToBranch = 'JAM-update-develop-17.4-20210301'
-#Assembly BOM error
-#Repr Contract: "Commissions Calculated" cannot be found
+$ToBranch = 'JAM-Built-19.1.0.15'
+$CommitMsg = 'Update built 19.1.0.15'
+
 $currentLocation = Get-Location
 foreach ($Target in $AppJsons) {
     $AppJson = Get-ObjectFromJSON (Join-Path $target.directory.FullName "app.json")
@@ -18,6 +15,7 @@ foreach ($Target in $AppJsons) {
             & git checkout -q -b "$ToBranch"
             & git add *
             & git commit -m "$CommitMsg"
+            & git push origin "$ToBranch"
         }
     }
 }
