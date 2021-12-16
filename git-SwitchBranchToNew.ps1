@@ -1,9 +1,9 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
-$ToBranch = 'JAM-Built-19.1.0.15'
-$CommitMsg = 'Update built 19.1.0.15'
-$ToBranch = 'JAM-ZSFieldRenamed-20211215'
-$CommitMsg = 'Update ZS field renamed'
+$ToBranch = 'JAM-Built-19.1.0.18'
+$CommitMsg = 'Update built 19.1.0.18'
+#$ToBranch = 'JAM-ZSFieldRenamed-20211216'
+#$CommitMsg = 'Update ZS field renamed'
 
 $currentLocation = Get-Location
 foreach ($Target in $AppJsons) {
