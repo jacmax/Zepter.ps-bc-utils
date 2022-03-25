@@ -1,32 +1,181 @@
 {
-    "name": "ForNAV",
-    "description": "ForNAV Rules",
-    "generalAction": "Hidden",
-    "rules": [
+    "name": "RULES",
+    "description": "ZepterIT Rules",
+    "rules": [  
+        {
+            "id": "AA0021",
+            "action": "Hidden",
+            "justification": "This is OK -> Temporary hidden. Prefix will be added later"
+        },
+        {
+            "id": "AA0072",
+            "action": "Hidden",
+            "justification": "This is OK -> Temporary hidden. Prefix will be added later"
+        },
+        {
+            "id": "AA0074",
+            "action": "Hidden",
+            "justification": "This is OK -> Temporary hidden. Prefix will be added later"
+        },
+        {
+            "id": "AA0215",
+            "action": "Hidden",
+            "justification": "This is OK -> File names included number of object"
+        },
+        {
+            "id": "AA0218",
+            "action": "Hidden",
+            "justification": "This is OK -> Temporary hidden. Tooltip will be added later"
+        },
+        {
+            "id": "AA0232",
+            "action": "Hidden",
+            "justification": "This is OK -> Temporary hidden. SIFT kay will be added later"
+        },
+        {
+            "id": "AA0470",
+            "action": "Hidden",
+            "justification": "This is OK -> Temporary hidden. Comment for label will be added later"
+        },
+        {
+            "id": "AS0051",
+            "action": "Hidden",
+            "justification": "This is OK -> We don't need app.json"
+        },
+        {
+            "id": "AS0052",
+            "action": "Hidden",
+            "justification": "This is OK -> We don't need app.json"
+        },
+        {
+            "id": "AS0013",
+            "action": "Hidden",
+            "justification": "This is OK -> In Common extension only"
+        },
+        {
+            "id": "AS0053",
+            "action": "Hidden",
+            "justification": "This is OK -> We have OnPrem extention"
+        },
+        {
+            "id": "AS0085",
+            "action": "Hidden",
+            "justification": "This is OK -> We have do not have Azure"
+        },
+        {
+            "id": "AS0099",
+            "action": "Hidden",
+            "justification": "This is OK -> In Common extension only"
+        },
+        {
+            "id": "AW0006",
+            "action": "Hidden",
+            "justification": "This is OK -> ApplicationArea will not be added"
+        },
+        {
+            "id": "AA0005",
+            "action": "Hidden",
+            "justification": "Temporary Later"
+        },
+        {
+            "id": "AA0008",
+            "action": "Hidden",
+            "justification": "Temporary Later"
+        },
+		{
+            "id": "AA0022",
+            "action": "Hidden",
+            "justification": "Temporary Later CASE or IF"
+        },
+        {
+            "id": "AA0136",
+            "action": "Hidden",
+            "justification": "Temporary Later"
+        },
+        {
+            "id": "AA0139",
+            "action": "Hidden",
+            "justification": "Temporary Overflow Later"
+        },
+        {
+            "id": "AA0194",
+            "action": "Hidden",
+            "justification": "Temporary, this will be resolved by Jacek Level 3"
+        },
+        {
+            "id": "AA0198",
+            "action": "Hidden",
+            "justification": "Temporary, this will be resolved by Pawel Level 1"
+        },
+        {
+            "id": "AA0202",
+            "action": "Hidden",
+            "justification": "Temporary, this will be resolved by Pawel Level 2"
+        },
+        {
+            "id": "AA0204",
+            "action": "Hidden",
+            "justification": "Temporary, this will be resolved by Pawel Level 3"
+        },
+        {
+            "id": "AA0205",
+            "action": "Hidden",
+            "justification": "Temporary, this will be resolved by Jacek Level 2"
+        },
+        {
+            "id": "AA0214",
+            "action": "Hidden",
+            "justification": "Temporary, this will be resolved by Jacek Level 7"
+        },
+        {
+            "id": "AA0217",
+            "action": "Hidden",
+            "justification": "Temporary"
+        },
+        {
+            "id": "AA0221",
+            "action": "Hidden",
+            "justification": "Temporary, this will be resolved by Jacek Level 1"
+        },
+        {
+            "id": "AA0225",
+            "action": "Hidden",
+            "justification": "Temporary"
+        },
+        {
+            "id": "AA0228",
+            "action": "Hidden",
+            "justification": "Temporary"
+        },
+        {
+            "id": "AA0231",
+            "action": "Hidden",
+            "justification": "Temporary, this will be resolved by Jacek Level 5"
+        },
         {
             "id": "AL0432",
             "action": "Hidden",
-            "justification": "Not possible to solve"
+            "justification": "Temporary"
         },
         {
             "id": "AL0603",
             "action": "Hidden",
-            "justification": "Option,Integer,Enum. Will be solved in the future"
+            "justification": "Temporary, this will be resolved by Jacek Level 4"
         },
         {
-            "id": "AL0605",
-            "action": "Error",
-            "justification": "Will be solved in the future"
-        },
-        {
-            "id": "AL0607",
+            "id": "AL0719",
             "action": "Hidden",
-            "justification": "Will be solved in the future"
+            "justification": "Temporary, this will be resolved by Jacek Level 6"
         },
         {
-            "id": "AL0667",
+            "id": "AW0005",
             "action": "Hidden",
-            "justification": "Import is deprecated. Will be solved in the future"
+            "justification": "Temporary"
+        },
+        {
+            "id": "AW0011",
+            "action": "Hidden",
+            "justification": "Temporary"
         }
     ]
 }
