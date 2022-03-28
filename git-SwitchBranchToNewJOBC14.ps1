@@ -20,7 +20,7 @@ $TargetGit = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.
 if ($TargetGit) {
     Set-Location $TargetGit
     write-host $TargetGit ' Branch:' $ToBranch -ForegroundColor Green
-    & git checkout -q -b "$ToBranch"
+    & git checkout -q -b "$ToBranch" develop
     & git add *
     & git commit -m "$CommitMsg"
     & git push origin "$ToBranch"

@@ -3,7 +3,8 @@
 $currentLocation = Get-Location
 foreach ($Target in $AppJsons) {
     $AppJson = Get-ObjectFromJSON (Join-Path $target.directory.FullName "app.json")
-    if (($AppJson.application -eq '19.0.0.0') -and $AppJson.name.Contains('ZS ') -and $AppJson.description.Contains('JAM')) {    
+    #if (($AppJson.application -eq '19.0.0.0') -and $AppJson.name.Contains('ZS ') -and $AppJson.description.Contains('JAM')) {    
+    if (($AppJson.application -eq '19.0.0.0') -and $AppJson.name.Contains('ZS ')) { 
         <#         
         $version = [version]$AppJson.version
         $version = [version]::New($version.Major, $version.Minor, $version.Build, 19) #$version.Revision + 1)
