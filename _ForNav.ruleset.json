@@ -130,7 +130,7 @@
         {
             "id": "AA0217",
             "action": "Hidden",
-            "justification": "Temporary"
+            "justification": "Temporary, StrSubstNo must use text constant or label"
         },
         {
             "id": "AA0221",
@@ -138,14 +138,9 @@
             "justification": "Temporary, this will be resolved by Jacek Level 1"
         },
         {
-            "id": "AA0225",
-            "action": "Hidden",
-            "justification": "Temporary"
-        },
-        {
             "id": "AA0228",
             "action": "Hidden",
-            "justification": "Temporary"
+            "justification": "Temporary, local procedure not used"
         },
         {
             "id": "AA0231",
@@ -166,6 +161,11 @@
             "id": "AL0719",
             "action": "Hidden",
             "justification": "Temporary, this will be resolved by Jacek Level 6"
+        },
+        {
+            "id": "AS0084",
+            "action": "Hidden",
+            "justification": "Temporary"
         },
         {
             "id": "AW0005",

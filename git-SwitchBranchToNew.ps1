@@ -3,9 +3,9 @@
 $currentLocation = Get-Location
 foreach ($Target in $AppJsons) {
     $AppJson = Get-ObjectFromJSON (Join-Path $target.directory.FullName "app.json")
-    #if (($AppJson.application -eq '19.0.0.0') -and $AppJson.name.Contains('ZS ') -and $AppJson.description.Contains('JAM')) {    
+    #if (($AppJson.application -eq '19.0.0.0') -and $AppJson.name.Contains('ZS ') -and $AppJson.description.Contains('JAM')) {
     if (($AppJson.application -eq '19.0.0.0') -and $AppJson.name.Contains('ZS ')) { 
-        <#         
+        <#
         $version = [version]$AppJson.version
         $version = [version]::New($version.Major, $version.Minor, $version.Build, 19) #$version.Revision + 1)
         $AppJson.version = $version.ToString()
@@ -23,11 +23,14 @@ foreach ($Target in $AppJsons) {
         $CommitMsg = "Update Build $($AppJson.version)"
         #>
 
-        $ToBranch = "JAM-AlRules-20220324"
+        $ToBranch = "JAM-AlRules-20220328"
         $CommitMsg = "Update AL rules"
 
-        $ToBranch = "JAM-AlRules-UnusedVaraible-20220325"
-        $CommitMsg = "Unused variable fix"
+        $ToBranch = "JAM-AlRules-CaptionProperty-20220329"
+        $CommitMsg = "Caption Property fix"
+
+        $ToBranch = "JAM-gitignore-20220329"
+        $CommitMsg = "Update gitignore"
 
         $Workspace = $Target.directory.parent.FullName
         $TargetGit = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName
