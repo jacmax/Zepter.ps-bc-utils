@@ -5,9 +5,8 @@ Import-Module Microsoft.PowerShell.Utility
 $compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse alc.exe | select -First 1
 $compPath = $compilator.PSParentPath
 
-$paramRules    = @("/ruleset:""$Workspace$('\ps-bc-utils\_ForNav.ruleset.json')""")
-$paramNoWarn   = @("/nowarn:AL0603")
-$paramNoWarn   += @("/nowarn:AL0605")
+$paramRules = @("/ruleset:""$Workspace$('\ps-bc-utils\_ForNav.ruleset.json')""")
+$paramNoWarn = @("/nowarn:AL0603")
 $paramAnalyzer = @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.CodeCop.dll')")
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.AppSourceCop.dll')")
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.UICop.dll')")
@@ -36,7 +35,8 @@ foreach ($Target in $Targets) {
         $extension = $extensions | Where-Object -Property Name -eq -Value $object.Name
         if (!($extension)) {
             $extensions += $object
-        } else {
+        }
+        else {
             $extension.Folder = $Target
         }
 
@@ -50,7 +50,8 @@ foreach ($Target in $Targets) {
                 $extension = $extensions | Where-Object -Property Name -eq -Value $object.Name
                 if ($extension) {
                     $extension."Quantity Dependency" += 1
-                } else {
+                }
+                else {
                     $extensions += $object
                 }
             }
@@ -74,9 +75,9 @@ foreach ($extension in $extensions) {
     $ExtensionApp = $(Join-Path $AppFolder $("$($AppJson.publisher)$('_')$($AppJson.name)$('_')$($AppJson.version)$('.app')"))
 
     $paramProject = @("/project:""$Target""")
-    $paramOut     = @("/out:""$ExtensionApp""")
-    $paramSymbol  = @("/packagecachepath:""$(Join-Path $Target $SymbolFolder)""")
-    $paramError   = @("/errorlog:""$(Join-Path $Target 'error.log')""")
+    $paramOut = @("/out:""$ExtensionApp""")
+    $paramSymbol = @("/packagecachepath:""$(Join-Path $Target $SymbolFolder)""")
+    $paramError = @("/errorlog:""$(Join-Path $Target 'error.log')""")
 
     write-Host '==='
     write-Host $Target -ForegroundColor yellow

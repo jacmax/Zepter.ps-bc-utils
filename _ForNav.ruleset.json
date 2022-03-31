@@ -58,6 +58,11 @@
             "justification": "This is OK -> We have OnPrem extention"
         },
         {
+            "id": "AS0084",
+            "action": "Hidden",
+            "justification": "This is OK -> We have OnPrem extention"
+        },
+        {
             "id": "AS0085",
             "action": "Hidden",
             "justification": "This is OK -> We have do not have Azure"
@@ -75,12 +80,12 @@
         {
             "id": "AA0005",
             "action": "Hidden",
-            "justification": "Temporary Later"
+            "justification": "Temporary Later, BEGIN..END"
         },
         {
             "id": "AA0008",
             "action": "Hidden",
-            "justification": "Temporary Later"
+            "justification": "Temporary Later, Open and Close"
         },
 		{
             "id": "AA0022",
@@ -90,12 +95,7 @@
         {
             "id": "AA0136",
             "action": "Hidden",
-            "justification": "Temporary Later"
-        },
-        {
-            "id": "AA0139",
-            "action": "Hidden",
-            "justification": "Temporary Overflow Later"
+            "justification": "Temporary Later, Unreachable code detected"
         },
         {
             "id": "AA0194",
@@ -150,7 +150,7 @@
         {
             "id": "AL0432",
             "action": "Hidden",
-            "justification": "Temporary"
+            "justification": "Temporary, marked for removal"
         },
         {
             "id": "AL0603",
@@ -161,21 +161,6 @@
             "id": "AL0719",
             "action": "Hidden",
             "justification": "Temporary, this will be resolved by Jacek Level 6"
-        },
-        {
-            "id": "AS0084",
-            "action": "Hidden",
-            "justification": "Temporary"
-        },
-        {
-            "id": "AW0005",
-            "action": "Hidden",
-            "justification": "Temporary"
-        },
-        {
-            "id": "AW0011",
-            "action": "Hidden",
-            "justification": "Temporary"
         }
     ]
 }
