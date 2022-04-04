@@ -2,7 +2,7 @@
 
 Import-Module Microsoft.PowerShell.Utility
 
-$compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse alc.exe | select -First 1
+$compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse alc.exe | Select-Object -First 1
 $compPath = $compilator.PSParentPath
 
 $paramRules = @("/ruleset:""$Workspace$('\ps-bc-utils\_ForNav.ruleset.json')""")
@@ -26,7 +26,7 @@ foreach ($Target in $Targets) {
     #Get app.json
     $AppJson = Get-ObjectFromJSON (Join-Path $target "app.json")
 
-    if ($AppJson.application -eq '19.0.0.0') {
+    if (($AppJson.application -eq $application)) {
         $object = New-Object -TypeName PSObject
         $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
         $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value $Target

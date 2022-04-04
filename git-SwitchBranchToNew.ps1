@@ -1,14 +1,44 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
+$clean19 = $application -eq '19.0.0.0'
 $mainWorkspace = $Workspace
 $currentLocation = Get-Location
 foreach ($Target in $AppJsons) {
     $AppJson = Get-ObjectFromJSON (Join-Path $target.directory.FullName "app.json")
-    #if (($AppJson.application -eq '19.0.0.0') -and $AppJson.name.Contains('ZS ') -and $AppJson.description.Contains('JAM')) {
-    if (($AppJson.application -eq '19.0.0.0') -and $AppJson.name.Contains('ZS ')) { 
+    #if ((($AppJson.application -eq '19.0.0.0') -or ($AppJson.application -eq '20.0.0.0')) -and $AppJson.name.Contains('ZS ') -and $AppJson.description.Contains('JAM')) {
+    if ((($AppJson.application -eq '19.0.0.0') -or ($AppJson.application -eq '20.0.0.0')) -and $AppJson.name.Contains('ZS ')) { 
         
         $versionOld = [version]$AppJson.version
-        $versionNew = [version]::New($versionOld.Major, $versionOld.Minor, $versionOld.Build, $versionOld.Revision + 1)
+
+        if ($clean19) {
+            $versionOldMajor = 19
+            $versionOldMinor = 1
+            $AppJson.application = '19.0.0.0'
+            $AppJson.platform = '19.0.0.0'
+            $AppJson.preprocessorSymbols[0] = 'CLEAN19'
+            $AppJson.preprocessorSymbols[1] = 'IT'
+        }
+        else {
+            $versionOldMajor = 20
+            $versionOldMinor = 0
+            $AppJson.application = '20.0.0.0'
+            $AppJson.platform = '20.0.0.0'
+            $AppJson.preprocessorSymbols[0] = 'CLEAN20'
+            $AppJson.preprocessorSymbols[1] = 'W1'
+        }
+
+        if ($AppJson.name -eq 'ZS Integration IT') {
+            $versionOldMajor = 19
+            $versionOldMinor = 1
+            $AppJson.application = '19.0.0.0'
+            $AppJson.platform = '19.0.0.0'
+            $AppJson.preprocessorSymbols[0] = 'CLEAN19'
+            $AppJson.preprocessorSymbols[1] = 'IT'
+        }
+
+        $versionOld = [version]::New($versionOldMajor, $versionOldMinor, $versionOld.Build, $versionOld.Revision)
+        $versionNew = [version]::New($versionOld.Major, $versionOld.Minor, $versionOld.Build, $versionOld.Revision)
+        
         $AppJson.version = $versionNew.ToString()
 
         foreach ($app in $AppJson.dependencies) {
@@ -17,20 +47,19 @@ foreach ($Target in $AppJsons) {
             }
         }
 
-        #$AppJson.application = '19.0.0.0'
-        #$AppJson.propagateDependencies = $false
-        #$AppJson.preprocessorSymbols[1] = 'IT'
-
+        $AppJson.propagateDependencies = $false
         $AppJson | ConvertTo-Json -depth 32 | set-content (Join-Path $target.directory.FullName "app.json")
-        
+
+        <#
         $ToBranch = "JAM-Build-$($AppJson.version)"
         $CommitMsg = "Update Build $($AppJson.version)"
-
+        #>
+        
         #$ToBranch = "JAM-AlRules-20220329A"
         #$CommitMsg = "Update AL rules 2"
 
-        #$ToBranch = "JAM-AlRules-OverflowWarnings-20220330"
-        #$CommitMsg = "Overflow warnings fix"
+        $ToBranch = "JAM-AlRules-Warnings-20220404"
+        $CommitMsg = "AA0194,AL0603 warnings fix"
 
         #$ToBranch = "JAM-gitignore-20220329"
         #$CommitMsg = "Update gitignore"
@@ -45,7 +74,7 @@ foreach ($Target in $AppJsons) {
             & git add *
             & git commit -m "$CommitMsg"
             & git push origin "$ToBranch"
-
+            
         }
 
     }
