@@ -55,11 +55,12 @@ foreach ($Target in $AppJsons) {
         $CommitMsg = "Update Build $($AppJson.version)"
         #>
         
-        #$ToBranch = "JAM-AlRules-20220329A"
-        #$CommitMsg = "Update AL rules 2"
+        #$ToBranch = "JAM-AlRules-20220405"
+        #$CommitMsg = "Update AL rules"
 
-        $ToBranch = "JAM-AlRules-Warnings-20220404"
-        $CommitMsg = "AA0194,AL0603 warnings fix"
+        $ToBranch = "JAM-AlRules-Warnings-20220405A"
+        #$CommitMsg = "AA0194,AA0231,AL0603,AL0719 warnings fix"
+        $CommitMsg = "AA0198,AA0202,AA0204 warnings fix"
 
         #$ToBranch = "JAM-gitignore-20220329"
         #$CommitMsg = "Update gitignore"
@@ -68,13 +69,15 @@ foreach ($Target in $AppJsons) {
         $TargetGit = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName
         if ($TargetGit) {
             Set-Location $TargetGit
-            write-host $TargetGit ' Branch:' $ToBranch -ForegroundColor Green
-            
-            & git checkout -q -b "$ToBranch"
-            & git add *
-            & git commit -m "$CommitMsg"
-            & git push origin "$ToBranch"
-            
+            if ($(git status --porcelain)) {
+                write-host $TargetGit ' Branch:' $ToBranch -ForegroundColor Green
+                
+                & git checkout -q -b "$ToBranch"
+                & git add *
+                & git commit -m "$CommitMsg"
+                & git push origin "$ToBranch"
+                
+            }
         }
 
     }
