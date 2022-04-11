@@ -1,3 +1,5 @@
+$SecretSettings = Get-ObjectFromJSON (Join-Path $PSScriptRoot "_SecretSettings.json") #Secret Settings, stored in a .json file, and ignored by git
+
 if (Test-Path 'D:\DEV-EXT' -PathType Container) {
     $Workspace = 'D:\DEV-EXT'
     $AppFolder = 'D:\DEV-EXT\APP\'
@@ -20,6 +22,19 @@ $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSP
 
 $TargetRepos = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName
 $Targets = $AppJsons.directory.FullName
-$AppJsons.Parent.FullName
 
-$application = '19.0.0.0';
+$ContainerUserName = 'admin'
+$ContainerPassword = ConvertTo-SecureString 'ZitP@ssword1' -AsPlainText -Force
+$ContainerCredential = New-Object System.Management.Automation.PSCredential ($ContainerUserName, $ContainerPassword)
+
+$UserName = 'sa'
+$Password = ConvertTo-SecureString 'ZitP@ssword1' -AsPlainText -Force
+$ContainerSqlCredential = New-Object System.Management.Automation.PSCredential ($UserName, $Password)
+
+$ContainerImage = 'mcr.microsoft.com/businesscentral/onprem:w1' 
+$ContainerLicenseFile = $SecretSettings.containerLicenseFile
+
+#$ContainerAdditionalParameters = @("--env isBcSandbox=Y","--cpu-count 8","--dns=8.8.8.8")
+$ContainerAdditionalParameters = @("--cpu-count 8", "--dns=8.8.8.8")
+
+$BCZSFolder = $SecretSettings.ZepterSoftPath
