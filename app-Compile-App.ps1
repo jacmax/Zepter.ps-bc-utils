@@ -3,6 +3,7 @@
 Import-Module Microsoft.PowerShell.Utility
 
 $application = '';
+$country = '';
 $compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse alc.exe | Select-Object -First 1
 $compPath = $compilator.PSParentPath
 
@@ -32,8 +33,11 @@ foreach ($Target in $Targets) {
             $application = $AppJson.application;
         }
     }
+    if ($country -eq '') {   
+        $country = $AppJson.preprocessorSymbols[1];
+    }
 
-    if ($AppJson.application -eq $application) {
+    if (($AppJson.application -eq $application) -and ($country -eq $AppJson.preprocessorSymbols[1])) {
         $object = New-Object -TypeName PSObject
         $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
         $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value $Target

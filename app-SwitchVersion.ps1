@@ -1,6 +1,8 @@
 param (
     [validateset('BC19', 'BC20', 'BC+')]
-    [String] $Type = 'BC19'
+    [String] $Type = 'BC19',
+    [validateset('W1', 'IT')]
+    [String] $Country = 'W1'
 )
 
 . (Join-path $PSScriptRoot '_Settings.ps1')
@@ -29,7 +31,7 @@ foreach ($Target in $AppJsons) {
             $AppJson.application = '19.0.0.0'
             $AppJson.platform = '19.0.0.0'
             $AppJson.preprocessorSymbols[0] = 'CLEAN19'
-            $AppJson.preprocessorSymbols[1] = 'IT'
+            $AppJson.preprocessorSymbols[1] = $Country
         }
         elseif ($clean20) {
             $versionOldMajor = 20
@@ -37,10 +39,11 @@ foreach ($Target in $AppJsons) {
             $AppJson.application = '20.0.0.0'
             $AppJson.platform = '20.0.0.0'
             $AppJson.preprocessorSymbols[0] = 'CLEAN20'
-            $AppJson.preprocessorSymbols[1] = 'W1'
+            $AppJson.preprocessorSymbols[1] = $Country
         }
 
-        if ($AppJson.name -eq 'ZS Integration IT') {
+        
+        if (($AppJson.name -eq 'ZS Integration IT') -and ($Country -eq 'W1')) {
             $versionOldMajor = 19
             $versionOldMinor = 1
             $AppJson.application = '19.0.0.0'

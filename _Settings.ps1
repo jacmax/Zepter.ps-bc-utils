@@ -38,3 +38,6 @@ $ContainerLicenseFile = $SecretSettings.containerLicenseFile
 $ContainerAdditionalParameters = @("--cpu-count 8", "--dns=8.8.8.8")
 
 $BCZSFolder = $SecretSettings.ZepterSoftPath
+
+$ContainerName = 'w1-bc200'
+$dockerInstallApp = '20.0.0.29'

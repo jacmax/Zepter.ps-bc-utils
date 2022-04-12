@@ -17,10 +17,10 @@ foreach ($Target in $AppJsons) {
         #$ToBranch = "JAM-gitignore-20220329"
         #$CommitMsg = "Update gitignore"
 
-        $ToBranch = "JAM-AlRules-Warnings-20220411"
+        $ToBranch = "JAM-Upgrade-BC20-20220411"
         #$CommitMsg = "AA0194,AA0231,AL0603,AL0719 warnings fix"
         #$CommitMsg = "AL0432 warnings fix"
-        $CommitMsg = "Update Build 19.1.0.29"
+        $CommitMsg = "Upgrade for BC20"
 
         #$ToBranch = "JAM-Migration-20220405"
         #$CommitMsg = "Personal Voucher, Commission excluded"
