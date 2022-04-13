@@ -39,5 +39,9 @@ $ContainerAdditionalParameters = @("--cpu-count 8", "--dns=8.8.8.8")
 
 $BCZSFolder = $SecretSettings.ZepterSoftPath
 
-$ContainerName = 'w1-bc200'
-$dockerInstallApp = '20.0.0.29'
+$SettingsJson = Get-ObjectFromJSON (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
+$ContainerCountry = $SettingsJson.country
+$ContainerVersion = $SettingsJson.version
+
+$ContainerName = "$ContainerCountry-bc$($ContainerVersion.Replace('.',''))"
+$dockerInstallApp = "$ContainerVersion.0.30"

@@ -15,6 +15,22 @@ if ($newVersion) {
     $clean19 = $true
 }
 
+Write-Host $Country
+
+$SettingsJson = Get-ObjectFromJSON (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
+if ($clean19) {
+    $SettingsJson.version = '19.5'
+}
+if ($clean20) {
+    $SettingsJson.version = '20.0'
+}
+$SettingsJson.country = $Country.ToLower()
+
+$SettingsJson | ConvertTo-Json -depth 32 | set-content (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
+
+Write-Host $SettingsJson.version
+Write-Host $SettingsJson.country
+
 $mainWorkspace = $Workspace
 $currentLocation = Get-Location
 foreach ($Target in $AppJsons) {
@@ -84,7 +100,12 @@ if ($clean19) {
     Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC190.bat" -WindowStyle Hidden
 }
 elseif ($clean20) {
-    Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC200.bat" -WindowStyle Hidden
+    if ($Country -eq 'W1') {
+        Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC200.bat" -WindowStyle Hidden
+    }
+    else {
+        Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC200-IT.bat" -WindowStyle Hidden
+    }
 }
 
 Set-Location $currentLocation
