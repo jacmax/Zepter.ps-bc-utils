@@ -44,4 +44,4 @@ $ContainerCountry = $SettingsJson.country
 $ContainerVersion = $SettingsJson.version
 
 $ContainerName = "$ContainerCountry-bc$($ContainerVersion.Replace('.',''))"
-$dockerInstallApp = "$ContainerVersion.0.30"
+$dockerInstallApp = "$ContainerVersion.0.32"
