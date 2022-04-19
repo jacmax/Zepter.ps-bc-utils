@@ -15,7 +15,7 @@ if ($newVersion) {
     $clean19 = $true
 }
 
-Write-Host $Country
+Write-Host $Country -NoNewline
 
 $SettingsJson = Get-ObjectFromJSON (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
 if ($clean19) {
@@ -26,10 +26,8 @@ if ($clean20) {
 }
 $SettingsJson.country = $Country.ToLower()
 
-$SettingsJson | ConvertTo-Json -depth 32 | set-content (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
-
-Write-Host $SettingsJson.version
-Write-Host $SettingsJson.country
+Write-Host " " $SettingsJson.version -NoNewline
+Write-Host " " $SettingsJson.country
 
 $mainWorkspace = $Workspace
 $currentLocation = Get-Location
@@ -95,6 +93,9 @@ if (($versionOld) -and ($versionNew)) {
     $Extenstion = $Extenstion.replace($versionOld.ToString(), $versionNew.ToString())
     $Extenstion | set-content (Join-Path $mainWorkspace 'ps-bc-utils\NavExtensions.ps1')
 }
+
+$SettingsJson.ZepterSoftVersion = "$($versionNew.Build.ToString()).$($versionNew.Revision.ToString())"
+$SettingsJson | ConvertTo-Json -depth 32 | set-content (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
 
 if ($clean19) {
     Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC190.bat" -WindowStyle Hidden

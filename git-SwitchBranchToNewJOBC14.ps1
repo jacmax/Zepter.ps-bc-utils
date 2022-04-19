@@ -11,7 +11,8 @@ $AppJson.version = $version.ToString()
 
 $AppJson | ConvertTo-Json -depth 32 | set-content (Join-Path $target.directory.FullName "app.json")
 
-$ToBranch = "JAM-Build-$($AppJson.version)"
+$ToFixDate = $(Get-Date -Format "yyyyMMdd-HHmm")
+$ToBranch = $("JAM-Build-$($AppJson.version)-{0}" -f $ToFixDate)
 $CommitMsg = "Update Build $($AppJson.version)"
 
 $Workspace = $target.directory.parent.FullName
@@ -21,7 +22,7 @@ if ($TargetGit) {
     Set-Location $TargetGit
     write-host $TargetGit ' Branch:' $ToBranch -ForegroundColor Green
     & git checkout -q -b "$ToBranch" develop
-    & git add *
+    & git add .
     & git commit -m "$CommitMsg"
     & git push origin "$ToBranch"
 }
