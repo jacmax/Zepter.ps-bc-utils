@@ -8,7 +8,7 @@ $compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse
 $compPath = $compilator.PSParentPath
 
 $paramRules = @("/ruleset:""$Workspace$('\ps-bc-utils\_ForNav.ruleset.json')""")
-$paramNoWarn = @("/nowarn:AL0603")
+#$paramNoWarn = @("/nowarn:AL0603")
 $paramAnalyzer = @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.CodeCop.dll')")
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.AppSourceCop.dll')")
 $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynamics.Nav.UICop.dll')")

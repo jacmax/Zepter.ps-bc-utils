@@ -13,12 +13,12 @@ $ToFixBranch = $("JAM-Upgrade-BC20-{0}" -f $ToFixDate)
 #$ToFixBranch = "JAM-gitignore-20220329"
 #$ToFixBranch = "JAM-Migration-20220405"
 
-$FixCommitMsg = "Upgrade for BC20"
+#$FixCommitMsg = "Upgrade for BC20"
 #$FixCommitMsg = "New fields were added in setup page"
 #$FixCommitMsg = "Update AL rules"
 #$FixCommitMsg = "Update gitignore"
 #$FixCommitMsg = "AA0194,AA0231,AL0603,AL0719 warnings fix"
-#$FixCommitMsg = "AL0432 warnings fix"
+$FixCommitMsg = "AA0021 warnings fix"
 #$FixCommitMsg = "Personal Voucher, Commission excluded"
 #$FixCommitMsg = "AS0011, prefix in enums was added, warnings fix"
 

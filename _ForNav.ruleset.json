@@ -3,19 +3,19 @@
     "description": "ZepterIT Rules",
     "rules": [  
         {
-            "id": "AA0021",
-            "action": "Hidden",
-            "justification": "This is OK -> Temporary hidden. Prefix will be added later"
-        },
-        {
             "id": "AA0072",
             "action": "Hidden",
-            "justification": "This is OK -> Temporary hidden. Prefix will be added later"
+            "justification": "This is OK -> The name of variable must be suffixed with the type or object name"
         },
         {
             "id": "AA0074",
             "action": "Hidden",
-            "justification": "This is OK -> Temporary hidden. Prefix will be added later"
+            "justification": "This is OK -> Variable label must have a suffix from this list: Msg, Tok, Err, Qsr, Lbl, Txt"
+        },
+        {
+            "id": "AA0214",
+            "action": "Hidden",
+            "justification": "This is OK -> The record should be modified before saving to the database"
         },
         {
             "id": "AA0215",
@@ -38,6 +38,16 @@
             "justification": "This is OK -> Temporary hidden. Comment for label will be added later"
         },
         {
+            "id": "AS0011",
+            "action": "Hidden",
+            "justification": "This is OK -> Mandatory affixes in the identifier names"
+        },
+        {
+            "id": "AS0013",
+            "action": "Hidden",
+            "justification": "This is OK -> In Common extension only, fields numbers range"
+        },
+        {
             "id": "AS0051",
             "action": "Hidden",
             "justification": "This is OK -> We don't need app.json"
@@ -48,14 +58,14 @@
             "justification": "This is OK -> We don't need app.json"
         },
         {
-            "id": "AS0013",
-            "action": "Hidden",
-            "justification": "This is OK -> In Common extension only"
-        },
-        {
             "id": "AS0053",
             "action": "Hidden",
             "justification": "This is OK -> We have OnPrem extention"
+        },
+        {
+            "id": "AS0079",
+            "action": "Hidden",
+            "justification": "This is OK -> Mandatory affixes in procedure names"
         },
         {
             "id": "AS0084",
@@ -65,7 +75,7 @@
         {
             "id": "AS0085",
             "action": "Hidden",
-            "justification": "This is OK -> We have do not have Azure"
+            "justification": "This is OK -> We don't have Azure"
         },
         {
             "id": "AS0099",
@@ -98,69 +108,14 @@
             "justification": "Temporary Later, Unreachable code detected"
         },
         {
-            "id": "AA0194",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Jacek Level 3"
-        },
-        {
-            "id": "AA0198",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Pawel Level 1"
-        },
-        {
-            "id": "AA0202",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Pawel Level 2"
-        },
-        {
-            "id": "AA0204",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Pawel Level 3"
-        },
-        {
-            "id": "AA0205",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Jacek Level 2"
-        },
-        {
-            "id": "AA0214",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Jacek Level 7"
-        },
-        {
             "id": "AA0217",
             "action": "Hidden",
             "justification": "Temporary, StrSubstNo must use text constant or label"
         },
         {
-            "id": "AA0221",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Jacek Level 1"
-        },
-        {
             "id": "AA0228",
             "action": "Hidden",
             "justification": "Temporary, local procedure not used"
-        },
-        {
-            "id": "AA0231",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Jacek Level 5"
-        },
-        {
-            "id": "AL0432",
-            "action": "Hidden",
-            "justification": "Temporary, marked for removal"
-        },
-        {
-            "id": "AL0603",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Jacek Level 4"
-        },
-        {
-            "id": "AL0719",
-            "action": "Hidden",
-            "justification": "Temporary, this will be resolved by Jacek Level 6"
         }
     ]
 }
