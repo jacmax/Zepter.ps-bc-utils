@@ -8,6 +8,7 @@ param (
 
 $ToFixDate = $(Get-Date -Format "yyyyMMdd-HHmm")
 $ToFixBranch = $("JAM-Upgrade-BC20-{0}" -f $ToFixDate)
+$ToFixBranch = $("JAM-Update-BC19-{0}" -f $ToFixDate)
 #$ToFixBranch = "JAM-Upgrade-BC20-20220413-0920"
 #$ToFixBranch = "JAM-AlRules-20220406"
 #$ToFixBranch = "JAM-gitignore-20220329"
@@ -18,9 +19,10 @@ $ToFixBranch = $("JAM-Upgrade-BC20-{0}" -f $ToFixDate)
 #$FixCommitMsg = "Update AL rules"
 #$FixCommitMsg = "Update gitignore"
 #$FixCommitMsg = "AA0194,AA0231,AL0603,AL0719 warnings fix"
-$FixCommitMsg = "AA0021 warnings fix"
+#$FixCommitMsg = "AA0021 warnings fix"
 #$FixCommitMsg = "Personal Voucher, Commission excluded"
 #$FixCommitMsg = "AS0011, prefix in enums was added, warnings fix"
+
 
 if ($Type -eq 'Fix') {
     $ToBranch = $ToFixBranch
@@ -49,7 +51,7 @@ foreach ($Target in $AppJsons) {
                 & git stage .
                 & git commit -m "$CommitMsg"
                 & git push origin "$ToBranch"
-                
+
             }
         }
 
