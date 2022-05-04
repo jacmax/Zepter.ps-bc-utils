@@ -8,7 +8,7 @@ foreach ($Target in $AppJsons) {
 	if ((($AppJson.application -eq '19.0.0.0') -or ($AppJson.application -eq '20.0.0.0')) -and $AppJson.name.Contains('ZS ')) {
 		$Workspace = $Target.directory.parent.FullName
 		$TargetGit = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName
-		write-host $TargetGit -ForegroundColor Green
+		write-host $AppJson.name $TargetGit -ForegroundColor Green
 		Set-Location $TargetGit
 		& git checkout -q "$ToBranch"
 		& git pull -q origin "$ToBranch"
