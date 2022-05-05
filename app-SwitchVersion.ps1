@@ -1,6 +1,6 @@
 param (
     [validateset('BC18', 'BC19', 'BC20', 'BC+')]
-    [String] $Type = 'BC19',
+    [String] $Type = 'BC20',
     [validateset('W1', 'IT')]
     [String] $Country = 'W1'
 )
@@ -13,7 +13,7 @@ $clean20 = $Type -eq 'BC20'
 $newVersion = $Type -eq 'BC+'
 
 if ($newVersion) {
-    $clean19 = $true
+    $clean20 = $true
 }
 
 Write-Host $Country -NoNewline
