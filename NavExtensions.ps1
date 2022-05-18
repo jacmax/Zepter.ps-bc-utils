@@ -3,20 +3,21 @@ function GetNavExtensions {
     @(
         [pscustomobject]@{name = "BaseAppOld"      ; version = '19.0.29894.30696' },
         [pscustomobject]@{name = "BaseApp"         ; version = '19.0.29894.30697' },
-        [pscustomobject]@{name = "Common"          ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "SalesItem"       ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "Representative"  ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "SalesContract"   ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "Payment"         ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "DataMigration"   ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "PersonalVoucher" ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "Commission"      ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "GDPR"            ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "ImportPurchase"  ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "Sample"          ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "Service"         ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "HoldingReport"   ; version = '20.0.0.47' },
-        [pscustomobject]@{name = "ITIntegration"   ; version = '20.0.0.47' }
+        [pscustomobject]@{name = "Common"          ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "SalesItem"       ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "Representative"  ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "SalesContract"   ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "Payment"         ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "DataMigration"   ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "PersonalVoucher" ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "Commission"      ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "GDPR"            ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "ImportPurchase"  ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "Sample"          ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "Service"         ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "HoldingReport"   ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "ITIntegration"   ; version = '20.0.0.58' },
+        [pscustomobject]@{name = "SIIntegration"   ; version = '20.0.0.58' }
     )
     return $NavExtension
 }
