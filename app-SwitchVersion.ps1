@@ -1,32 +1,32 @@
 param (
-    [validateset('BC18', 'BC19', 'BC20', 'BC+')]
-    [String] $Type = 'BC20',
+    [validateset('BC190', 'BC200', 'BC201', 'BC+')]
+    [String] $Type = 'BC200',
     [validateset('W1', 'IT')]
     [String] $Country = 'W1'
 )
 
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
-$clean18 = $Type -eq 'BC18'
-$clean19 = $Type -eq 'BC19'
-$clean20 = $Type -eq 'BC20'
+$clean190 = $Type -eq 'BC190'
+$clean200 = $Type -eq 'BC200'
+$clean201 = $Type -eq 'BC201'
 $newVersion = $Type -eq 'BC+'
 
 if ($newVersion) {
-    $clean20 = $true
+    $clean200 = $true
 }
 
 Write-Host $Country -NoNewline
 
 $SettingsJson = Get-ObjectFromJSON (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
-if ($clean18) {
-    $SettingsJson.version = '18.0'
-}
-if ($clean19) {
+if ($clean190) {
     $SettingsJson.version = '19.5'
 }
-if ($clean20) {
+if ($clean200) {
     $SettingsJson.version = '20.0'
+}
+if ($clean201) {
+    $SettingsJson.version = '20.1'
 }
 $SettingsJson.country = $Country.ToLower()
 
@@ -43,15 +43,7 @@ foreach ($Target in $AppJsons) {
         $versionOldMajor = 19
         $versionOldMinor = 1
 
-        if ($clean18) {
-            $versionOldMajor = 18
-            $versionOldMinor = 1
-            $AppJson.application = '19.0.0.0'
-            $AppJson.platform = '19.0.0.0'
-            $AppJson.preprocessorSymbols[0] = 'CLEAN18'
-            $AppJson.preprocessorSymbols[1] = $Country
-        }
-        elseif ($clean19) {
+        if ($clean190) {
             $versionOldMajor = 19
             $versionOldMinor = 1
             $AppJson.runtime = '8.0'
@@ -60,9 +52,12 @@ foreach ($Target in $AppJsons) {
             $AppJson.preprocessorSymbols[0] = 'CLEAN19'
             $AppJson.preprocessorSymbols[1] = $Country
         }
-        elseif ($clean20) {
+        elseif (($clean200) -or ($clean201)) {
             $versionOldMajor = 20
             $versionOldMinor = 0
+            if ($clean201) {
+                $versionOldMinor = 1
+            }
             $AppJson.runtime = '9.0'
             $AppJson.application = '20.0.0.0'
             $AppJson.platform = '20.0.0.0'
@@ -72,14 +67,8 @@ foreach ($Target in $AppJsons) {
 
 
         if (($AppJson.name -eq 'ZS Integration IT') -and ($Country -eq 'W1')) {
-            if ($clean18) {
-                $versionOldMajor = 18
-                $AppJson.preprocessorSymbols[0] = 'CLEAN18'
-            }
-            else {
-                $versionOldMajor = 19
-                $AppJson.preprocessorSymbols[0] = 'CLEAN19'
-            }
+            $versionOldMajor = 19
+            $AppJson.preprocessorSymbols[0] = 'CLEAN19'
             $versionOldMinor = 1
             $AppJson.application = '19.0.0.0'
             $AppJson.platform = '19.0.0.0'
@@ -118,11 +107,11 @@ if (($versionOld) -and ($versionNew)) {
     Write-Host $versionOld.ToString() $versionNew.ToString()
     $Extenstion = Get-Content -Path (Join-Path $mainWorkspace 'ps-bc-utils\NavExtensions.ps1')
     $Extenstion = $Extenstion.replace($versionOld.ToString(), $versionNew.ToString())
-    if ($clean19) {
+    if ($clean190) {
         $versionOldMajor = 20
         $versionOldMinor = 0
     }
-    elseif ($clean20) {
+    elseif (($clean200) -or ($clean201)) {
         $versionOldMajor = 19
         $versionOldMinor = 1
     }
@@ -137,7 +126,7 @@ $SettingsJson | ConvertTo-Json -depth 32 | set-content (Join-Path $Workspace "ps
 if (($clean18) -or ($clean19)) {
     Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC190.bat" -WindowStyle Hidden
 }
-elseif ($clean20) {
+elseif (($clean200) -or ($clean201)) {
     if ($Country -eq 'W1') {
         Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC200.bat" -WindowStyle Hidden
     }
