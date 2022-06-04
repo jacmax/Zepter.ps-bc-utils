@@ -1,5 +1,5 @@
 param (
-    [validateset('BC190', 'BC200', 'BC201', 'BC+')]
+    [validateset('BC190', 'BC200', 'BC201', 'BC+', 'BC++')]
     [String] $Type = 'BC200',
     [validateset('W1', 'IT')]
     [String] $Country = 'W1'
@@ -11,8 +11,9 @@ $clean190 = $Type -eq 'BC190'
 $clean200 = $Type -eq 'BC200'
 $clean201 = $Type -eq 'BC201'
 $newVersion = $Type -eq 'BC+'
+$newVersionLive = $Type -eq 'BC++'
 
-if ($newVersion) {
+if ($newVersion -or $newVersionLive) {
     $clean200 = $true
 }
 
@@ -78,6 +79,9 @@ foreach ($Target in $AppJsons) {
         $versionOld = [version]::New($versionOldMajor, $versionOldMinor, $versionOld.Build, $versionOld.Revision)
         if ($newVersion) {
             $versionNew = [version]::New($versionOld.Major, $versionOld.Minor, $versionOld.Build, $versionOld.Revision + 1)
+        }
+        elseif ($newVersionLive) {
+            $versionNew = [version]::New($versionOld.Major, $versionOld.Minor, $versionOld.Build + 1, 0)
         }
         else {
             $versionNew = [version]::New($versionOld.Major, $versionOld.Minor, $versionOld.Build, $versionOld.Revision)

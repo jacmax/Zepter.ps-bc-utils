@@ -11,7 +11,7 @@ else {
 
 $SymbolFolder = '.alpackages'
 
-$dotNetProbingPaths = 
+$dotNetProbingPaths =
 "d:\DEV-EXT\bc-common\Common - App\.netpackages",
 "D:\DEV-BASEAPP\BC190-ProgramFiles",
 "D:\DEV-BASEAPP\BC190-ProgramFilesX86",
@@ -31,7 +31,7 @@ $UserName = 'sa'
 $Password = ConvertTo-SecureString 'ZitP@ssword1' -AsPlainText -Force
 $ContainerSqlCredential = New-Object System.Management.Automation.PSCredential ($UserName, $Password)
 
-$ContainerImage = 'mcr.microsoft.com/businesscentral/onprem:w1' 
+$ContainerImage = 'mcr.microsoft.com/businesscentral/onprem:w1'
 $ContainerLicenseFile = $SecretSettings.containerLicenseFile
 
 #$ContainerAdditionalParameters = @("--env isBcSandbox=Y","--cpu-count 8","--dns=8.8.8.8")
@@ -42,6 +42,8 @@ $BCZSFolder = $SecretSettings.ZepterSoftPath
 $SettingsJson = Get-ObjectFromJSON (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
 $ContainerCountry = $SettingsJson.country
 $ContainerVersion = $SettingsJson.version
+$ZepterCountry = $SettingsJson.zeptercountry
+$ZepterVersion = $SettingsJson.zepterversion
 
 $ContainerName = "$ContainerCountry-bc$($ContainerVersion.Replace('.',''))"
 $dockerInstallApp = "$ContainerVersion.$($SettingsJson.ZepterSoftVersion)"
