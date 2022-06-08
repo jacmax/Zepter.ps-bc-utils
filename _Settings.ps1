@@ -46,4 +46,10 @@ $ZepterCountry = $SettingsJson.zeptercountry
 $ZepterVersion = $SettingsJson.zepterversion
 
 $ContainerName = "$ContainerCountry-bc$($ContainerVersion.Replace('.',''))"
+if ($ZepterCountry) {
+    $ContainerName = "$ZepterCountry"
+}
+if ($ZepterVersion) {
+    $ContainerName = "$ContainerName-$ZepterVersion"
+}
 $dockerInstallApp = "$ContainerVersion.$($SettingsJson.ZepterSoftVersion)"
