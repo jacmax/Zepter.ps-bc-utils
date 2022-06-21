@@ -8,7 +8,7 @@ param (
 
 $ToFixDate = $(Get-Date -Format "yyyyMMdd-HHmm")
 #$ToFixBranch = $("JAM-Upgrade-BC20-{0}" -f $ToFixDate)
-$ToFixBranch = $("JAM-Update-BC19-{0}" -f $ToFixDate)
+$ToFixBranch = $("JAM-Update-BC20-{0}" -f $ToFixDate)
 #$ToFixBranch = $("JAM-BC17-348-{0}" -f $ToFixDate)
 #$ToFixBranch = "JAM-Upgrade-BC20-20220413-0920"
 #$ToFixBranch = "JAM-AlRules-20220406"
@@ -24,6 +24,7 @@ $ToFixBranch = $("JAM-Update-BC19-{0}" -f $ToFixDate)
 #$FixCommitMsg = "AS0011, prefix in enums was added, warnings fix"
 $FixCommitMsg = "AA0021 warnings fix"
 $FixCommitMsg = "Update the 'Closed Base Calendar Unit' field"
+$FixCommitMsg = "Code cleaning"
 
 if ($Type -eq 'Fix') {
     $ToBranch = $ToFixBranch
@@ -36,7 +37,6 @@ foreach ($Target in $AppJsons) {
     if ((($AppJson.application -eq '19.0.0.0') -or ($AppJson.application -eq '20.0.0.0')) -and $AppJson.name.Contains('ZS ')) {
 
         if (($Type -eq 'Version') -and (!$ToBranch)) {
-
             $ToBranch = "JAM-Build-$($AppJson.version)-$ToFixDate"
             $CommitMsg = "Update Build $($AppJson.version)"
         }
