@@ -22,6 +22,7 @@ $ToFixBranch = $("JAM-Update-BC20-{0}" -f $ToFixDate)
 #$FixCommitMsg = "AA0194,AA0231,AL0603,AL0719 warnings fix"
 #$FixCommitMsg = "Personal Voucher, Commission excluded"
 #$FixCommitMsg = "AS0011, prefix in enums was added, warnings fix"
+$FixCommitMsg = "The Caption field was updated"
 $FixCommitMsg = "AA0021 warnings fix"
 $FixCommitMsg = "Update the 'Closed Base Calendar Unit' field"
 $FixCommitMsg = "Code cleaning"
