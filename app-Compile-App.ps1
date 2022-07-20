@@ -18,22 +18,37 @@ foreach ($element in $dotNetProbingPaths) {
 }
 
 Remove-Item -Path $(Join-Path $AppFolder '*') -Filter "Zepter IT_ZS*.app"
-
 $currentPath = Get-Location
+$ClearFolder = $false
 
 $extensions = @()
 foreach ($Target in $Targets) {
-    #Remove-Item -Path $(Join-Path $(Join-Path $Target $SymbolFolder) '*') -Filter "Zepter IT_ZS*.app"
+    if ($ClearFolder -eq $false) {
+        $branch = git branch --show-current
+        Write-Host 'Branch:' $branch
+        if ($branch -eq 'develop') {
+            Remove-Item -Path $(Join-Path $AppFolderTest '*') -Filter "Zepter IT_ZS*.app"
+        }
+        if ($branch -eq 'master') {
+            Remove-Item -Path $(Join-Path $AppFolderLive '*') -Filter "Zepter IT_ZS*.app"
+        }
+        $AppFolder = $AppFolderTest
+        if ($branch -eq 'master') {
+            $AppFolder = $AppFolderLive
+        }
+        Write-Host 'AppFolder:' $AppFolder
+        $ClearFolder = $true
+    }
 
     #Get app.json
     $AppJson = Get-ObjectFromJSON (Join-Path $target "app.json")
 
-    if ($application -eq '') {   
+    if ($application -eq '') {
         if (($AppJson.application -eq '19.0.0.0') -or ($AppJson.application -eq '20.0.0.0')) {
             $application = $AppJson.application;
         }
     }
-    if ($country -eq '') {   
+    if ($country -eq '') {
         $country = $AppJson.preprocessorSymbols[1];
     }
 
@@ -83,7 +98,13 @@ foreach ($extension in $extensions) {
 
     #Get app.json
     $AppJson = Get-ObjectFromJSON (Join-Path $Target "app.json")
-    $ExtensionApp = $(Join-Path $AppFolder $("$($AppJson.publisher)$('_')$($AppJson.name)$('_')$($AppJson.version)$('.app')"))
+    $ExtensionApp = $(Join-Path $AppFolder $("$($AppJson.publisher)$('_')$($AppJson.name)"))
+    foreach ($Symbol in $AppJson.preprocessorSymbols) {
+        if ($Symbol -notMatch '(CLEAN20|W1)') {
+            $ExtensionApp = "$($ExtensionApp)$('_')$Symbol"
+        }
+    }
+    $ExtensionApp = "$($ExtensionApp)$('_')$($AppJson.version)$('.app')"
 
     $paramProject = @("/project:""$Target""")
     $paramOut = @("/out:""$ExtensionApp""")
@@ -92,22 +113,24 @@ foreach ($extension in $extensions) {
 
     write-Host '==='
     write-Host $Target -ForegroundColor yellow
+    write-Host $AppJson.preprocessorSymbols -ForegroundColor yellow
     write-Host '==='
     write-Host $compilator.fullname
-    write-Host $paramProject 
-    write-Host $paramSymbol 
-    write-Host $paramError 
+    write-Host $paramProject
+    write-Host $paramSymbol
+    write-Host $paramError
     write-Host $paramRules
-    write-Host $paramOut
+    write-Host $paramOut -ForegroundColor blue
     write-Host $paramAnalyzer
     write-Host $assemblyProbingPaths
     write-Host '==='
 
     foreach ($Dependency in $AppJson.dependencies) {
         if ($Dependency.publisher -eq 'Zepter IT') {
-            write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
-            if (Test-Path "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_')$($Dependency.version)$('.app')") {
-                Copy-Item "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_')$($Dependency.version)$('.app')" -Destination "$($Target)$('\')$($SymbolFolder)"
+            $Dependency.version = $Dependency.version.Replace('.0', '.*')
+            Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
+            if (Test-Path "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')") {
+                Copy-Item "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')" -Destination "$($Target)$('\')$($SymbolFolder)"
             }
         }
     }
@@ -120,10 +143,12 @@ foreach ($extension in $extensions) {
     Write-Host $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn  -ForegroundColor Blue
     & $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn | Write-Verbose
     # | Write-Verbose
-    
+
     $TranslationFile = Get-ChildItem -path $ExtensionApp
     if ($TranslationFile) {
-        Write-Host "Successfully compiled $ExtensionApp" -ForegroundColor Green
+        Write-Host "Successfully compiled $ExtensionApp" -ForegroundColor Green -NoNewline
+        write-Host ' (' $AppJson.preprocessorSymbols ')' -ForegroundColor yellow
+
     }
     else {
         write-error "Compilation ended with errors"
@@ -132,7 +157,5 @@ foreach ($extension in $extensions) {
     write-Host '>>> END Compiling' -ForegroundColor green
     write-Host ''
 }
-
-Copy-Item (Join-path $PSScriptRoot 'NavExtensions.ps1') -Destination $AppFolder
 
 Set-Location $currentPath

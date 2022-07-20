@@ -3,6 +3,8 @@ $SecretSettings = Get-ObjectFromJSON (Join-Path $PSScriptRoot "_SecretSettings.j
 if (Test-Path 'D:\DEV-EXT' -PathType Container) {
     $Workspace = 'D:\DEV-EXT'
     $AppFolder = 'D:\DEV-EXT\APP\'
+    $AppFolderTest = 'D:\DEV-EXT\APP\TEST\'
+    $AppFolderLive = 'D:\DEV-EXT\APP\LIVE\'
 }
 else {
     $Workspace = 'C:\DEVELOPER'
@@ -38,6 +40,7 @@ $ContainerLicenseFile = $SecretSettings.containerLicenseFile
 $ContainerAdditionalParameters = @("--cpu-count 8", "--dns=8.8.8.8")
 
 $BCZSFolder = $SecretSettings.ZepterSoftPath
+$BCZSAddOnFolder = $SecretSettings.ZepterSoftPathAddOn
 
 $SettingsJson = Get-ObjectFromJSON (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
 $ContainerCountry = $SettingsJson.country
@@ -46,6 +49,7 @@ $ZepterCountry = $SettingsJson.zeptercountry
 $ZepterVersion = $SettingsJson.zepterversion
 
 $ContainerName = "$ContainerCountry-bc$($ContainerVersion.Replace('.',''))"
+$ContainerNameSaved = $ContainerName
 if ($ZepterCountry) {
     $ContainerName = "$ZepterCountry"
 }

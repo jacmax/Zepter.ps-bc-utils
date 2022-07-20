@@ -17,6 +17,8 @@ foreach ($element in $dotNetProbingPaths) {
     $assemblyProbingPaths += @("/assemblyProbingPaths:$element")
 }
 
+Remove-Item -Path $(Join-Path $AppFolder '*') -Filter "Zepter IT_ZS*.app"
+
 $currentPath = Get-Location
 
 $Target = 'd:\DEV-EXT\bc-integration-jo\Integration JO - App'

@@ -17,11 +17,31 @@ foreach ($element in $dotNetProbingPaths) {
     $assemblyProbingPaths += @("/assemblyProbingPaths:$element")
 }
 
+Remove-Item -Path $(Join-Path $AppFolder '*') -Filter "Zepter IT_ZS*.app"
 $currentPath = Get-Location
+$ClearFolder = $false
 
 $Targets = @('d:\DEV-EXT\bc-integration-hu\Integration HU - App','d:\DEV-EXT\bc-integration-hu\Translation HU')
-	
+
 foreach ($Target in $Targets) {
+    $branch = git branch --show-current
+    if ($ClearFolder -eq $false)
+    {
+        if ($branch -eq 'develop')
+        {
+            Remove-Item -Path $(Join-Path $AppFolderTest '*') -Filter "Zepter IT_ZS*.app"
+        }
+        if ($branch -eq 'master')
+        {
+            Remove-Item -Path $(Join-Path $AppFolderLive '*') -Filter "Zepter IT_ZS*.app"
+        }
+        $ClearFolder = $true
+    }
+    $AppFolder = $AppFolderTest
+    if ($branch -eq 'master')
+    {
+        $AppFolder = $AppFolderLive
+    }
     $AppJson = Get-ObjectFromJSON (Join-Path $Target "app.json")
     $ExtensionApp = $(Join-Path $AppFolder $("$($AppJson.publisher)$('_')$($AppJson.name)$('_')$($AppJson.version)$('.app')"))
 

@@ -1,7 +1,7 @@
 param (
     [validateset('BC190', 'BC200', 'BC201', 'BC+', 'BC++')]
     [String] $Type = 'BC200',
-    [validateset('W1', 'IT')]
+    [validateset('W1', 'IT', 'CZ')]
     [String] $Country = 'W1'
 )
 
@@ -62,18 +62,20 @@ foreach ($Target in $AppJsons) {
             $AppJson.runtime = '9.0'
             $AppJson.application = '20.0.0.0'
             $AppJson.platform = '20.0.0.0'
-            $AppJson.preprocessorSymbols[0] = 'CLEAN20'
-            $AppJson.preprocessorSymbols[1] = $Country
+            $AppJson.preprocessorSymbols = 'CLEAN20', 'W1'
         }
 
-
-        if (($AppJson.name -eq 'ZS Integration IT') -and ($Country -eq 'W1')) {
+        if (($AppJson.name -eq 'ZS Integration IT')) {
             $versionOldMajor = 19
             $AppJson.preprocessorSymbols[0] = 'CLEAN19'
             $versionOldMinor = 1
             $AppJson.application = '19.0.0.0'
             $AppJson.platform = '19.0.0.0'
             $AppJson.preprocessorSymbols[1] = 'IT'
+        }
+
+        if ((($AppJson.name -eq 'ZS Sales Contract') -or ($AppJson.name -eq 'ZS Data Migration')) -and ($Country -eq 'CZ')) {
+            $AppJson.preprocessorSymbols += $Country
         }
 
         $versionOld = [version]::New($versionOldMajor, $versionOldMinor, $versionOld.Build, $versionOld.Revision)
@@ -87,13 +89,13 @@ foreach ($Target in $AppJsons) {
             $versionNew = [version]::New($versionOld.Major, $versionOld.Minor, $versionOld.Build, $versionOld.Revision)
         }
         $AppJson.version = $versionNew.ToString()
-
+        <#
         foreach ($app in $AppJson.dependencies) {
             if ($app.publisher -eq 'Zepter IT') {
                 $app.version = $AppJson.version
             }
         }
-
+#>
         foreach ($app in $AppJson.dependencies) {
             if ($app.publisher -eq 'Microsoft') {
                 $app.version = $AppJson.platform
@@ -134,8 +136,11 @@ elseif (($clean200) -or ($clean201)) {
     if ($Country -eq 'W1') {
         Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC200.bat" -WindowStyle Hidden
     }
-    else {
+    elseif ($Country -eq 'IT') {
         Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC200-IT.bat" -WindowStyle Hidden
+    }
+    elseif ($Country -eq 'CZ') {
+        Start-Process "cmd.exe" "/c d:\DEV-EXT\BaseAppCopyBC200-CZ.bat" -WindowStyle Hidden
     }
 }
 
