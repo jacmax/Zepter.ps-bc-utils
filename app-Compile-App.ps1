@@ -127,7 +127,8 @@ foreach ($extension in $extensions) {
 
     foreach ($Dependency in $AppJson.dependencies) {
         if ($Dependency.publisher -eq 'Zepter IT') {
-            $Dependency.version = $Dependency.version.Replace('.0', '.*')
+            $CharArray = $Dependency.version.Split('.')
+            $Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.' + $CharArray[2] + '.*'
             Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
             if (Test-Path "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')") {
                 Copy-Item "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')" -Destination "$($Target)$('\')$($SymbolFolder)"

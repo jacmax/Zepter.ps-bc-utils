@@ -59,5 +59,5 @@ if ($ZepterVersion) {
 $dockerInstallApp = "$ContainerVersion.$($SettingsJson.ZepterSoftVersion)"
 $SyncMode = 'Add'
 #$SyncMode = 'Clean'
-#$SyncMode = 'Development'
+$SyncMode = 'Development'
 #$SyncMode = 'ForceSync'

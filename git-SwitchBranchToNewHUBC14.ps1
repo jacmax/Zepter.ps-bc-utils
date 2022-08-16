@@ -21,7 +21,7 @@ if ($TargetGit) {
     }
     if ($CurrentBranch -eq 'develop')
     {
-        $version = [version]::New($version.Major, $version.Minor, $version.Build + 1, 1)
+        #$version = [version]::New($version.Major, $version.Minor, $version.Build + 1, 1)
     }
     $AppJson.version = $version.ToString()
 
