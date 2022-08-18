@@ -7,7 +7,7 @@ function GetNavExtensions {
         [pscustomobject]@{name = "SalesItem"       ; version = '20.0.9.4' },
         [pscustomobject]@{name = "Representative"  ; version = '20.0.9.1' },
         [pscustomobject]@{name = "SalesContract"   ; version = '20.0.9.9' },
-        [pscustomobject]@{name = "Payment"         ; version = '20.0.9.2' },
+        [pscustomobject]@{name = "Payment"         ; version = '20.0.9.3' },
         [pscustomobject]@{name = "DataMigration"   ; version = '20.0.9.0' },
         [pscustomobject]@{name = "PersonalVoucher" ; version = '20.0.9.1' },
         [pscustomobject]@{name = "Commission"      ; version = '20.0.9.3' },
