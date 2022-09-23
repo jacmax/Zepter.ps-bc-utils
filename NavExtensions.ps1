@@ -3,11 +3,11 @@ function GetNavExtensions {
     @(
         [pscustomobject]@{name = "BaseAppOld"      ; version = '19.0.29894.30696' },
         [pscustomobject]@{name = "BaseApp"         ; version = '19.0.29894.30697' },
-        [pscustomobject]@{name = "Common"          ; version = '20.0.10.2' },
+        [pscustomobject]@{name = "Common"          ; version = '20.0.10.3' },
         [pscustomobject]@{name = "SalesItem"       ; version = '20.0.10.0' },
         [pscustomobject]@{name = "Representative"  ; version = '20.0.10.1' },
         [pscustomobject]@{name = "SalesContract"   ; version = '20.0.10.3' },
-        [pscustomobject]@{name = "Payment"         ; version = '20.0.10.1' },
+        [pscustomobject]@{name = "Payment"         ; version = '20.0.10.2' },
         [pscustomobject]@{name = "DataMigration"   ; version = '20.0.10.2' },
         [pscustomobject]@{name = "PersonalVoucher" ; version = '20.0.10.0' },
         [pscustomobject]@{name = "Commission"      ; version = '20.0.10.0' },
