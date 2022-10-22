@@ -56,7 +56,6 @@ if ($ZepterCountry) {
 if ($ZepterVersion) {
     $ContainerName = "$ContainerName-$ZepterVersion"
 }
-$dockerInstallApp = "$ContainerVersion.$($SettingsJson.ZepterSoftVersion)"
 $SyncMode = 'Add'
 #$SyncMode = 'Clean'
 $SyncMode = 'Development'

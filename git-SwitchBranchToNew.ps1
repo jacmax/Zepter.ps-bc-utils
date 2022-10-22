@@ -25,8 +25,8 @@ $ToFixBranch = $("JAM-Update-BC20-{0}" -f $ToFixDate)
 $FixCommitMsg = "The Caption field was updated"
 $FixCommitMsg = "AA0021 warnings fix"
 $FixCommitMsg = "Update the 'Closed Base Calendar Unit' field"
-$FixCommitMsg = "Code cleaning"
-$FixCommitMsg = "Update for Tool Update Prices on Ctr."
+$FixCommitMsg = "Code cleaning, warnings fix"
+#$FixCommitMsg = "Update for Tool Update Prices on Ctr."
 
 if ($Type -eq 'Fix') {
     $ToBranch = $ToFixBranch
