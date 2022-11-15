@@ -15,13 +15,12 @@ $SymbolFolder = '.alpackages'
 
 $dotNetProbingPaths =
 "d:\DEV-EXT\bc-common\Common - App\.netpackages",
-"D:\DEV-BASEAPP\BC190-ProgramFiles",
-"D:\DEV-BASEAPP\BC190-ProgramFilesX86",
 "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8",
-"C:\Windows\assembly"
+"C:\Windows\assembly",
+"D:\DEV-BASEAPP\BC210-ProgramFiles",
+"D:\DEV-BASEAPP\BC210-ProgramFilesX86"
 
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*App*" }
-
 $TargetRepos = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName
 $Targets = $AppJsons.directory.FullName
 
@@ -58,5 +57,5 @@ if ($ZepterVersion) {
 }
 $SyncMode = 'Add'
 #$SyncMode = 'Clean'
-$SyncMode = 'Development'
+#$SyncMode = 'Development'
 #$SyncMode = 'ForceSync'

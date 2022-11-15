@@ -24,6 +24,7 @@ $ClearFolder = $false
 $extensions = @()
 foreach ($Target in $Targets) {
     if ($ClearFolder -eq $false) {
+        Set-Location $Target
         $branch = git branch --show-current
         Write-Host 'Branch:' $branch
         if ($branch -eq 'develop') {
@@ -85,10 +86,12 @@ foreach ($Target in $Targets) {
     }
 }
 
+$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Sales Contract'
+$extension."Quantity Dependency" -= 2
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Personal Voucher'
-$extension."Quantity Dependency" += 2
+$extension."Quantity Dependency" += 3
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS GDPR'
-$extension."Quantity Dependency" += 2
+$extension."Quantity Dependency" += 0
 
 $extensions = $extensions | Sort-Object -Property 'Quantity Dependency' -Descending
 $extensions | Format-Table

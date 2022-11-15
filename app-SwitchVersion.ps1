@@ -89,13 +89,13 @@ foreach ($Target in $AppJsons) {
             $versionNew = [version]::New($versionOld.Major, $versionOld.Minor, $versionOld.Build, $versionOld.Revision)
         }
         $AppJson.version = $versionNew.ToString()
-        <#
+
         foreach ($app in $AppJson.dependencies) {
             if ($app.publisher -eq 'Zepter IT') {
                 $app.version = $AppJson.version
             }
         }
-#>
+
         foreach ($app in $AppJson.dependencies) {
             if ($app.publisher -eq 'Microsoft') {
                 $app.version = $AppJson.platform
