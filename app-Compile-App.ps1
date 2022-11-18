@@ -44,6 +44,8 @@ foreach ($Target in $Targets) {
     #Get app.json
     $AppJson = Get-ObjectFromJSON (Join-Path $target "app.json")
 
+    $Block = $AppJson.description -eq 'BLOCK'
+
     if ($application -eq '') {
         if (($AppJson.application -eq '19.0.0.0') -or ($AppJson.application -eq '20.0.0.0')) {
             $application = $AppJson.application;
@@ -53,7 +55,7 @@ foreach ($Target in $Targets) {
         $country = $AppJson.preprocessorSymbols[1];
     }
 
-    if (($AppJson.application -eq $application) -and ($country -eq $AppJson.preprocessorSymbols[1])) {
+    if (($AppJson.application -eq $application) -and ($country -eq $AppJson.preprocessorSymbols[1]) -and (-not $Block)) {
         $object = New-Object -TypeName PSObject
         $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
         $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value $Target
