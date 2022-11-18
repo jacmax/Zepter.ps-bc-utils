@@ -44,6 +44,7 @@ $BCZSAddOnFolder = $SecretSettings.ZepterSoftPathAddOn
 $SettingsJson = Get-ObjectFromJSON (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
 $ContainerCountry = $SettingsJson.country
 $ContainerVersion = $SettingsJson.version
+$ContainerVersionNewest = $SettingsJson.versionNewest
 $ZepterCountry = $SettingsJson.zeptercountry
 $ZepterVersion = $SettingsJson.zepterversion
 
