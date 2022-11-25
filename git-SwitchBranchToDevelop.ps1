@@ -1,7 +1,7 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
 $ToBranch = 'develop'
-$ToBranch = 'JAM-Build-20.0.11.0-20221114-2309'
+#$ToBranch = 'JAM-Build-20.0.11.0-20221114-2309'
 
 $currentLocation = Get-Location
 foreach ($Target in $Targets) {

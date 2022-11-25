@@ -11,6 +11,9 @@ docker start zsi-live
 docker stop zmk-live
 docker start zmk-live
 
+docker stop zba-live
+docker start zba-live
+
 docker stop zcz-live
 #docker start zcz-live
 
