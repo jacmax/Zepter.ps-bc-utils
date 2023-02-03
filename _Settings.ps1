@@ -21,8 +21,10 @@ $dotNetProbingPaths =
 "D:\DEV-BASEAPP\BC210-ProgramFilesX86"
 
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*App*" }
+$AppJsons += Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*Upgrade*" }
 $TargetRepos = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName
 $Targets = $AppJsons.directory.FullName
+#Write-Host $Targets
 
 $ContainerUserName = 'admin'
 $ContainerPassword = ConvertTo-SecureString 'ZitP@ssword1' -AsPlainText -Force
@@ -60,3 +62,30 @@ $SyncMode = 'Add'
 #$SyncMode = 'Clean'
 #$SyncMode = 'Development'
 #$SyncMode = 'ForceSync'
+
+$AppToInstall = @()
+$AppToInstall += 'ZS Common'
+$AppToInstall += 'ZS Sales Item'
+$AppToInstall += 'ZS Representative'
+$AppToInstall += 'ZS Sales Contract'
+$AppToInstall += 'ZS Payment'
+$AppToInstall += 'ZS Personal Voucher'
+$AppToInstall += 'ZS Commission'
+$AppToInstall += 'ZS GDPR'
+$AppToInstall += 'ZS Import Purchase'
+$AppToInstall += 'ZS Holding Report'
+$AppToInstall += 'ZS Courier'
+$AppToInstall += 'ZS Integration SI'
+$AppToInstall += 'ZS Integration MK'
+$AppToInstall += 'ZS Integration BA'
+$AppToInstall += 'ZS Integration CZ'
+$AppToInstall += 'ZS Data Migration'
+$AppToInstall += 'ZS Sandbox JAM'
+$AppToInstall += 'ESB Integration ZS'
+$AppToInstall += 'ESB Integration Temp Fix'
+$AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
+
+$AppToInstallCount = [array]::IndexOf($AppToInstall,'ZS Commission',0) + 1
+
+#Write-Host $AppToInstall
+#Write-Host $AppToInstallCount

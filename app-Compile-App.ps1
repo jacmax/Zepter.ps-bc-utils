@@ -51,11 +51,11 @@ foreach ($Target in $Targets) {
             $application = $AppJson.application;
         }
     }
-    if ($country -eq '') {
+    if (($country -eq '') -and $AppJson.preprocessorSymbols){
         $country = $AppJson.preprocessorSymbols[1];
     }
 
-    if (($AppJson.application -eq $application) -and ($country -eq $AppJson.preprocessorSymbols[1]) -and (-not $Block)) {
+    if ($AppJson.preprocessorSymbols -and ($AppJson.application -eq $application) -and ($country -eq $AppJson.preprocessorSymbols[1]) -and (-not $Block)) {
         $object = New-Object -TypeName PSObject
         $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
         $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value $Target
@@ -89,10 +89,14 @@ foreach ($Target in $Targets) {
 }
 
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Sales Contract'
-$extension."Quantity Dependency" -= 2
+$extension."Quantity Dependency" -= 3
+$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Payment'
+$extension."Quantity Dependency" -= 1
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Personal Voucher'
-$extension."Quantity Dependency" += 3
+$extension."Quantity Dependency" += 5
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS GDPR'
+$extension."Quantity Dependency" += 0
+$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Integration AT'
 $extension."Quantity Dependency" += 0
 
 $extensions = $extensions | Sort-Object -Property 'Quantity Dependency' -Descending

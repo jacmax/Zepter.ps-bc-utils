@@ -10,10 +10,14 @@ foreach ($Target in $Targets) {
 		$TargetGit = $AppJsonFile.Directory.Parent.FullName
 		$TargetGit = (Get-ChildItem $TargetGit -Recurse -Hidden -Include '.git').Parent.FullName
 		write-host $AppJson.name $TargetGit -ForegroundColor Green
-		Set-Location $TargetGit
-		& git checkout -q "$ToBranch"
-		& git pull -q origin "$ToBranch"
-		& git fetch --all --prune
+		if ($TargetGit -ne $TargetGitBefore)
+		{
+			$TargetGitBefore = $TargetGit
+			Set-Location $TargetGit
+			& git checkout -q "$ToBranch"
+			& git pull -q origin "$ToBranch"
+			& git fetch --all --prune
+		}
 	}
 }
 Set-Location $currentLocation

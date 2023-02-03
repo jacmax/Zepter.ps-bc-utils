@@ -9,7 +9,7 @@ docker stop zsi-live
 docker start zsi-live
 
 docker stop zmk-live
-#docker start zmk-live
+docker start zmk-live
 
 docker stop zba-live
 #docker start zba-live
