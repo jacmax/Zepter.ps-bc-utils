@@ -1,7 +1,7 @@
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
 $ToBranch = 'develop'
-#$ToBranch = 'JAM-Build-20.0.11.1-20221201-1452'
+#$ToBranch = 'JAM-CountryRegionCode-20230220'
 
 $currentLocation = Get-Location
 foreach ($Target in $Targets) {
@@ -15,7 +15,7 @@ foreach ($Target in $Targets) {
 		{
 			$TargetGitBefore = $TargetGit
 			Set-Location $TargetGit
-			& git checkout -q "$ToBranch"
+            & git checkout -q "$ToBranch"
 			& git pull -q origin "$ToBranch"
 			& git fetch --all --prune
 		}

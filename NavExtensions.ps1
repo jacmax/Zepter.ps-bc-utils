@@ -13,14 +13,14 @@ function GetNavExtensions {
         [pscustomobject]@{name = "Commission"      ; version = '20.0.10.3' },
         [pscustomobject]@{name = "GDPR"            ; version = '20.0.10.2' },
         [pscustomobject]@{name = "ImportPurchase"  ; version = '20.0.10.2' },
-        [pscustomobject]@{name = "Courier"         ; version = '20.0.11.0' },
-        [pscustomobject]@{name = "Sample"          ; version = '20.0.11.0' },
-        [pscustomobject]@{name = "Service"         ; version = '20.0.11.0' },
-        [pscustomobject]@{name = "HoldingReport"   ; version = '20.0.11.0' },
-        [pscustomobject]@{name = "ITIntegration"   ; version = '20.0.11.0' },
+        [pscustomobject]@{name = "Courier"         ; version = '20.0.11.1' },
+        [pscustomobject]@{name = "Sample"          ; version = '20.0.11.1' },
+        [pscustomobject]@{name = "Service"         ; version = '20.0.11.1' },
+        [pscustomobject]@{name = "HoldingReport"   ; version = '20.0.11.1' },
+        [pscustomobject]@{name = "ITIntegration"   ; version = '20.0.11.1' },
         [pscustomobject]@{name = "SIIntegration"   ; version = '20.0.10.2' },
         [pscustomobject]@{name = "MKIntegration"   ; version = '20.0.10.21' },
-        [pscustomobject]@{name = "SandboxJAM"      ; version = '20.0.11.0' }
+        [pscustomobject]@{name = "SandboxJAM"      ; version = '20.0.11.1' }
     )
     return $NavExtension
 }

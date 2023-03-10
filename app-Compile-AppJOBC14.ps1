@@ -22,6 +22,8 @@ Remove-Item -Path $(Join-Path $AppFolder '*') -Filter "Zepter IT_ZS*.app"
 $currentPath = Get-Location
 
 $Target = 'd:\DEV-EXT\bc-integration-jo\Integration JO - App'
+
+Set-Location $Target
 $branch = git branch --show-current
 if ($ClearFolder -eq $false)
 {

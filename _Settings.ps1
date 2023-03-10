@@ -61,7 +61,7 @@ if ($ZepterVersion) {
 $SyncMode = 'Add'
 #$SyncMode = 'Clean'
 #$SyncMode = 'Development'
-#$SyncMode = 'ForceSync'
+$SyncMode = 'ForceSync'
 
 $AppToInstall = @()
 $AppToInstall += 'ZS Common'
@@ -74,18 +74,18 @@ $AppToInstall += 'ZS Commission'
 $AppToInstall += 'ZS GDPR'
 $AppToInstall += 'ZS Import Purchase'
 $AppToInstall += 'ZS Holding Report'
-$AppToInstall += 'ZS Courier'
 $AppToInstall += 'ZS Integration SI'
 $AppToInstall += 'ZS Integration MK'
 $AppToInstall += 'ZS Integration BA'
 $AppToInstall += 'ZS Integration CZ'
+$AppToInstall += 'ZS Courier'
 $AppToInstall += 'ZS Data Migration'
 $AppToInstall += 'ZS Sandbox JAM'
 $AppToInstall += 'ESB Integration ZS'
 $AppToInstall += 'ESB Integration Temp Fix'
 $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
 
-$AppToInstallCount = [array]::IndexOf($AppToInstall,'ZS Commission',0) + 1
+$AppToInstallCount = [array]::IndexOf($AppToInstall,'ZS Common',0) + 1
 
 #Write-Host $AppToInstall
 #Write-Host $AppToInstallCount

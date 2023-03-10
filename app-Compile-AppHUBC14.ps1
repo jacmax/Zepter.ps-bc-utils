@@ -18,12 +18,14 @@ foreach ($element in $dotNetProbingPaths) {
 }
 
 Remove-Item -Path $(Join-Path $AppFolder '*') -Filter "Zepter IT_ZS*.app"
+
 $currentPath = Get-Location
 $ClearFolder = $false
 
 $Targets = @('d:\DEV-EXT\bc-integration-hu\Integration HU - App','d:\DEV-EXT\bc-integration-hu\Translation HU')
 
 foreach ($Target in $Targets) {
+    Set-Location $Target
     $branch = git branch --show-current
     if ($ClearFolder -eq $false)
     {

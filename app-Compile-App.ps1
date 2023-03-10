@@ -23,6 +23,7 @@ $ClearFolder = $false
 
 $extensions = @()
 foreach ($Target in $Targets) {
+    #Write-Host 'Folder:' $Target
     if ($ClearFolder -eq $false) {
         Set-Location $Target
         $branch = git branch --show-current
@@ -56,6 +57,7 @@ foreach ($Target in $Targets) {
     }
 
     if ($AppJson.preprocessorSymbols -and ($AppJson.application -eq $application) -and ($country -eq $AppJson.preprocessorSymbols[1]) -and (-not $Block)) {
+        Write-Host 'AppName:' $AppJson.name
         $object = New-Object -TypeName PSObject
         $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
         $object | Add-Member -Name 'Folder' -MemberType Noteproperty -Value $Target
@@ -89,7 +91,7 @@ foreach ($Target in $Targets) {
 }
 
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Sales Contract'
-$extension."Quantity Dependency" -= 3
+$extension."Quantity Dependency" -= 4
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Payment'
 $extension."Quantity Dependency" -= 1
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Personal Voucher'
@@ -120,25 +122,26 @@ foreach ($extension in $extensions) {
     $paramSymbol = @("/packagecachepath:""$(Join-Path $Target $SymbolFolder)""")
     $paramError = @("/errorlog:""$(Join-Path $Target 'error.log')""")
 
-    write-Host '==='
-    write-Host $Target -ForegroundColor yellow
-    write-Host $AppJson.preprocessorSymbols -ForegroundColor yellow
-    write-Host '==='
-    write-Host $compilator.fullname
-    write-Host $paramProject
-    write-Host $paramSymbol
-    write-Host $paramError
-    write-Host $paramRules
-    write-Host $paramOut -ForegroundColor blue
-    write-Host $paramAnalyzer
-    write-Host $assemblyProbingPaths
-    write-Host '==='
+    Write-Host '==='
+    Write-Host $Target -ForegroundColor yellow
+    Write-Host $AppJson.preprocessorSymbols -ForegroundColor yellow
+    Write-Host '==='
+    #Write-Host $compilator.fullname
+    #Write-Host $paramProject
+    #Write-Host $paramSymbol
+    #Write-Host $paramError
+    #Write-Host $paramRules
+    #Write-Host $paramOut -ForegroundColor blue
+    #Write-Host $paramAnalyzer
+    #Write-Host $assemblyProbingPaths
+    #Write-Host '==='
 
+    Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Zepter IT_ZS*.app" -force
     foreach ($Dependency in $AppJson.dependencies) {
         if ($Dependency.publisher -eq 'Zepter IT') {
             $CharArray = $Dependency.version.Split('.')
             $Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.' + $CharArray[2] + '.*'
-            Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
+            #Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
             if (Test-Path "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')") {
                 Copy-Item "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')" -Destination "$($Target)$('\')$($SymbolFolder)"
             }
@@ -148,24 +151,27 @@ foreach ($extension in $extensions) {
     if (Test-Path $ExtensionApp) {
         Get-ChildItem -path $ExtensionApp | Remove-Item -Force | Write-Verbose
     }
-    write-Host ''
-    write-Host '>>> START Compiling' -ForegroundColor green
-    Write-Host $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn  -ForegroundColor Blue
+    #Write-Host ''
+    #Write-Host '>>> START Compiling' -ForegroundColor green
+    #Write-Host $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn  -ForegroundColor Blue
     & $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn | Write-Verbose
     # | Write-Verbose
 
-    $TranslationFile = Get-ChildItem -path $ExtensionApp
-    if ($TranslationFile) {
-        Write-Host "Successfully compiled $ExtensionApp" -ForegroundColor Green -NoNewline
-        write-Host ' (' $AppJson.preprocessorSymbols ')' -ForegroundColor yellow
-
+    if (Test-Path -Path $ExtensionApp -PathType Leaf)
+    {
+        $TranslationFile = Get-ChildItem -path $ExtensionApp -erroraction 'silentlycontinue'
+        if ($TranslationFile) {
+            Write-Host "Successfully compiled $ExtensionApp" -ForegroundColor Green -NoNewline
+            Write-Host ' (' $AppJson.preprocessorSymbols ')' -ForegroundColor yellow
+        }
     }
-    else {
-        write-error "Compilation ended with errors"
+    else
+    {    
+        Write-Host "Compilation ended with errors" -ForegroundColor red
     }
 
-    write-Host '>>> END Compiling' -ForegroundColor green
-    write-Host ''
+    #Write-Host '>>> END Compiling' -ForegroundColor green
+    Write-Host ''
 }
 
 Set-Location $currentPath
