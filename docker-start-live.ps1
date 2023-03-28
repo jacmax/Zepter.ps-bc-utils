@@ -15,7 +15,7 @@ docker stop zba-live
 #docker start zba-live
 
 docker stop zby-live
-docker start zby-live
+#docker start zby-live
 
 docker stop zcz-live
 #docker start zcz-live
@@ -24,7 +24,7 @@ docker stop zsk-live
 #docker start zsk-live
 
 docker stop zfr-live
-#docker start zfr-live
+docker start zfr-live
 
 docker stop zjo-live
 #docker start zjo-live

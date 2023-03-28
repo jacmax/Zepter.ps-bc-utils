@@ -61,7 +61,7 @@ if ($ZepterVersion) {
 $SyncMode = 'Add'
 #$SyncMode = 'Clean'
 #$SyncMode = 'Development'
-$SyncMode = 'ForceSync'
+#$SyncMode = 'ForceSync'
 
 $AppToInstall = @()
 $AppToInstall += 'ZS Common'
@@ -85,7 +85,7 @@ $AppToInstall += 'ESB Integration ZS'
 $AppToInstall += 'ESB Integration Temp Fix'
 $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
 
-$AppToInstallCount = [array]::IndexOf($AppToInstall,'ZS Common',0) + 1
+$AppToInstallCount = [array]::IndexOf($AppToInstall,'ZS Sales Contract',0) + 1
 
 #Write-Host $AppToInstall
 #Write-Host $AppToInstallCount
