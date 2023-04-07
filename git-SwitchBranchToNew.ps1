@@ -18,15 +18,15 @@ $ToFixBranch = $("JAM-Update-BC20-{0}" -f $ToFixDate)
 
 #$FixCommitMsg = "Upgrade for BC20"
 #$FixCommitMsg = "New fields were added in setup page"
-#$FixCommitMsg = "Update AL rules"
+$FixCommitMsg = "Updated AL rules"
 #$FixCommitMsg = "Update gitignore"
 #$FixCommitMsg = "AA0194,AA0231,AL0603,AL0719 warnings fix"
 #$FixCommitMsg = "Personal Voucher, Commission excluded"
 #$FixCommitMsg = "AS0011, prefix in enums was added, warnings fix"
-$FixCommitMsg = "The Caption field was updated"
-$FixCommitMsg = "AA0021 warnings fix"
-$FixCommitMsg = "Update the 'Closed Base Calendar Unit' field"
-$FixCommitMsg = "Code cleaning, warnings fix"
+#$FixCommitMsg = "The Caption field was updated"
+#$FixCommitMsg = "AA0021 warnings fix"
+#$FixCommitMsg = "Update the 'Closed Base Calendar Unit' field"
+#$FixCommitMsg = "Code cleaning, warnings fix"
 #$FixCommitMsg = "Update for Tool Update Prices on Ctr."
 #$FixCommitMsg = "Updated for Country Region Code field"
 
@@ -52,9 +52,9 @@ foreach ($Target in $AppJsons) {
             if ($(git status --porcelain)) {
                 write-host $TargetGit ' Branch:' $ToBranch -ForegroundColor Green
                 & git checkout -q -b "$ToBranch"
-                #& git stage .
-                #& git commit -m "$CommitMsg"
-                #& git push origin "$ToBranch"
+                & git stage .
+                & git commit -m "$CommitMsg"
+                & git push origin "$ToBranch"
             }
         }
     }
