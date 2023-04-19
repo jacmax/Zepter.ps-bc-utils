@@ -1,6 +1,80 @@
 ﻿. (Join-path $PSScriptRoot '_Settings.ps1')
+. (Join-path $PSScriptRoot 'app-SwitchCountryTarget.ps1')
 
 Import-Module Microsoft.PowerShell.Utility
+
+function CompileExtension {
+    param (
+        [String] $Target = '',
+        [String] $AppFolder = ''
+    )
+    
+    #Get app.json
+    $AppJson = Get-ObjectFromJSON (Join-Path $Target "app.json")
+    $ExtensionApp = $(Join-Path $AppFolder $("$($AppJson.publisher)$('_')$($AppJson.name)"))
+    foreach ($Symbol in $AppJson.preprocessorSymbols) {
+        if ($Symbol -notMatch '(CLEAN20|W1)') {
+            $ExtensionApp = "$($ExtensionApp)$('_')$Symbol"
+        }
+    }
+    $ExtensionApp = "$($ExtensionApp)$('_')$($AppJson.version)$('.app')"
+
+    $paramProject = @("/project:""$Target""")
+    $paramOut = @("/out:""$ExtensionApp""")
+    $paramSymbol = @("/packagecachepath:""$(Join-Path $Target $SymbolFolder)""")
+    $paramError = @("/errorlog:""$(Join-Path $Target 'error.log')""")
+
+    Write-Host '==='
+    Write-Host $Target -ForegroundColor yellow
+    Write-Host $AppJson.preprocessorSymbols -ForegroundColor yellow
+    Write-Host '==='
+    #Write-Host $compilator.fullname
+    #Write-Host $paramProject
+    #Write-Host $paramSymbol
+    #Write-Host $paramError
+    #Write-Host $paramRules
+    #Write-Host $paramOut -ForegroundColor blue
+    #Write-Host $paramAnalyzer
+    #Write-Host $assemblyProbingPaths
+    #Write-Host '==='
+
+    Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Zepter IT_ZS*.app" -force
+    foreach ($Dependency in $AppJson.dependencies) {
+        if ($Dependency.publisher -eq 'Zepter IT') {
+            $CharArray = $Dependency.version.Split('.')
+            $Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.' + $CharArray[2] + '.*'
+            #Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
+            if (Test-Path "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')") {
+                Copy-Item "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')" -Destination "$($Target)$('\')$($SymbolFolder)"
+            }
+        }
+    }
+
+    if (Test-Path $ExtensionApp) {
+        Get-ChildItem -path $ExtensionApp | Remove-Item -Force | Write-Verbose
+    }
+    #Write-Host ''
+    #Write-Host '>>> START Compiling' -ForegroundColor green
+    #Write-Host $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn  -ForegroundColor Blue
+    & $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn | Write-Verbose
+    # | Write-Verbose
+
+    if (Test-Path -Path $ExtensionApp -PathType Leaf)
+    {
+        $TranslationFile = Get-ChildItem -path $ExtensionApp -erroraction 'silentlycontinue'
+        if ($TranslationFile) {
+            Write-Host "Successfully compiled $ExtensionApp" -ForegroundColor Green -NoNewline
+            Write-Host ' (' $AppJson.preprocessorSymbols ')' -ForegroundColor yellow
+        }
+    }
+    else
+    {    
+        Write-Host "Compilation ended with errors" -ForegroundColor red
+    }
+
+    #Write-Host '>>> END Compiling' -ForegroundColor green
+    Write-Host ''
+}
 
 $application = '';
 $country = '';
@@ -106,72 +180,36 @@ $extensions | Format-Table
 
 foreach ($extension in $extensions) {
     $Target = $extension.Folder
-
-    #Get app.json
-    $AppJson = Get-ObjectFromJSON (Join-Path $Target "app.json")
-    $ExtensionApp = $(Join-Path $AppFolder $("$($AppJson.publisher)$('_')$($AppJson.name)"))
-    foreach ($Symbol in $AppJson.preprocessorSymbols) {
-        if ($Symbol -notMatch '(CLEAN20|W1)') {
-            $ExtensionApp = "$($ExtensionApp)$('_')$Symbol"
-        }
+    $Updated = $false
+    
+    CompileExtension -Target $Target -AppFolder $AppFolder
+    
+    $AppJsonFile = Get-ChildItem -Path $Target 'app.json'
+    $AppJsonFileBakName = $AppJsonFile.Fullname + '.bak'
+    Copy-Item -Path $AppJsonFile.Fullname -Destination $AppJsonFileBakName
+    
+    if ($extension.Name -eq 'ZS Common') {
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetSystem 'CLOUD' 
+        CompileExtension -Target $Target -AppFolder $AppFolder
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'CLOUD' 
+        CompileExtension -Target $Target -AppFolder $AppFolder
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'ONPREM' 
+        CompileExtension -Target $Target -AppFolder $AppFolder
+        $Updated = $true
     }
-    $ExtensionApp = "$($ExtensionApp)$('_')$($AppJson.version)$('.app')"
-
-    $paramProject = @("/project:""$Target""")
-    $paramOut = @("/out:""$ExtensionApp""")
-    $paramSymbol = @("/packagecachepath:""$(Join-Path $Target $SymbolFolder)""")
-    $paramError = @("/errorlog:""$(Join-Path $Target 'error.log')""")
-
-    Write-Host '==='
-    Write-Host $Target -ForegroundColor yellow
-    Write-Host $AppJson.preprocessorSymbols -ForegroundColor yellow
-    Write-Host '==='
-    #Write-Host $compilator.fullname
-    #Write-Host $paramProject
-    #Write-Host $paramSymbol
-    #Write-Host $paramError
-    #Write-Host $paramRules
-    #Write-Host $paramOut -ForegroundColor blue
-    #Write-Host $paramAnalyzer
-    #Write-Host $assemblyProbingPaths
-    #Write-Host '==='
-
-    Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Zepter IT_ZS*.app" -force
-    foreach ($Dependency in $AppJson.dependencies) {
-        if ($Dependency.publisher -eq 'Zepter IT') {
-            $CharArray = $Dependency.version.Split('.')
-            $Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.' + $CharArray[2] + '.*'
-            #Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
-            if (Test-Path "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')") {
-                Copy-Item "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')" -Destination "$($Target)$('\')$($SymbolFolder)"
-            }
-        }
+    if ($extension.Name -eq 'ZS Sales Contract') {
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' 
+        CompileExtension -Target $Target -AppFolder $AppFolder
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'CZ' 
+        CompileExtension -Target $Target -AppFolder $AppFolder
+        $Updated = $true
     }
-
-    if (Test-Path $ExtensionApp) {
-        Get-ChildItem -path $ExtensionApp | Remove-Item -Force | Write-Verbose
+    if ($Updated) {
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry '' 
+        Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
     }
-    #Write-Host ''
-    #Write-Host '>>> START Compiling' -ForegroundColor green
-    #Write-Host $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn  -ForegroundColor Blue
-    & $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn | Write-Verbose
-    # | Write-Verbose
-
-    if (Test-Path -Path $ExtensionApp -PathType Leaf)
-    {
-        $TranslationFile = Get-ChildItem -path $ExtensionApp -erroraction 'silentlycontinue'
-        if ($TranslationFile) {
-            Write-Host "Successfully compiled $ExtensionApp" -ForegroundColor Green -NoNewline
-            Write-Host ' (' $AppJson.preprocessorSymbols ')' -ForegroundColor yellow
-        }
-    }
-    else
-    {    
-        Write-Host "Compilation ended with errors" -ForegroundColor red
-    }
-
-    #Write-Host '>>> END Compiling' -ForegroundColor green
-    Write-Host ''
+    
+    Remove-Item $AppJsonFileBakName
 }
 
 Set-Location $currentPath

@@ -1,9 +1,9 @@
 & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchLinuxEngine
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 30
 docker stop SqlServer
 docker start SqlServer
 & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchWindowsEngine
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 30
 
 docker stop zsi-live
 docker start zsi-live
