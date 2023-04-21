@@ -1,12 +1,14 @@
 ﻿function Restore-Database {
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $bakFile,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [string] $version,
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseName,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseServer,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [PSCredential] $sqlCredential = $null
     )
 
@@ -14,13 +16,20 @@
     if ($sqlCredential) {
         $params += @{ 'Username' = $sqlCredential.UserName; 'Password' = ([System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($sqlCredential.Password))) }
     }
+    $prefix = 'NAV'
+    if ($version -eq '20') {
+        $prefix = 'BC'
+    }
+
+    $RestoreDatabase = "RESTORE DATABASE [$DatabaseName]
+      FROM  DISK = N'/var/backups/$bakfile' WITH FILE = 1,
+      MOVE N'Demo Database " + $prefix + " (" + $version + "-0)_Data' TO N'/var/opt/mssql/data/" + $DatabaseName + "_Data.mdf',
+      MOVE N'Demo Database " + $prefix + " (" + $version + "-0)_Log' TO N'/var/opt/mssql/data/" + $DatabaseName + "_Log.ldf',
+      NOUNLOAD, REPLACE"
 
     Write-Host "Restore database $DatabaseName"
-    $RestoreDatabase = "RESTORE DATABASE [$DatabaseName] 
-      FROM  DISK = N'/var/backups/$bakfile' WITH FILE = 1, 
-      MOVE N'Demo Database NAV (14-0)_Data' TO N'/var/opt/mssql/data/" + $DatabaseName + "_Data.mdf', 
-      MOVE N'Demo Database NAV (14-0)_Log' TO N'/var/opt/mssql/data/" + $DatabaseName + "_log.ldf', 
-      NOUNLOAD, REPLACE"
+    Write-Host $RestoreDatabase
+
     Invoke-Sqlcmd @params -Query $RestoreDatabase
 
     Write-Host "Shrink database $DatabaseName"
@@ -31,11 +40,11 @@
 
 function Remove-NetworkServiceUser {
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseName,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseServer,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [PSCredential] $sqlCredential = $null
     )
 
@@ -73,15 +82,20 @@ function Remove-NetworkServiceUser {
     Invoke-Sqlcmd @params -Query "USE [$DatabaseName]
     IF EXISTS (SELECT 'X' FROM sysusers WHERE name = 'jodataexport' and isntuser = 0)
       BEGIN DROP USER [jodataexport] END"
+
+    Write-Host "Remove mkdataexport User from $DatabaseName"
+    Invoke-Sqlcmd @params -Query "USE [$DatabaseName]
+    IF EXISTS (SELECT 'X' FROM sysusers WHERE name = 'mkdataexport' and isntuser = 0)
+      BEGIN DROP USER [mkdataexport] END"
 }
 
 function Remove-WindowsUsers {
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseName,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseServer,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [PSCredential] $sqlCredential = $null
     )
 
@@ -91,7 +105,7 @@ function Remove-WindowsUsers {
     }
 
     Write-Host "Remove Windows Users from $DatabaseName"
-    Invoke-Sqlcmd @params -Query "USE [$DatabaseName] 
+    Invoke-Sqlcmd @params -Query "USE [$DatabaseName]
         declare @sql nvarchar(max)
         set @sql = ''
 
@@ -107,11 +121,11 @@ function Remove-WindowsUsers {
 
 function Remove-ApplicationRoles {
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseName,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseServer,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [PSCredential] $sqlCredential = $null
     )
 
@@ -121,7 +135,7 @@ function Remove-ApplicationRoles {
     }
 
     Write-Host "Remove Application Roles from $DatabaseName"
-    Invoke-Sqlcmd @params -Query "USE [$DatabaseName] 
+    Invoke-Sqlcmd @params -Query "USE [$DatabaseName]
         declare @sql nvarchar(max)
         set @sql = ''
 
@@ -137,32 +151,32 @@ function Remove-ApplicationRoles {
 
 function Remove-NavDatabaseSystemTableData {
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseName,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseServer,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [PSCredential] $sqlCredential = $null
     )
- 
+
     $params = @{ 'ErrorAction' = 'Ignore'; 'ServerInstance' = $databaseServer; 'TrustServerCertificate' = $true }
     if ($sqlCredential) {
         $params += @{ 'Username' = $sqlCredential.UserName; 'Password' = ([System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($sqlCredential.Password))) }
     }
 
     Write-Host "Remove data from System Tables database $DatabaseName"
-    'Server Instance','$ndo$cachesync','$ndo$tenants','Object Tracking' | % {
+    'Server Instance', '$ndo$cachesync', '$ndo$tenants', 'Object Tracking' | % {
         Invoke-Sqlcmd @params -Query "USE [$DatabaseName] DELETE FROM dbo.[$_]"
     }
     Invoke-Sqlcmd @params -Query "USE [$DatabaseName] UPDATE [dbo].[`$ndo`$dbproperty] SET [license] = NULL"
 
     Invoke-Sqlcmd @params -Query "USE [$DatabaseName]
       IF EXISTS ( SELECT 'X' FROM [sys].[tables] WHERE name = 'Active Session' AND type = 'U' )
-        BEGIN Delete from dbo.[Active Session] END" 
-    
+        BEGIN Delete from dbo.[Active Session] END"
+
     Invoke-Sqlcmd @params -Query "USE [$DatabaseName]
       IF EXISTS ( SELECT 'X' FROM [sys].[tables] WHERE name = 'Session Event' AND type = 'U' )
-        BEGIN Delete from dbo.[Session Event] END" 
+        BEGIN Delete from dbo.[Session Event] END"
 
     $companies = Invoke-Sqlcmd @params -Query "USE [$DatabaseName] SELECT Name FROM dbo.Company"
     $companies | % {
@@ -176,12 +190,12 @@ function Remove-NavDatabaseSystemTableData {
 }
 
 function Remove-NavTenantDatabaseUserData {
-    Param (        
-        [Parameter(Mandatory=$true)]
+    Param (
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseName,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $DatabaseServer,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [PSCredential] $sqlCredential = $null,
         [switch] $KeepUserData
     )
@@ -221,25 +235,51 @@ function Remove-NavTenantDatabaseUserData {
     }
 
     Write-Host "Drop triggers from $DatabaseName"
-    Invoke-Sqlcmd @params -Query "USE [$DatabaseName] DROP TRIGGER [dbo].[RemoveOnLogoutActiveSession]" 
-    Invoke-Sqlcmd @params -Query "USE [$DatabaseName] DROP TRIGGER [dbo].[DeleteActiveSession]" 
-    
+    Invoke-Sqlcmd @params -Query "USE [$DatabaseName] DROP TRIGGER [dbo].[RemoveOnLogoutActiveSession]"
+    Invoke-Sqlcmd @params -Query "USE [$DatabaseName] DROP TRIGGER [dbo].[DeleteActiveSession]"
+
     Write-Host "Drop Views from $DatabaseName"
     Invoke-Sqlcmd @Params -Query "USE [$DatabaseName] DROP VIEW IF EXISTS [dbo].[deadlock_report_ring_buffer_view]"
 
     Remove-NetworkServiceUser -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName -sqlCredential $sqlCredential
 }
 
-$UserName = 'sa'
-$Password = ConvertTo-SecureString 'ZitP@ssword1' -AsPlainText -Force
-$sqlCredential = New-Object System.Management.Automation.PSCredential ($UserName, $Password)
+. (Join-Path $PSScriptRoot '_Settings.ps1')
+. (Join-Path $PSScriptRoot 'docker-newimg-sqlfile.ps1')
+. (Join-Path $PSScriptRoot 'docker-import-NAVEncryptionKey.ps1')
 
+$sqlCredential = $ContainerSqlCredential
 $databaseServerInstance = 'sql.host.internal'
-$tempDatabaseName = 'NAV_ZJO_LIVE_140'
-$bakFile = 'NAV_ZJO_LIVE_140-230416-2230.bak'
+$sqlBackupFiles = Get-ChildItem -Path 'D:\Temp\SqlServer' -Filter '*.bak'
 
-Restore-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential -BakFile $bakFile 
-Remove-WindowsUsers -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
-Remove-ApplicationRoles -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
-Remove-NavDatabaseSystemTableData -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
-#Remove-NavTenantDatabaseUserData -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+foreach ($file in $sqlBackupFiles) {
+    $result = $file.Name -match 'NAV_(?<country>[A-Z]{3})_.*_(?<version>\d{3})'
+    if ($result) {
+        $country = $Matches['country']
+        $version = $Matches['version']
+
+        $tempDatabaseName = "NAV_" + $country + "_LIVE_" + $version
+        $bakFile = $file.Name
+
+        Write-Host $file.Name
+
+        & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchLinuxEngine
+        & Start-Sleep -Seconds 30
+        & docker cp $file.FullName SqlServer:/var/backups
+
+        Restore-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential -BakFile $bakFile -version $version.Substring(0, 2)
+        Remove-WindowsUsers -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+        Remove-ApplicationRoles -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+        Remove-NavDatabaseSystemTableData -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+        #Remove-NavTenantDatabaseUserData -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+
+        $fileName = '/var/backups/' + $file.Name
+        Write-Host 'Remove' $fileName -ForegroundColor Yellow
+        docker exec -u 0 -it SqlServer rm -rf $fileName
+
+        & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchWindowsEngine
+        & Start-Sleep -Seconds 30
+        #& Docker-NewImg-Sqlfile -ZepterCountryParam $country.ToLower()
+        Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
+    }
+}
