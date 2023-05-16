@@ -8,17 +8,18 @@ param (
 
 $ToFixDate = $(Get-Date -Format "yyyyMMdd-HHmm")
 #$ToFixBranch = $("JAM-Upgrade-BC20-{0}" -f $ToFixDate)
-$ToFixBranch = $("JAM-Update-BC20-{0}" -f $ToFixDate)
+#$ToFixBranch = $("JAM-Update-BC20-{0}" -f $ToFixDate)
 #$ToFixBranch = $("JAM-BC17-348-{0}" -f $ToFixDate)
 #$ToFixBranch = "JAM-Upgrade-BC20-20220413-0920"
 #$ToFixBranch = "JAM-AlRules-20220406"
 #$ToFixBranch = "JAM-gitignore-20220329"
 #$ToFixBranch = "JAM-Migration-20220405"
 #$ToFixBranch = "JAM-CountryRegionCode-20230220"
+$ToFixBranch = "JAM-Translation-20230516"
 
 #$FixCommitMsg = "Upgrade for BC20"
 #$FixCommitMsg = "New fields were added in setup page"
-$FixCommitMsg = "Updated AL rules"
+#$FixCommitMsg = "Updated AL rules"
 #$FixCommitMsg = "Update gitignore"
 #$FixCommitMsg = "AA0194,AA0231,AL0603,AL0719 warnings fix"
 #$FixCommitMsg = "Personal Voucher, Commission excluded"
@@ -29,6 +30,7 @@ $FixCommitMsg = "Updated AL rules"
 #$FixCommitMsg = "Code cleaning, warnings fix"
 #$FixCommitMsg = "Update for Tool Update Prices on Ctr."
 #$FixCommitMsg = "Updated for Country Region Code field"
+$FixCommitMsg = "Translation for Czechia was added"
 
 if ($Type -eq 'Fix') {
     $ToBranch = $ToFixBranch

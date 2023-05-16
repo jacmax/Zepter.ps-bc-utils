@@ -1,1 +1,1 @@
-& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchLinuxEngine
+& $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine .

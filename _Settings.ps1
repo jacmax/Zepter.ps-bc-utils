@@ -26,6 +26,9 @@ $TargetRepos = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Paren
 $Targets = $AppJsons.directory.FullName
 #Write-Host $Targets
 
+$TestJsons = Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*Test*" }
+$TestTargets = $TestJsons.directory.FullName
+
 $ContainerUserName = 'admin'
 $ContainerPassword = ConvertTo-SecureString 'ZitP@ssword1' -AsPlainText -Force
 $ContainerCredential = New-Object System.Management.Automation.PSCredential ($ContainerUserName, $ContainerPassword)
@@ -74,10 +77,13 @@ $AppToInstall += 'ZS Commission'
 $AppToInstall += 'ZS GDPR'
 $AppToInstall += 'ZS Import Purchase'
 $AppToInstall += 'ZS Holding Report'
+if ($ZepterCountry -eq 'zjo') { $AppToInstall += 'ZS Integration JO' }
 if ($ZepterCountry -eq 'zsi') { $AppToInstall += 'ZS Integration SI' }
 if ($ZepterCountry -eq 'zmk') { $AppToInstall += 'ZS Integration MK' }
 if ($ZepterCountry -eq 'zba') { $AppToInstall += 'ZS Integration BA' }
 if ($ZepterCountry -eq 'zcz') { $AppToInstall += 'ZS Integration CZ' }
+if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Integration FR' }
+if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Upgrade FR' }
 $AppToInstall += 'ZS Courier'
 $AppToInstall += 'ZS Data Migration'
 $AppToInstall += 'ZS Sandbox JAM'
@@ -86,7 +92,8 @@ $AppToInstall += 'ESB Integration Temp Fix'
 $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
 $AppToInstall += 'ZS-PSW-TOOL'
 
-$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Holding Report', 0) + 1
+$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1
+if ($ZepterCountry -eq 'zjo') { $AppToInstallCount = 0 }
 
 #Write-Host $AppToInstall
 #Write-Host $AppToInstallCount
