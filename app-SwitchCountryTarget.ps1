@@ -1,6 +1,6 @@
 function App-SwitchCountryTarget {
     param (
-        [validateset('ZS Common', 'ZS Sales Contract')]
+        [validateset('ZS Common', 'ZS Sales Contract', 'ZS Personal Voucher')]
         [String] $TargetExt = '',
         [validateset('','CZ','RU')]
         [String] $TargetCountry = '',

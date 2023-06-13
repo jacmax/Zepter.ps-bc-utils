@@ -204,6 +204,13 @@ foreach ($extension in $extensions) {
         CompileExtension -Target $Target -AppFolder $AppFolder
         $Updated = $true
     }
+    if ($extension.Name -eq 'ZS Personal Voucher') {
+        App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' 
+        CompileExtension -Target $Target -AppFolder $AppFolder
+        App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'ONPREM'
+        CompileExtension -Target $Target -AppFolder $AppFolder
+        $Updated = $true
+    }
     if ($Updated) {
         App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry '' 
         Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname

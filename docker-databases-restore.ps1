@@ -280,6 +280,22 @@ function Remove-NavTenantDatabaseUserData {
     Remove-NetworkServiceUser -DatabaseServer $DatabaseServer -DatabaseName $DatabaseName -sqlCredential $sqlCredential
 }
 
+function Set-Docker-For-Restart {
+    param (
+        [String] $containerName
+    )
+
+    Write-Host '>>>' -ForegroundColor Yellow
+    Write-Host "Checking StartCount.txt file in $containerName" -ForegroundColor Green
+    Invoke-ScriptInBcContainer -containerName $ContainerName -scriptblock {
+        $startCountFile = 'C:\Run\StartCount.txt'
+        if (Test-Path $startCountFile) {
+            Remove-Item $startCountFile
+        }
+    }
+    Write-Host '<<<' -ForegroundColor Yellow
+}
+
 . (Join-Path $PSScriptRoot '_Settings.ps1')
 . (Join-Path $PSScriptRoot 'docker-newimg-sqlfile.ps1')
 . (Join-Path $PSScriptRoot 'docker-import-NAVEncryptionKey.ps1')
@@ -345,6 +361,26 @@ foreach ($file in $sqlBackupFiles) {
             if ($version -in '100', '140') {
                 & Docker-NewNavServerUser -ZepterCountryParam $country.ToLower()
             }
+            switch ($version) {
+                '100' {
+                    $licenseFile = $SettingsJson.containerLicenseFileBC100;
+                    break;
+                }
+                '140' {
+                    $licenseFile = $SettingsJson.containerLicenseFileBC140;
+                    break;
+                }
+                '200' {
+                    $licenseFile = $SettingsJson.containerLicenseFileBC200;
+                    break;
+                }
+                Default {
+                    $licenseFile = $SettingsJson.containerLicenseFile;
+                    break;
+                }
+            }
+            & Set-Docker-For-Restart $container
+            & Import-BcContainerLicense -containerName $container -licenseFile $licenseFile -restart
             & Docker restart $container
             Write-Host "<<< End update docker" -ForegroundColor Yellow
         }

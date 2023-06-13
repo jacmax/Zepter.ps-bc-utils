@@ -17,8 +17,8 @@ $dotNetProbingPaths =
 "d:\DEV-EXT\bc-common\Common - App\.netpackages",
 "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8",
 "C:\Windows\assembly",
-"D:\DEV-BASEAPP\BC210-ProgramFiles",
-"D:\DEV-BASEAPP\BC210-ProgramFilesX86"
+"D:\DotNetProbing\BC210-ProgramFiles",
+"D:\DotNetProbing\BC210-ProgramFilesX86"
 
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*App*" }
 $AppJsons += Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*Upgrade*" }
@@ -81,19 +81,24 @@ if ($ZepterCountry -eq 'zjo') { $AppToInstall += 'ZS Integration JO' }
 if ($ZepterCountry -eq 'zsi') { $AppToInstall += 'ZS Integration SI' }
 if ($ZepterCountry -eq 'zmk') { $AppToInstall += 'ZS Integration MK' }
 if ($ZepterCountry -eq 'zba') { $AppToInstall += 'ZS Integration BA' }
-if ($ZepterCountry -eq 'zcz') { $AppToInstall += 'ZS Integration CZ' }
+if ($ZepterCountry -eq 'zcz') { $AppToInstall += 'ZS Commission Imported' }
 if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Integration FR' }
 if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Upgrade FR' }
+if ($ZepterCountry -eq 'zhu') { $AppToInstall += 'ZS Integration HU' }
+if ($ZepterCountry -eq 'zhu') { $AppToInstall += 'ZS Migration HU' }
 $AppToInstall += 'ZS Courier'
 $AppToInstall += 'ZS Data Migration'
 $AppToInstall += 'ZS Sandbox JAM'
 $AppToInstall += 'ESB Integration ZS'
 $AppToInstall += 'ESB Integration Temp Fix'
 $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
+$AppToInstall += 'Designer_dda0cdb6-f83c-4ca0-9f9e-6cefc720a77a'
 $AppToInstall += 'ZS-PSW-TOOL'
 
-$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1
-if ($ZepterCountry -eq 'zjo') { $AppToInstallCount = 0 }
+$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Import Purchase', 0) + 1
+if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = 0 }
+if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
+if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
 
 #Write-Host $AppToInstall
 #Write-Host $AppToInstallCount

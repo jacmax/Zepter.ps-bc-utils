@@ -1,7 +1,17 @@
 {
     "name": "RULES",
     "description": "ZepterIT Rules",
-    "rules": [  
+    "rules": [
+        {
+            "id": "AA0005",
+            "action": "Hidden",
+            "justification": "Temporary Later, BEGIN..END"
+        },
+        {
+            "id": "AA0022",
+            "action": "Hidden",
+            "justification": "Temporary Later CASE or IF"
+        },
         {
             "id": "AA0072",
             "action": "Hidden",
@@ -11,6 +21,11 @@
             "id": "AA0074",
             "action": "Hidden",
             "justification": "This is OK -> Variable label must have a suffix from this list: Msg, Tok, Err, Qsr, Lbl, Txt"
+        },
+        {
+            "id": "AA0136",
+            "action": "Hidden",
+            "justification": "Temporary Later, Unreachable code detected"
         },
         {
             "id": "AA0214",
@@ -23,9 +38,19 @@
             "justification": "This is OK -> File names included number of object"
         },
         {
+            "id": "AA0217",
+            "action": "Hidden",
+            "justification": "Temporary, StrSubstNo must use text constant or label"
+        },
+        {
             "id": "AA0218",
             "action": "Hidden",
             "justification": "This is OK -> Temporary hidden. Tooltip will be added later"
+        },
+        {
+            "id": "AA0228",
+            "action": "Hidden",
+            "justification": "Temporary, local procedure not used"
         },
         {
             "id": "AA0232",
@@ -88,34 +113,9 @@
             "justification": "This is OK -> ApplicationArea will not be added"
         },
         {
-            "id": "AA0005",
-            "action": "Hidden",
-            "justification": "Temporary Later, BEGIN..END"
-        },
-        {
             "id": "AA0008",
             "action": "Hidden",
             "justification": "Temporary Later, Open and Close"
-        },
-		{
-            "id": "AA0022",
-            "action": "Hidden",
-            "justification": "Temporary Later CASE or IF"
-        },
-        {
-            "id": "AA0136",
-            "action": "Hidden",
-            "justification": "Temporary Later, Unreachable code detected"
-        },
-        {
-            "id": "AA0217",
-            "action": "Hidden",
-            "justification": "Temporary, StrSubstNo must use text constant or label"
-        },
-        {
-            "id": "AA0228",
-            "action": "Hidden",
-            "justification": "Temporary, local procedure not used"
         }
     ]
 }

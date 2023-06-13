@@ -6,6 +6,8 @@ param (
 
 . (Join-path $PSScriptRoot '_Settings.ps1')
 
+$FromBranch = 'master'
+
 $ToFixDate = $(Get-Date -Format "yyyyMMdd-HHmm")
 #$ToFixBranch = $("JAM-Upgrade-BC20-{0}" -f $ToFixDate)
 #$ToFixBranch = $("JAM-Update-BC20-{0}" -f $ToFixDate)
@@ -15,7 +17,7 @@ $ToFixDate = $(Get-Date -Format "yyyyMMdd-HHmm")
 #$ToFixBranch = "JAM-gitignore-20220329"
 #$ToFixBranch = "JAM-Migration-20220405"
 #$ToFixBranch = "JAM-CountryRegionCode-20230220"
-$ToFixBranch = "JAM-Translation-20230516"
+#$ToFixBranch = "JAM-Translation-20230518"
 
 #$FixCommitMsg = "Upgrade for BC20"
 #$FixCommitMsg = "New fields were added in setup page"
@@ -30,7 +32,7 @@ $ToFixBranch = "JAM-Translation-20230516"
 #$FixCommitMsg = "Code cleaning, warnings fix"
 #$FixCommitMsg = "Update for Tool Update Prices on Ctr."
 #$FixCommitMsg = "Updated for Country Region Code field"
-$FixCommitMsg = "Translation for Czechia was added"
+#$FixCommitMsg = "Translation for Czechia was updated"
 
 if ($Type -eq 'Fix') {
     $ToBranch = $ToFixBranch
@@ -51,9 +53,10 @@ foreach ($Target in $AppJsons) {
         $TargetGit = (Get-ChildItem $Workspace -Recurse -Hidden -Include '.git').Parent.FullName
         if ($TargetGit) {
             Set-Location $TargetGit
+            & git checkout -q "$FromBranch"
             if ($(git status --porcelain)) {
                 write-host $TargetGit ' Branch:' $ToBranch -ForegroundColor Green
-                & git checkout -q -b "$ToBranch"
+                & git checkout -q -b "$ToBranch" "$FromBranch"
                 & git stage .
                 & git commit -m "$CommitMsg"
                 & git push origin "$ToBranch"
