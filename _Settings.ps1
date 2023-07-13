@@ -95,9 +95,9 @@ $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
 $AppToInstall += 'Designer_dda0cdb6-f83c-4ca0-9f9e-6cefc720a77a'
 $AppToInstall += 'ZS-PSW-TOOL'
 
-$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Import Purchase', 0) + 1
-if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = 0 }
-if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
+$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Representative', 0) + 1
+#if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = 0 }
+#if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
 if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
 
 #Write-Host $AppToInstall

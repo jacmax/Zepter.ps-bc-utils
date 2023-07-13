@@ -1,0 +1,15 @@
+$WebClient = New-Object System.Net.WebClient
+
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Common.app", "C:\temp\Zepter IT_ZS Common.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Common_RU.app", "C:\temp\Zepter IT_ZS Common_RU.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Sales%20Item.app", "C:\temp\Zepter IT_ZS Sales Item.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Representative.app", "C:\temp\Zepter IT_ZS Representative.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Sales%20Contract.app", "C:\temp\Zepter IT_ZS Sales Contract.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Sales%20Contract_CZ.app", "C:\temp\Zepter IT_ZS Sales Contract_CZ.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Sales%20Contract_RU.app", "C:\temp\Zepter IT_ZS Sales Contract_RU.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Payment.app", "C:\temp\Zepter IT_ZS Payment.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Personal%20Voucher.app", "C:\temp\Zepter IT_ZS Personal Voucher.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20GDPR.app", "C:\temp\Zepter IT_ZS GDPR.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Import%20Purchase.app", "C:\temp\Zepter IT_ZS Import Purchase.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Holding%20Report.app", "C:\temp\Zepter IT_ZS Holding Report.app")
+$WebClient.DownloadFile("https://app-download.zepterit.com/Zepter%20IT_ZS%20Service.app", "C:\temp\Zepter IT_ZS Service.app")

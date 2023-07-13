@@ -106,7 +106,8 @@ function Remove-NetworkServiceUser {
     'ltdataexport',
     'jodataexport',
     'hudataexport',
-    'mkdataexport' | ForEach-Object {
+    'mkdataexport',
+    'czdataexport' | ForEach-Object {
         Write-Host "Remove $_ User from $DatabaseName"
         Invoke-Sqlcmd @params -Query "USE [$DatabaseName]
         IF EXISTS (SELECT 'X' FROM sysusers WHERE name = '$_' and isntuser = 0)

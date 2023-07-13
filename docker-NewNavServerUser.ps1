@@ -1,7 +1,7 @@
 . (Join-Path $PSScriptRoot '.\_Settings.ps1')
 function Docker-NewNavServerUser {
     param (
-        [validateset('zhu', 'zjo', 'zbg', 'zch', 'zde', 'zlt', 'zus')]
+        [validateset('zhu', 'zjo', 'zuz', 'zbg', 'zch', 'zde', 'zlt', 'zus')]
         [String] $ZepterCountryParam
     )
 

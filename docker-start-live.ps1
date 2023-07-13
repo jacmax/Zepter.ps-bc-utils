@@ -14,8 +14,9 @@ docker stop zde-live
 docker stop zlt-live
 docker stop zus-live
 
-docker stop zjo-live
 docker stop zhu-live
+docker stop zjo-live
+docker stop zuz-live
 
 docker stop zba-live
 docker stop zby-live

@@ -8,7 +8,7 @@ function CompileExtension {
         [String] $Target = '',
         [String] $AppFolder = ''
     )
-    
+
     #Get app.json
     $AppJson = Get-ObjectFromJSON (Join-Path $Target "app.json")
     $ExtensionApp = $(Join-Path $AppFolder $("$($AppJson.publisher)$('_')$($AppJson.name)"))
@@ -18,11 +18,28 @@ function CompileExtension {
         }
     }
     $ExtensionApp = "$($ExtensionApp)$('_')$($AppJson.version)$('.app')"
-
     $paramProject = @("/project:""$Target""")
     $paramOut = @("/out:""$ExtensionApp""")
     $paramSymbol = @("/packagecachepath:""$(Join-Path $Target $SymbolFolder)""")
     $paramError = @("/errorlog:""$(Join-Path $Target 'error.log')""")
+
+    $BaseFolder = 'd:\DEV-EXT\app\BC200\W1\'
+    [string] $AppName = $AppJson.name
+    if ($AppName.EndsWith('FR')) {
+        $BaseFolder = 'd:\DEV-EXT\app\BC200\FR\'
+        Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
+        Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
+    }
+    if ($AppName.EndsWith('AT')) {
+        $BaseFolder = 'd:\DEV-EXT\app\BC200\AT\'
+        Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
+        Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
+    }
+    if ($AppName.EndsWith('CZ')) {
+        $BaseFolder = 'd:\DEV-EXT\app\BC200\CZ\'
+        Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
+        Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
+    }
 
     Write-Host '==='
     Write-Host $Target -ForegroundColor yellow
@@ -42,7 +59,8 @@ function CompileExtension {
     foreach ($Dependency in $AppJson.dependencies) {
         if ($Dependency.publisher -eq 'Zepter IT') {
             $CharArray = $Dependency.version.Split('.')
-            $Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.' + $CharArray[2] + '.*'
+            #$Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.' + $CharArray[2] + '.*'
+            $Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.*' + '.*'
             #Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
             if (Test-Path "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')") {
                 Copy-Item "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')" -Destination "$($Target)$('\')$($SymbolFolder)"
@@ -59,16 +77,14 @@ function CompileExtension {
     & $compilator.fullname $paramProject $paramSymbol $paramError $paramRules $paramOut $paramAnayzer $assemblyProbingPaths $paramNoWarn | Write-Verbose
     # | Write-Verbose
 
-    if (Test-Path -Path $ExtensionApp -PathType Leaf)
-    {
+    if (Test-Path -Path $ExtensionApp -PathType Leaf) {
         $TranslationFile = Get-ChildItem -path $ExtensionApp -erroraction 'silentlycontinue'
         if ($TranslationFile) {
             Write-Host "Successfully compiled $ExtensionApp" -ForegroundColor Green -NoNewline
             Write-Host ' (' $AppJson.preprocessorSymbols ')' -ForegroundColor yellow
         }
     }
-    else
-    {    
+    else {
         Write-Host "Compilation ended with errors" -ForegroundColor red
     }
 
@@ -126,7 +142,7 @@ foreach ($Target in $Targets) {
             $application = $AppJson.application;
         }
     }
-    if (($country -eq '') -and $AppJson.preprocessorSymbols){
+    if (($country -eq '') -and $AppJson.preprocessorSymbols) {
         $country = $AppJson.preprocessorSymbols[1];
     }
 
@@ -181,41 +197,41 @@ $extensions | Format-Table
 foreach ($extension in $extensions) {
     $Target = $extension.Folder
     $Updated = $false
-    
+
     CompileExtension -Target $Target -AppFolder $AppFolder
-    
+
     $AppJsonFile = Get-ChildItem -Path $Target 'app.json'
     $AppJsonFileBakName = $AppJsonFile.Fullname + '.bak'
     Copy-Item -Path $AppJsonFile.Fullname -Destination $AppJsonFileBakName
-    
+
     if ($extension.Name -eq 'ZS Common') {
-        App-SwitchCountryTarget -TargetExt $extension.Name -TargetSystem 'CLOUD' 
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetSystem 'CLOUD'
         CompileExtension -Target $Target -AppFolder $AppFolder
-        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'CLOUD' 
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'CLOUD'
         CompileExtension -Target $Target -AppFolder $AppFolder
-        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'ONPREM' 
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'ONPREM'
         CompileExtension -Target $Target -AppFolder $AppFolder
         $Updated = $true
     }
     if ($extension.Name -eq 'ZS Sales Contract') {
-        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' 
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU'
         CompileExtension -Target $Target -AppFolder $AppFolder
-        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'CZ' 
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'CZ'
         CompileExtension -Target $Target -AppFolder $AppFolder
         $Updated = $true
     }
     if ($extension.Name -eq 'ZS Personal Voucher') {
-        App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' 
+        App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD'
         CompileExtension -Target $Target -AppFolder $AppFolder
         App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'ONPREM'
         CompileExtension -Target $Target -AppFolder $AppFolder
         $Updated = $true
     }
     if ($Updated) {
-        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry '' 
+        App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry ''
         Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
     }
-    
+
     Remove-Item $AppJsonFileBakName
 }
 
