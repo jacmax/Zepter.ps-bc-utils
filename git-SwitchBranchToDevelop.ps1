@@ -1,7 +1,7 @@
+param (
+	[String] $ToBranch = 'develop'
+)
 . (Join-path $PSScriptRoot '_Settings.ps1')
-
-$ToBranch = 'develop'
-#$ToBranch = 'JAM-CountryRegionCode-20230220'
 
 $currentLocation = Get-Location
 foreach ($Target in $Targets) {
@@ -18,12 +18,28 @@ foreach ($Target in $Targets) {
 		if ($TargetGit -ne $TargetGitBefore) {
 			$TargetGitBefore = $TargetGit
 			Set-Location $TargetGit
+
+			write-host $AppJson.name $TargetGit "$ToBranch" -ForegroundColor Yellow
+			git branch --list
+
 			if (git ls-remote --heads origin "$ToBranch") {
-				& git checkout -q "master"
-				& git branch -d "$ToBranch"
+				Write-Host $ToBranch -ForegroundColor Cyan
+				#& git checkout -q "master"
+				#& git branch -d "$ToBranch"
 				& git checkout -q "$ToBranch"
 				& git pull -q origin "$ToBranch"
+				& git reset --hard origin/$ToBranch
 				& git fetch --all --prune
+			}
+			elseif (git show-ref --heads origin "$ToBranch") {
+				Write-Host $ToBranch -ForegroundColor Red
+				#& git branch -d "$ToBranch"
+				#& git checkout -b "$ToBranch" master
+				& git checkout "$ToBranch"
+			}
+			elseif (git branch --list "$ToBranch") {
+				Write-Host $ToBranch
+				& git checkout "$ToBranch"
 			}
 		}
 	}

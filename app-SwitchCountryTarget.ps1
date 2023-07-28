@@ -1,10 +1,15 @@
 function App-SwitchCountryTarget {
     param (
-        [validateset('ZS Common', 'ZS Sales Contract', 'ZS Personal Voucher')]
+        [validateset('ZS Common',
+            'ZS Sales Contract',
+            'ZS Personal Voucher',
+            'ZS Courier',
+            'ZS Integration CH',
+            'ZS Integration LT')]
         [String] $TargetExt = '',
-        [validateset('','CZ','RU')]
+        [validateset('', 'CZ', 'RU')]
         [String] $TargetCountry = '',
-        [validateset('','ONPREM','CLOUD')]
+        [validateset('', 'ONPREM', 'CLOUD')]
         [String] $TargetSystem = ''
     )
 
@@ -32,6 +37,6 @@ function App-SwitchCountryTarget {
                 $AppJson | ConvertTo-Json -depth 32 | set-content (Join-Path $target "app.json")
             }
         }
-    }    
+    }
     Set-Location $currentLocation
 }

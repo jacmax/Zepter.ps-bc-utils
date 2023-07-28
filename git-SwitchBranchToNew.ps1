@@ -1,4 +1,3 @@
-
 param (
     [validateset('Version', 'Fix')]
     [String] $Type = 'Fix'
@@ -16,7 +15,7 @@ $ToFixDate = $(Get-Date -Format "yyyyMMdd-HHmm")
 #$ToFixBranch = "JAM-AlRules-20220406"
 #$ToFixBranch = "JAM-gitignore-20220329"
 #$ToFixBranch = "JAM-Migration-20220405"
-#$ToFixBranch = "JAM-CountryRegionCode-20230220"
+$ToFixBranch = "JAM-CountryRegionCode-20230723"
 #$ToFixBranch = "JAM-Translation-20230518"
 
 #$FixCommitMsg = "Upgrade for BC20"
@@ -31,7 +30,7 @@ $ToFixDate = $(Get-Date -Format "yyyyMMdd-HHmm")
 #$FixCommitMsg = "Update the 'Closed Base Calendar Unit' field"
 #$FixCommitMsg = "Code cleaning, warnings fix"
 #$FixCommitMsg = "Update for Tool Update Prices on Ctr."
-#$FixCommitMsg = "Updated for Country Region Code field"
+$FixCommitMsg = "Updated for Country Region Code field"
 #$FixCommitMsg = "Translation for Czechia was updated"
 
 if ($Type -eq 'Fix') {
