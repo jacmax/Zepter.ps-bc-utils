@@ -166,11 +166,16 @@ foreach ($Target in $Targets) {
             $application = $AppJson.application;
         }
     }
+    if ($AppJson.application -eq '20.0.0.0') {
+        if (-not ( Get-Member -InputObject $AppJson -Name "preprocessorSymbols" )) {
+            Add-Member -InputObject $AppJson NoteProperty "preprocessorSymbols" Object[]
+            $AppJson.preprocessorSymbols = 'CLEAN20', 'W1'
+        }
+    }
     if (($country -eq '') -and $AppJson.preprocessorSymbols) {
         $country = $AppJson.preprocessorSymbols[1];
     }
-
-    if ($AppJson.preprocessorSymbols -and ($AppJson.application -eq $application) -and ($country -eq $AppJson.preprocessorSymbols[1]) -and (-not $Block)) {
+    if ($AppJson.preprocessorSymbols -and ($AppJson.application -eq $application) -and (-not $Block)) {
         Write-Host 'AppName:' $AppJson.name
         $object = New-Object -TypeName PSObject
         $object | Add-Member -Name 'Name' -MemberType Noteproperty -Value $AppJson.name
