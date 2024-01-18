@@ -40,8 +40,8 @@
 
 
 . (Join-Path $PSScriptRoot '_Settings.ps1')
-& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchLinuxEngine
-Start-Sleep -Seconds 30
+& $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine -Verbose
+#Start-Sleep -Seconds 30
 &docker start SqlServer
 
 $sqlCredential = $ContainerSqlCredential

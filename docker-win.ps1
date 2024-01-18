@@ -1,1 +1,1 @@
-& $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchWindowsEngine .
+& $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchWindowsEngine -Verbose

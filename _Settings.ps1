@@ -13,12 +13,22 @@ else {
 
 $SymbolFolder = '.alpackages'
 
-$dotNetProbingPaths =
-"d:\DEV-EXT\bc-common\Common - App\.netpackages",
-"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8",
-"C:\Windows\assembly",
-"D:\DotNetProbing\BC210-ProgramFiles",
-"D:\DotNetProbing\BC210-ProgramFilesX86"
+if ($SecretSettings.version -eq '20.0') {
+    $dotNetProbingPaths =
+    "d:\DEV-EXT\bc-common\Common - App\.netpackages",
+    "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8",
+    "C:\Windows\assembly",
+    "D:\DotNetProbing\BC210-ProgramFiles",
+    "D:\DotNetProbing\BC210-ProgramFilesX86"
+}
+if ($SecretSettings.version -eq '23.0') {
+    $dotNetProbingPaths =
+    "d:\DEV-EXT\bc-common\Common - App\.netpackages",
+    "D:\DotNetProbing\BC230-ProgramFiles",
+    "D:\DotNetProbing\BC230-ProgramFilesX86",
+    "C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.24",
+    "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\6.0.24"
+}
 
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*App*" }
 $AppJsons += Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*Upgrade*" }
@@ -67,6 +77,7 @@ $SyncMode = 'Add'
 $SyncMode = 'ForceSync'
 
 $AppToInstall = @()
+
 $AppToInstall += 'ZS Common'
 $AppToInstall += 'ZS Sales Item'
 $AppToInstall += 'ZS Representative'
@@ -75,13 +86,16 @@ $AppToInstall += 'ZS Payment'
 $AppToInstall += 'ZS Personal Voucher'
 $AppToInstall += 'ZS Commission'
 $AppToInstall += 'ZS GDPR'
+$AppToInstall += 'ZS Service'
 $AppToInstall += 'ZS Import Purchase'
 $AppToInstall += 'ZS Holding Report'
 if ($ZepterCountry -eq 'zjo') { $AppToInstall += 'ZS Integration JO' }
 if ($ZepterCountry -eq 'zsi') { $AppToInstall += 'ZS Integration SI' }
 if ($ZepterCountry -eq 'zmk') { $AppToInstall += 'ZS Integration MK' }
 if ($ZepterCountry -eq 'zba') { $AppToInstall += 'ZS Integration BA' }
+if ($ZepterCountry -eq 'zpl') { $AppToInstall += 'ZS Integration PL' }
 if ($ZepterCountry -eq 'zcz') { $AppToInstall += 'ZS Commission Imported' }
+if ($ZepterCountry -eq 'zcz') { $AppToInstall += 'ZS Integration CZ' }
 if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Integration FR' }
 if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Upgrade FR' }
 if ($ZepterCountry -eq 'zhu') { $AppToInstall += 'ZS Integration HU' }
@@ -93,12 +107,23 @@ $AppToInstall += 'ESB Integration ZS'
 $AppToInstall += 'ESB Integration Temp Fix'
 $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
 $AppToInstall += 'Designer_dda0cdb6-f83c-4ca0-9f9e-6cefc720a77a'
+$AppToInstall += 'Designer_3cf8144b-4ea0-4d65-97a6-cbae53be4aad'
+$AppToInstall += 'ZS-PSW-PL'
+$AppToInstall += 'ZS-PSW-SI'
 $AppToInstall += 'ZS-PSW-TOOL'
+$AppToInstall += 'ZS-JLY-CZ'
+$AppToInstall += 'ZS-IJA'
+$AppToInstall += 'ZCZ-Development'
 
-$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Representative', 0) + 1
-if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration SI', 0) + 1 }
+$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Service', 0) + 1
+
+#if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = 0 }
+if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
+
 #if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
-#if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration MK', 0) + 1 }
+if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
+
+if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Holding Report', 0) + 1 }
 if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
 
 #Write-Host $AppToInstall

@@ -11,14 +11,7 @@ $currentLocation = Get-Location
 foreach ($Target in $Targets) {
     $AppJsonFile = Get-ChildItem -Path $Target 'app.json'
     $AppJson = Get-ObjectFromJSON $AppJsonFile.FullName
-    if (($AppJson.application -eq '20.0.0.0') -and $AppJson.name.Contains('ZS ')) {
-        $AppJson.target = $TargetExt
-        $AppJson.preprocessorSymbols = 'CLEAN20', 'W1'
-        if ($AppJson.name -in ('ZS Personal Voucher', 'ZS Common')) {
-            if ($Cloud) {
-                $AppJson.preprocessorSymbols += 'CLOUD'
-            }
-        }
+    if (($AppJson.application -in '20.0.0.0', '23.0.0.0') -and $AppJson.name.Contains('ZS ')) {
         if ((($AppJson.name -ne 'ZS Holding Report') -and
             ($AppJson.name -ne 'ZS Sandbox JAM') -and
             ($AppJson.name -ne 'ZS Data Migration')) -or (-Not $Cloud)) {
@@ -29,6 +22,7 @@ foreach ($Target in $Targets) {
             $AppJson | ConvertTo-Json -depth 32 | set-content (Join-Path $target "app.json")
             Write-Host $AppJson.version $AppJson.name
         }
+        $versionOld = [version]$AppJson.version
     }
 }
 Set-Location $currentLocation

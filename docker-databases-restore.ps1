@@ -301,8 +301,9 @@ function Set-Docker-For-Restart {
 . (Join-Path $PSScriptRoot 'docker-newimg-sqlfile.ps1')
 . (Join-Path $PSScriptRoot 'docker-import-NAVEncryptionKey.ps1')
 
-& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchLinuxEngine
-Start-Sleep -Seconds 30
+& $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine -Verbose
+$env:DOCKER_CONTEXT = 'desktop-linux'
+#Start-Sleep -Seconds 30
 &docker start SqlServer
 
 $sqlCredential = $ContainerSqlCredential
@@ -316,8 +317,9 @@ foreach ($file in $sqlBackupFiles) {
         $country = $Matches['country']
         $version = $Matches['version']
 
-        & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchWindowsEngine
-        & Start-Sleep -Seconds 20
+        & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchWindowsEngine -Verbose
+        $env:DOCKER_CONTEXT = 'desktop-windows'
+
         $container = $country.ToLower() + '-live'
         Write-Host "Container $container is checking" -ForegroundColor Green
         $containers = docker images $container
@@ -331,8 +333,9 @@ foreach ($file in $sqlBackupFiles) {
 
         Write-Host 'Restore database' $file.Name 'on' $sqlServer -ForegroundColor Red
 
-        & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchLinuxEngine
-        & Start-Sleep -Seconds 20
+        & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine -Verbose
+        $env:DOCKER_CONTEXT = 'desktop-linux'
+        #& Start-Sleep -Seconds 20
         & docker cp $file.FullName $($sqlServer + ':/var/backups')
 
         Restore-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential -BakFile $bakFile
@@ -346,22 +349,14 @@ foreach ($file in $sqlBackupFiles) {
         Write-Host 'Remove' $fileName -ForegroundColor Yellow
         docker exec -u 0 $($sqlServer) rm -rf $fileName
 
-        & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchWindowsEngine
-        & Start-Sleep -Seconds 20
+        & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchWindowsEngine -Verbose
+        $env:DOCKER_CONTEXT = 'desktop-windows'
 
         $containers = docker images $container
         if ($containers.count -eq 1) {
             & Docker-NewImg-Sqlfile -ZepterCountryParam $country.ToLower()
         }
         else {
-            Write-Host ">>> Start update docker" -ForegroundColor Yellow
-            Write-Host "Docker start $container"
-            & Docker start $container
-            & Start-Sleep -Seconds 20
-            & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
-            if ($version -in '100', '140') {
-                & Docker-NewNavServerUser -ZepterCountryParam $country.ToLower()
-            }
             switch ($version) {
                 '100' {
                     $licenseFile = $SettingsJson.containerLicenseFileBC100;
@@ -380,7 +375,17 @@ foreach ($file in $sqlBackupFiles) {
                     break;
                 }
             }
+            Write-Host ">>> Start update docker" -ForegroundColor Yellow
+            Write-Host "Docker start $container"
+            & Docker start $container
+            & Start-Sleep -Seconds 20
             & Set-Docker-For-Restart $container
+            & Docker restart $container
+            & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
+            if ($version -in '100', '140') {
+                & Docker-NewNavServerUser -ZepterCountryParam $country.ToLower()
+            }
+            #& Set-Docker-For-Restart $container
             & Import-BcContainerLicense -containerName $container -licenseFile $licenseFile -restart
             & Docker restart $container
             Write-Host "<<< End update docker" -ForegroundColor Yellow

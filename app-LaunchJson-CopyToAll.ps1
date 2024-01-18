@@ -22,7 +22,7 @@ if ($LaunchJson) {
     foreach ($Target in $Targets) {
         if ($Target -ne $BaseFolder) {
             $AppJson = Get-ObjectFromJSON (Join-Path $Target "app.json")
-            if ($AppJson.application -eq '20.0.0.0') {
+            if ($AppJson.application -in '20.0.0.0', '23.0.0.0') {
                 $LaunchJson, $SettingsJson | Copy-Item -Destination (join-path $Target ".vscode") -Force -Verbose
                 Remove-Item "$(join-path $Target ".alpackages")\*.app" -Recurse -Force -Verbose
                 $AppFiles | Copy-Item -Destination (join-path $Target ".alpackages") -Force -Verbose
@@ -33,7 +33,7 @@ if ($LaunchJson) {
     foreach ($Target in $TestTargets) {
         if ($Target -ne $BaseFolder) {
             $AppJson = Get-ObjectFromJSON (Join-Path $Target "app.json")
-            if ($AppJson.application -in '19.0.0.0', '20.0.0.0') {
+            if ($AppJson.application -in '19.0.0.0', '20.0.0.0', '23.0.0.0') {
                 $LaunchJson, $SettingsJson | Copy-Item -Destination (join-path $Target ".vscode") -Force -Verbose
             }
         }

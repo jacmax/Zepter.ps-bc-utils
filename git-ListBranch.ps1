@@ -37,7 +37,10 @@ foreach ($Target in $Targets) {
                 foreach ($branch in $branches) {
                     Write-Host $branch -ForegroundColor Yellow
                 }
-
+                $branches = git branch --list --merged | Where-Object { ($_ -ne '* master') -and ($_ -ne '  master') }
+                foreach ($branch in $branches) {
+                    Write-Host $branch -ForegroundColor Blue
+                }
             }
         }
     }

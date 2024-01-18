@@ -1,9 +1,13 @@
-& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchLinuxEngine
-Start-Sleep -Seconds 30
+& $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine -Verbose
+$env:DOCKER_CONTEXT = 'desktop-linux'
+#Start-Sleep -Seconds 30
 &docker restart SqlServer
 &docker restart dockers
-& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchWindowsEngine
-Start-Sleep -Seconds 30
+&docker restart mapa
+
+& $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchWindowsEngine -Verbose
+$env:DOCKER_CONTEXT = 'desktop-windows'
+#Start-Sleep -Seconds 30
 
 docker stop zsi-live
 docker stop zmk-live
@@ -30,5 +34,6 @@ docker stop ru-bc220
 
 docker stop w1-bc100
 docker stop w1-bc200
-docker stop w1-bc220
 docker stop w1-bc230
+
+Read-Host -Prompt 'Press any key to continue. . .'
