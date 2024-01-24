@@ -382,11 +382,11 @@ foreach ($file in $sqlBackupFiles) {
             & Set-Docker-For-Restart $container
             & Docker restart $container
             & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
+            & Import-BcContainerLicense -containerName $container -licenseFile $licenseFile -restart
             if ($version -in '100', '140') {
                 & Docker-NewNavServerUser -ZepterCountryParam $country.ToLower()
             }
             #& Set-Docker-For-Restart $container
-            & Import-BcContainerLicense -containerName $container -licenseFile $licenseFile -restart
             & Docker restart $container
             Write-Host "<<< End update docker" -ForegroundColor Yellow
         }

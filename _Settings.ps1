@@ -123,7 +123,7 @@ if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInst
 #if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
 if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
 
-if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Holding Report', 0) + 1 }
+if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
 if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
 
 #Write-Host $AppToInstall
