@@ -253,10 +253,12 @@ $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Personal V
 $extension."Quantity Dependency" += 2
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS GDPR'
 $extension."Quantity Dependency" += 0
-#$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Integration AT'
-#$extension."Quantity Dependency" += 0
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Commission Imported'
 $extension."Quantity Dependency" += 1
+$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Service'
+$extension."Quantity Dependency" += 1
+#$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Integration AT'
+#$extension."Quantity Dependency" += 0
 
 $extensions = $extensions | Sort-Object -Property 'Quantity Dependency' -Descending
 $extensions | Format-Table
@@ -314,7 +316,7 @@ foreach ($extension in $extensions) {
             App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' -BCSystem $BCSystem
             if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
         }
-
+        
         Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname #-Verbose
         Remove-Item $AppJsonFileBakName #-Verbose
     }

@@ -26,8 +26,8 @@ if ($SecretSettings.version -eq '23.0') {
     "d:\DEV-EXT\bc-common\Common - App\.netpackages",
     "D:\DotNetProbing\BC230-ProgramFiles",
     "D:\DotNetProbing\BC230-ProgramFilesX86",
-    "C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.24",
-    "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\6.0.24"
+    "C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.27",
+    "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\6.0.27"
 }
 
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*App*" }
@@ -105,9 +105,11 @@ $AppToInstall += 'ZS Data Migration'
 $AppToInstall += 'ZS Sandbox JAM'
 $AppToInstall += 'ESB Integration ZS'
 $AppToInstall += 'ESB Integration Temp Fix'
+$AppToInstall += 'ESB Integration tmp'
 $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
 $AppToInstall += 'Designer_dda0cdb6-f83c-4ca0-9f9e-6cefc720a77a'
 $AppToInstall += 'Designer_3cf8144b-4ea0-4d65-97a6-cbae53be4aad'
+$AppToInstall += 'ZCZ design pages'
 $AppToInstall += 'ZS-PSW-PL'
 $AppToInstall += 'ZS-PSW-SI'
 $AppToInstall += 'ZS-PSW-TOOL'
@@ -123,7 +125,7 @@ if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInst
 #if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
 if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
 
-if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
+if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration CZ', 0) + 1 }
 if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
 
 #Write-Host $AppToInstall
