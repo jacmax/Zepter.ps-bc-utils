@@ -36,4 +36,4 @@ docker stop w1-bc100
 docker stop w1-bc200
 docker stop w1-bc230
 
-Read-Host -Prompt 'Press any key to continue. . .'
+#Read-Host -Prompt 'Press any key to continue. . .'

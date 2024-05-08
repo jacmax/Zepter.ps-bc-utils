@@ -56,12 +56,11 @@ $ContainerAdditionalParameters = @("--cpu-count 8", "--dns=8.8.8.8")
 $BCZSFolder = $SecretSettings.ZepterSoftPath
 $BCZSAddOnFolder = $SecretSettings.ZepterSoftPathAddOn
 
-$SettingsJson = Get-ObjectFromJSON (Join-Path $Workspace "ps-bc-utils/_SecretSettings.json")
-$ContainerCountry = $SettingsJson.country
-$ContainerVersion = $SettingsJson.version
-$ContainerVersionNewest = $SettingsJson.versionNewest
-$ZepterCountry = $SettingsJson.zeptercountry
-$ZepterVersion = $SettingsJson.zepterversion
+$ContainerCountry = $SecretSettings.country
+$ContainerVersion = $SecretSettings.version
+$ContainerVersionNewest = $SecretSettings.versionNewest
+$ZepterCountry = $SecretSettings.zeptercountry
+$ZepterVersion = $SecretSettings.zepterversion
 
 $ContainerName = "$ContainerCountry-bc$($ContainerVersion.Replace('.',''))"
 $ContainerNameSaved = $ContainerName
@@ -120,7 +119,7 @@ $AppToInstall += 'ZCZ-Development'
 $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Service', 0) + 1
 
 #if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = 0 }
-if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
+if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration SI', 0) + 1 }
 
 #if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
 if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }

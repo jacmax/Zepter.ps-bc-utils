@@ -335,7 +335,7 @@ foreach ($file in $sqlBackupFiles) {
 
         & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine -Verbose
         $env:DOCKER_CONTEXT = 'desktop-linux'
-        
+        #<#
         & docker cp $file.FullName $($sqlServer + ':/var/backups')
         Restore-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential -BakFile $bakFile
         Remove-WindowsUsers -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
@@ -347,7 +347,8 @@ foreach ($file in $sqlBackupFiles) {
         $fileName = '/var/backups/' + $file.Name
         Write-Host 'Remove' $fileName -ForegroundColor Yellow
         docker exec -u 0 $($sqlServer) rm -rf $fileName
-
+        #>
+        <#
         & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchWindowsEngine -Verbose
         $env:DOCKER_CONTEXT = 'desktop-windows'
 
@@ -358,29 +359,30 @@ foreach ($file in $sqlBackupFiles) {
         else {
             switch ($version) {
                 '100' {
-                    $licenseFile = $SettingsJson.containerLicenseFileBC100;
+                    $licenseFile = $SecretSettings.containerLicenseFileBC100;
                     break;
                 }
                 '140' {
-                    $licenseFile = $SettingsJson.containerLicenseFileBC140;
+                    $licenseFile = $SecretSettings.containerLicenseFileBC140;
                     break;
                 }
                 '200' {
-                    $licenseFile = $SettingsJson.containerLicenseFileBC200;
+                    $licenseFile = $SecretSettings.containerLicenseFileBC200;
                     break;
                 }
                 Default {
-                    $licenseFile = $SettingsJson.containerLicenseFile;
+                    $licenseFile = $SecretSettings.containerLicenseFile;
                     break;
                 }
             }
             Write-Host ">>> Start update docker" -ForegroundColor Yellow
             Write-Host "Docker start $container"
             & Docker start $container
+            & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
             & Start-Sleep -Seconds 20
             & Set-Docker-For-Restart $container
             & Docker restart $container
-            & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
+            & Start-Sleep -Seconds 120
             & Import-BcContainerLicense -containerName $container -licenseFile $licenseFile -restart
             if ($version -in '100', '140') {
                 & Docker-NewNavServerUser -ZepterCountryParam $country.ToLower()
@@ -388,6 +390,8 @@ foreach ($file in $sqlBackupFiles) {
             #& Set-Docker-For-Restart $container
             & Docker restart $container
             Write-Host "<<< End update docker" -ForegroundColor Yellow
+            & Docker stop $container
         }
+        #>        
     }
 }

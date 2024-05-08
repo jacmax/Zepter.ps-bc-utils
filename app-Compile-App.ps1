@@ -29,8 +29,9 @@ function CompileExtension {
     $paramError = @("/errorlog:""$(Join-Path $Target 'error.log')""")
 
     $BCVersion = $ContainerVersion.Replace('.', '')
+    $BCVersion = $BCSystem
 
-    $BaseFolderW1 = "d:\DEV-EXT\app\BC$($BCVersion)\W1\"
+    $BaseFolderW1 = "d:\DEV-EXT\app\$($BCVersion)\W1\"
     $BaseFolder = $BaseFolderW1
 
     Remove-Item "$($Target)$('\')$($SymbolFolder)\*.app"
@@ -38,27 +39,27 @@ function CompileExtension {
 
     [string] $AppName = $AppJson.name
     if ($AppName.EndsWith('AT')) {
-        $BaseFolder = "d:\DEV-EXT\app\BC$($BCVersion)\AT\"
+        $BaseFolder = "d:\DEV-EXT\app\$($BCVersion)\AT\"
         Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
         Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
     }
     if ($AppName.EndsWith('CA') -or $ExtensionApp.Contains('_CA_')) {
-        $BaseFolder = "d:\DEV-EXT\app\BC$($BCVersion)\CA\"
+        $BaseFolder = "d:\DEV-EXT\app\$($BCVersion)\CA\"
         Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
         Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
     }
     if ($AppName.EndsWith('CZ') -or $ExtensionApp.Contains('_CZ_')) {
-        $BaseFolder = "d:\DEV-EXT\app\BC$($BCVersion)\CZ\"
+        $BaseFolder = "d:\DEV-EXT\app\$($BCVersion)\CZ\"
         Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
         Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
     }
     if ($AppName.EndsWith('FR')) {
-        $BaseFolder = "d:\DEV-EXT\app\BC$($BCVersion)\FR\"
+        $BaseFolder = "d:\DEV-EXT\app\$($BCVersion)\FR\"
         Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
         Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
     }
     if ($AppName.EndsWith('RU') -or $ExtensionApp.Contains('_RU_')) {
-        $BaseFolder = "d:\DEV-EXT\app\BC$($BCVersion)\RU\"
+        $BaseFolder = "d:\DEV-EXT\app\$($BCVersion)\RU\"
         Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
         Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
     }
@@ -182,9 +183,9 @@ foreach ($Target in $Targets) {
     $AppJson = Get-ObjectFromJSON (Join-Path $target "app.json")
 
     $Block = $AppJson.description -eq 'BLOCK'
-    #if ($BCSystem -eq 'BC230' -and $AppJson.name -eq 'ZS Holding Report') {
-    #    $Block = $true
-    #}
+    if ($BCSystem -eq 'BC230' -and $AppJson.name -eq 'ZS Holding Report') {
+        $Block = $true
+    }
     #if ($BCSystem -eq 'BC230' -and $AppJson.name -ne 'ZS Commission Imported') {
     #    $Block = $true
     #}
@@ -246,7 +247,7 @@ foreach ($Target in $Targets) {
 Remove-Item -Path $(Join-Path $AppFolder '*') -Filter "Zepter IT_ZS*.app"
 
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Sales Contract'
-$extension."Quantity Dependency" -= 1
+$extension."Quantity Dependency" -= 2
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Payment'
 $extension."Quantity Dependency" -= 0
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Personal Voucher'
