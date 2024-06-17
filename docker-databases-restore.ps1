@@ -1,4 +1,9 @@
-﻿function Restore-Database {
+﻿param
+(
+    [bool]$RestoreSQL = $false
+)
+
+function Restore-Database {
     Param (
         [Parameter(Mandatory = $true)]
         [string] $bakFile,
@@ -335,63 +340,64 @@ foreach ($file in $sqlBackupFiles) {
 
         & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine -Verbose
         $env:DOCKER_CONTEXT = 'desktop-linux'
-        #<#
-        & docker cp $file.FullName $($sqlServer + ':/var/backups')
-        Restore-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential -BakFile $bakFile
-        Remove-WindowsUsers -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
-        Remove-ApplicationRoles -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
-        Remove-NavDatabaseSystemTableData -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
-        #Shrink-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
-        #Remove-NavTenantDatabaseUserData -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+        
+        if ($RestoreSQL) {
+            & docker cp $file.FullName $($sqlServer + ':/var/backups')
+            Restore-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential -BakFile $bakFile
+            Remove-WindowsUsers -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+            Remove-ApplicationRoles -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+            Remove-NavDatabaseSystemTableData -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+            #Shrink-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
+            #Remove-NavTenantDatabaseUserData -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
 
-        $fileName = '/var/backups/' + $file.Name
-        Write-Host 'Remove' $fileName -ForegroundColor Yellow
-        docker exec -u 0 $($sqlServer) rm -rf $fileName
-        #>
-        <#
-        & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchWindowsEngine -Verbose
-        $env:DOCKER_CONTEXT = 'desktop-windows'
-
-        $containers = docker images $container
-        if ($containers.count -eq 1) {
-            & Docker-NewImg-Sqlfile -ZepterCountryParam $country.ToLower()
+            $fileName = '/var/backups/' + $file.Name
+            Write-Host 'Remove' $fileName -ForegroundColor Yellow
+            docker exec -u 0 $($sqlServer) rm -rf $fileName
         }
         else {
-            switch ($version) {
-                '100' {
-                    $licenseFile = $SecretSettings.containerLicenseFileBC100;
-                    break;
-                }
-                '140' {
-                    $licenseFile = $SecretSettings.containerLicenseFileBC140;
-                    break;
-                }
-                '200' {
-                    $licenseFile = $SecretSettings.containerLicenseFileBC200;
-                    break;
-                }
-                Default {
-                    $licenseFile = $SecretSettings.containerLicenseFile;
-                    break;
-                }
+            & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchWindowsEngine -Verbose
+            $env:DOCKER_CONTEXT = 'desktop-windows'
+
+            $containers = docker images $container
+            if ($containers.count -eq 1) {
+                & Docker-NewImg-Sqlfile -ZepterCountryParam $country.ToLower()
             }
-            Write-Host ">>> Start update docker" -ForegroundColor Yellow
-            Write-Host "Docker start $container"
-            & Docker start $container
-            & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
-            & Start-Sleep -Seconds 20
-            & Set-Docker-For-Restart $container
-            & Docker restart $container
-            & Start-Sleep -Seconds 120
-            & Import-BcContainerLicense -containerName $container -licenseFile $licenseFile -restart
-            if ($version -in '100', '140') {
-                & Docker-NewNavServerUser -ZepterCountryParam $country.ToLower()
+            else {
+                switch ($version) {
+                    '100' {
+                        $licenseFile = $SecretSettings.containerLicenseFileBC100;
+                        break;
+                    }
+                    '140' {
+                        $licenseFile = $SecretSettings.containerLicenseFileBC140;
+                        break;
+                    }
+                    '200' {
+                        $licenseFile = $SecretSettings.containerLicenseFileBC200;
+                        break;
+                    }
+                    Default {
+                        $licenseFile = $SecretSettings.containerLicenseFile;
+                        break;
+                    }
+                }
+                Write-Host ">>> Start update docker" -ForegroundColor Yellow
+                Write-Host "Docker start $container"
+                & Docker start $container
+                & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
+                & Start-Sleep -Seconds 20
+                & Set-Docker-For-Restart $container
+                & Docker restart $container
+                & Start-Sleep -Seconds 120
+                & Import-BcContainerLicense -containerName $container -licenseFile $licenseFile -restart
+                if ($version -in '100', '140') {
+                    & Docker-NewNavServerUser -ZepterCountryParam $country.ToLower()
+                }
+                #& Set-Docker-For-Restart $container
+                & Docker restart $container
+                Write-Host "<<< End update docker" -ForegroundColor Yellow
+                & Docker stop $container
             }
-            #& Set-Docker-For-Restart $container
-            & Docker restart $container
-            Write-Host "<<< End update docker" -ForegroundColor Yellow
-            & Docker stop $container
         }
-        #>        
     }
 }

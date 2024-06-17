@@ -62,6 +62,9 @@ $ContainerVersionNewest = $SecretSettings.versionNewest
 $ZepterCountry = $SecretSettings.zeptercountry
 $ZepterVersion = $SecretSettings.zepterversion
 
+if ($ZepterCountryParam) {
+	$ZepterCountry = $ZepterCountryParam
+}
 $ContainerName = "$ContainerCountry-bc$($ContainerVersion.Replace('.',''))"
 $ContainerNameSaved = $ContainerName
 if ($ZepterCountry) {
@@ -94,6 +97,7 @@ if ($ZepterCountry -eq 'zmk') { $AppToInstall += 'ZS Integration MK' }
 if ($ZepterCountry -eq 'zba') { $AppToInstall += 'ZS Integration BA' }
 if ($ZepterCountry -eq 'zpl') { $AppToInstall += 'ZS Integration PL' }
 if ($ZepterCountry -eq 'zcz') { $AppToInstall += 'ZS Commission Imported' }
+if ($ZepterCountry -eq 'zmk') { $AppToInstall += 'ZS Commission Imported' }
 if ($ZepterCountry -eq 'zcz') { $AppToInstall += 'ZS Integration CZ' }
 if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Integration FR' }
 if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Upgrade FR' }
@@ -108,6 +112,7 @@ $AppToInstall += 'ESB Integration tmp'
 $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
 $AppToInstall += 'Designer_dda0cdb6-f83c-4ca0-9f9e-6cefc720a77a'
 $AppToInstall += 'Designer_3cf8144b-4ea0-4d65-97a6-cbae53be4aad'
+$AppToInstall += 'Designer_39b17ded-af09-4cf3-b319-41d1f671978d'
 $AppToInstall += 'ZCZ design pages'
 $AppToInstall += 'ZS-PSW-PL'
 $AppToInstall += 'ZS-PSW-SI'
@@ -118,14 +123,18 @@ $AppToInstall += 'ZCZ-Development'
 
 $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Service', 0) + 1
 
+if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
+
 #if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = 0 }
 if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration SI', 0) + 1 }
 
 #if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
-if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
+if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration MK', 0) + 1 }
+#if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
 
+#if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = 0 }
 if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration CZ', 0) + 1 }
-if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
+if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Commission Imported', 0) + 1 }
 
 #Write-Host $AppToInstall
 #Write-Host $AppToInstallCount
