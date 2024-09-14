@@ -29,6 +29,22 @@ if ($SecretSettings.version -eq '23.0') {
     "C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.27",
     "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\6.0.27"
 }
+if ($SecretSettings.version -eq '24.0') {
+    $dotNetProbingPaths =
+    "d:\DEV-EXT\bc-common\Common - App\.netpackages",
+    "D:\DotNetProbing\BC240-ProgramFiles",
+    "D:\DotNetProbing\BC240-ProgramFilesX86",
+    "C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.5",
+    "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\8.0.5"
+}
+if ($SecretSettings.version -eq '25.0') {
+    $dotNetProbingPaths =
+    "d:\DEV-EXT\bc-common\Common - App\.netpackages",
+    "D:\DotNetProbing\BC240-ProgramFiles",
+    "D:\DotNetProbing\BC240-ProgramFilesX86",
+    "C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.5",
+    "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\8.0.5"
+}
 
 $AppJsons = Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*App*" }
 $AppJsons += Get-ChildItem $Workspace -Recurse 'app.json' | Where-Object { $_.PSParentPath -like "*Upgrade*" }
@@ -63,7 +79,7 @@ $ZepterCountry = $SecretSettings.zeptercountry
 $ZepterVersion = $SecretSettings.zepterversion
 
 if ($ZepterCountryParam) {
-	$ZepterCountry = $ZepterCountryParam
+    $ZepterCountry = $ZepterCountryParam
 }
 $ContainerName = "$ContainerCountry-bc$($ContainerVersion.Replace('.',''))"
 $ContainerNameSaved = $ContainerName
@@ -135,6 +151,7 @@ if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInst
 #if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = 0 }
 if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration CZ', 0) + 1 }
 if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Commission Imported', 0) + 1 }
+if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
 
 #Write-Host $AppToInstall
 #Write-Host $AppToInstallCount

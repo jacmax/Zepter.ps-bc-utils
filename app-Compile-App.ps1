@@ -3,6 +3,15 @@
     [String] $BCSystem = ''
 )
 
+$SecretSettings = Get-ObjectFromJSON (Join-Path $PSScriptRoot "_SecretSettings.json")
+Switch ($BCSystem) {
+    'BC250' { $SecretSettings.Version = '25.0' }
+    'BC240' { $SecretSettings.Version = '24.0' }
+    'BC230' { $SecretSettings.Version = '23.0' }
+    '' { $SecretSettings.Version = '20.0' }
+}
+$SecretSettings | ConvertTo-Json -depth 32 | set-content (Join-Path $PSScriptRoot "_SecretSettings.json")
+
 . (Join-path $PSScriptRoot '_Settings.ps1')
 . (Join-path $PSScriptRoot 'app-SwitchCountryTarget.ps1')
 
@@ -18,7 +27,7 @@ function CompileExtension {
     $AppJson = Get-ObjectFromJSON (Join-Path $Target "app.json")
     $ExtensionApp = $(Join-Path $AppFolder $("$($AppJson.publisher)$('_')$($AppJson.name)"))
     foreach ($Symbol in $AppJson.preprocessorSymbols) {
-        if ($Symbol -notMatch '(CLEAN20|CLEAN23|W1)') {
+        if ($Symbol -notMatch '(CLEAN20|CLEAN24|CLEAN25|W1)') {
             $ExtensionApp = "$($ExtensionApp)$('_')$Symbol"
         }
     }
@@ -63,12 +72,19 @@ function CompileExtension {
         Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
         Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
     }
+    if ($AppName.EndsWith('PL') -or $ExtensionApp.Contains('_PL_')) {
+        $BaseFolder = "d:\DEV-EXT\app\$($BCVersion)\PL\"
+        Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Microsoft_*.app" -force
+        Copy-Item "$($BaseFolder)Microsoft_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
+        Copy-Item "$($BaseFolder)*_runtime_*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
+        Copy-Item "$($BaseFolder)IT.integro sp. z o.o._*.app" -Destination "$($Target)$('\')$($SymbolFolder)"
+    }
 
     Write-Host '==='
     Write-Host $Target -ForegroundColor yellow
     #Write-Host $AppJson.preprocessorSymbols -ForegroundColor yellow
     #Write-Host '==='
-    #Write-Host $compilator.fullname
+    Write-Host $compilator.fullname
     #Write-Host $paramProject
     #Write-Host $paramSymbol
     #Write-Host $paramError
@@ -131,6 +147,8 @@ if ($BCSystem -eq '') {
     Switch ($SecretSettings.version) {
         '20.0' { $BCSystem = 'BC200' }
         '23.0' { $BCSystem = 'BC230' }
+        '24.0' { $BCSystem = 'BC240' }
+        '25.0' { $BCSystem = 'BC250' }
     }
 }
 
@@ -139,7 +157,12 @@ Write-Host 'BCSystem:' $BCSystem -ForegroundColor Green
 
 $application = '';
 $country = '';
-$compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse alc.exe | Select-Object -First 1
+if ($BCSystem -eq 'BC250') {
+    $compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse alc.exe | Select-Object -Last 1
+}
+else {
+    $compilator = get-childitem -Path "$env:USERPROFILE\.vscode\extensions" -Recurse alc.exe | Select-Object -First 1
+}
 $compPath = $compilator.PSParentPath
 
 $paramRules = @("/ruleset:""$Workspace$('\ps-bc-utils\_ForNav.ruleset.json')""")
@@ -151,6 +174,9 @@ $paramAnalyzer += @("/analyzer:$(Join-Path $compPath 'Analyzers\Microsoft.Dynami
 foreach ($element in $dotNetProbingPaths) {
     $assemblyProbingPaths += @("/assemblyProbingPaths:$element")
 }
+
+Write-Host 'dotNetProbingPaths:' -ForegroundColor Green
+$assemblyProbingPaths | Format-Table | Out-String | Write-Host -ForegroundColor Green
 
 $currentPath = Get-Location
 $ClearFolder = $false
@@ -183,12 +209,16 @@ foreach ($Target in $Targets) {
     $AppJson = Get-ObjectFromJSON (Join-Path $target "app.json")
 
     $Block = $AppJson.description -eq 'BLOCK'
-    if ($BCSystem -eq 'BC230' -and $AppJson.name -eq 'ZS Holding Report') {
+
+    if ($BCSystem -in 'BC230', 'BC240', 'BC250' -and $AppJson.name -eq 'ZS Common Tool') {
         $Block = $true
     }
-    #if ($BCSystem -eq 'BC230' -and $AppJson.name -ne 'ZS Commission Imported') {
-    #    $Block = $true
-    #}
+    if ($BCSystem -in 'BC200' -and $AppJson.name -eq 'ZS Integration PL') {
+        $Block = $true
+    }
+    if ($BCSystem -in 'BC230' -and $AppJson.name -in 'ZS Integration FR', 'ZS Integration CZ') {
+        $Block = $true
+    }
 
     if ($application -eq '') {
         if (($AppJson.application -eq '19.0.0.0') -or ($AppJson.application -eq '20.0.0.0')) {
@@ -201,8 +231,12 @@ foreach ($Target in $Targets) {
             #if ($BCSystem -eq 'BC200') {
             #    $AppJson.preprocessorSymbols += 'CLEAN20'
             #}
-            if ($BCSystem -eq 'BC230') {
-                $AppJson.preprocessorSymbols += 'CLEAN23'
+            if ($BCSystem -in 'BC230', 'BC240') {
+                $AppJson.preprocessorSymbols += 'CLEAN24'
+            }
+            if ($BCSystem -in 'BC250') {
+                $AppJson.preprocessorSymbols += 'CLEAN24'
+                $AppJson.preprocessorSymbols += 'CLEAN25'
             }
         }
     }
@@ -272,30 +306,36 @@ foreach ($extension in $extensions) {
         $AppJsonFileBakName = $AppJsonFile.Fullname + '.bak'
         Copy-Item -Path "$($AppJsonFile.Fullname)" -Destination "$AppJsonFileBakName" #-Verbose
 
-        try {
-            if ($extension.Name -eq 'ZS Sales Contract') {
-                App-SwitchCountryTarget -TargetExt $extension.Name -BCSystem $BCSystem
-            }
-            else {
-                App-SwitchCountryTarget -TargetExt $extension.Name -TargetSystem 'ONPREM' -BCSystem $BCSystem
-            }
+        # try {
+        #     if ($extension.Name -eq 'ZS Sales Contract') {
+        #         App-SwitchCountryTarget -TargetExt $extension.Name -BCSystem $BCSystem
+        #     }
+        #     else {
+        #         App-SwitchCountryTarget -TargetExt $extension.Name -TargetSystem 'ONPREM' -BCSystem $BCSystem
+        #     }
+        # }
+        # catch {
+        App-SwitchBCSystemTarget -TargetExt $extension.Name -BCSystem $BCSystem
+        # }
+
+        if (($extension.Name -in 'ZS Common', 'ZS Sales Contract', 'ZS Payment', 'ZS Holding Report') -and ($BCSystem -in 'BC240', 'BC250')) {
+            Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
+            App-SwitchCountryTarget -TargetExt $extension.Name -BCSystem $BCSystem
         }
-        catch {
-            App-SwitchBCSystemTarget -TargetExt $extension.Name -BCSystem $BCSystem
-        }
+
         if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
 
         if ($extension.Name -eq 'ZS Common') {
-            Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
-            App-SwitchCountryTarget -TargetExt $extension.Name -TargetSystem 'CLOUD' -BCSystem $BCSystem
-            if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
+            # Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
+            # App-SwitchCountryTarget -TargetExt $extension.Name -TargetSystem 'CLOUD' -BCSystem $BCSystem
+            # if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
+
+            # Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
+            # App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'CLOUD' -BCSystem $BCSystem
+            # if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
 
             Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
-            App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'CLOUD' -BCSystem $BCSystem
-            if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
-
-            Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
-            App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -TargetSystem 'ONPREM' -BCSystem $BCSystem
+            App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'RU' -BCSystem $BCSystem
             if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
         }
         if ($extension.Name -eq 'ZS Sales Contract') {
@@ -307,17 +347,17 @@ foreach ($extension in $extensions) {
             App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'CZ' -BCSystem $BCSystem
             if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
         }
-        if ($extension.Name -eq 'ZS Personal Voucher') {
-            Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
-            App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' -BCSystem $BCSystem
-            if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
-        }
-        if ($extension.Name -eq 'ZS Integration CZ') {
-            Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
-            App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' -BCSystem $BCSystem
-            if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
-        }
-        
+        # if ($extension.Name -eq 'ZS Personal Voucher') {
+        #     Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
+        #     App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' -BCSystem $BCSystem
+        #     if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
+        # }
+        # if ($extension.Name -eq 'ZS Integration CZ') {
+        #     Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
+        #     App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' -BCSystem $BCSystem
+        #     if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
+        # }
+
         Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname #-Verbose
         Remove-Item $AppJsonFileBakName #-Verbose
     }

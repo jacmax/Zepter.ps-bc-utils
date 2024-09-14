@@ -107,12 +107,16 @@ function Remove-NetworkServiceUser {
     'raporter',
     'QlikRS',
     'ZIT_Reporting',
+    'fatt_elett',
     'bgdataexport',
     'ltdataexport',
     'jodataexport',
     'hudataexport',
     'mkdataexport',
-    'czdataexport' | ForEach-Object {
+    'czdataexport',
+    'uzdataexport',
+    'egdataexport',
+    'itdataexport' | ForEach-Object {
         Write-Host "Remove $_ User from $DatabaseName"
         Invoke-Sqlcmd @params -Query "USE [$DatabaseName]
         IF EXISTS (SELECT 'X' FROM sysusers WHERE name = '$_' and isntuser = 0)
@@ -340,9 +344,9 @@ foreach ($file in $sqlBackupFiles) {
 
         & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine -Verbose
         $env:DOCKER_CONTEXT = 'desktop-linux'
-        
+
         if ($RestoreSQL) {
-            & docker cp $file.FullName $($sqlServer + ':/var/backups')
+            & docker cp -q $file.FullName $($sqlServer + ':/var/backups')
             Restore-Database -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential -BakFile $bakFile
             Remove-WindowsUsers -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
             Remove-ApplicationRoles -DatabaseServer $databaseServerInstance -DatabaseName $tempDatabaseName -sqlCredential $sqlCredential
@@ -397,6 +401,7 @@ foreach ($file in $sqlBackupFiles) {
                 & Docker restart $container
                 Write-Host "<<< End update docker" -ForegroundColor Yellow
                 & Docker stop $container
+                Clear-DnsClientCache
             }
         }
     }

@@ -17,6 +17,7 @@ foreach ($Target in $Targets) {
 		if ($TargetGit -ne $TargetGitBefore) {
 			$TargetGitBefore = $TargetGit
 			Set-Location $TargetGit
+			& git checkout -- $AppJsonFile.FullName
 			& git checkout -q "$ToBranch"
 			& git pull -q origin "$ToBranch"
 			& git fetch --all --prune
