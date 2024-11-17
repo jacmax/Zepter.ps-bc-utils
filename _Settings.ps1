@@ -26,8 +26,8 @@ if ($SecretSettings.version -eq '23.0') {
     "d:\DEV-EXT\bc-common\Common - App\.netpackages",
     "D:\DotNetProbing\BC230-ProgramFiles",
     "D:\DotNetProbing\BC230-ProgramFilesX86",
-    "C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.27",
-    "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\6.0.27"
+    "C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.36",
+    "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\6.0.36"
 }
 if ($SecretSettings.version -eq '24.0') {
     $dotNetProbingPaths =
@@ -38,6 +38,7 @@ if ($SecretSettings.version -eq '24.0') {
     "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\8.0.5"
 }
 if ($SecretSettings.version -eq '25.0') {
+	$system = '25'
     $dotNetProbingPaths =
     "d:\DEV-EXT\bc-common\Common - App\.netpackages",
     "D:\DotNetProbing\BC240-ProgramFiles",
@@ -102,11 +103,14 @@ $AppToInstall += 'ZS Representative'
 $AppToInstall += 'ZS Sales Contract'
 $AppToInstall += 'ZS Payment'
 $AppToInstall += 'ZS Personal Voucher'
-$AppToInstall += 'ZS Commission'
 $AppToInstall += 'ZS GDPR'
 $AppToInstall += 'ZS Service'
 $AppToInstall += 'ZS Import Purchase'
-$AppToInstall += 'ZS Holding Report'
+$AppToInstall += 'ZS Courier'
+$AppToInstall += 'ZS Commission'
+
+if ($ZepterCountry -ne 'w1') { $AppToInstall += 'ZS Holding Report' }
+
 if ($ZepterCountry -eq 'zjo') { $AppToInstall += 'ZS Integration JO' }
 if ($ZepterCountry -eq 'zsi') { $AppToInstall += 'ZS Integration SI' }
 if ($ZepterCountry -eq 'zmk') { $AppToInstall += 'ZS Integration MK' }
@@ -119,7 +123,7 @@ if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Integration FR' }
 if ($ZepterCountry -eq 'zfr') { $AppToInstall += 'ZS Upgrade FR' }
 if ($ZepterCountry -eq 'zhu') { $AppToInstall += 'ZS Integration HU' }
 if ($ZepterCountry -eq 'zhu') { $AppToInstall += 'ZS Migration HU' }
-$AppToInstall += 'ZS Courier'
+
 $AppToInstall += 'ZS Data Migration'
 $AppToInstall += 'ZS Sandbox JAM'
 $AppToInstall += 'ESB Integration ZS'
@@ -129,29 +133,44 @@ $AppToInstall += 'Designer_35699e84-3a00-48c4-ae73-075a663e0667'
 $AppToInstall += 'Designer_dda0cdb6-f83c-4ca0-9f9e-6cefc720a77a'
 $AppToInstall += 'Designer_3cf8144b-4ea0-4d65-97a6-cbae53be4aad'
 $AppToInstall += 'Designer_39b17ded-af09-4cf3-b319-41d1f671978d'
+$AppToInstall += 'Test'
 $AppToInstall += 'ZCZ design pages'
+$AppToInstall += 'Customizations Zepter'
 $AppToInstall += 'ZS-PSW-PL'
 $AppToInstall += 'ZS-PSW-SI'
 $AppToInstall += 'ZS-PSW-TOOL'
 $AppToInstall += 'ZS-JLY-CZ'
+$AppToInstall += 'ZS-JLY-PL'
 $AppToInstall += 'ZS-IJA'
 $AppToInstall += 'ZCZ-Development'
 
-$AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Service', 0) + 1
+$AppToInstallCount = 0
 
-if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
+#if ($ZepterCountry -eq 'zhu') { $AppToInstallCount = 0 }
 
 #if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = 0 }
-if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration SI', 0) + 1 }
+#if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration SI', 0) + 1 }
+#if ($ZepterCountry -eq 'zsi') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
 
 #if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = 0 }
-if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration MK', 0) + 1 }
+#if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration MK', 0) + 1 }
 #if ($ZepterCountry -eq 'zmk') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
 
 #if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = 0 }
 if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration CZ', 0) + 1 }
-if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Commission Imported', 0) + 1 }
-if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
+#if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Commission Imported', 0) + 1 }
+#if ($ZepterCountry -eq 'zcz') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
+
+if ($ZepterCountry -eq 'zpl') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Personal Voucher', 0) + 1 }
+if ($ZepterCountry -eq 'zpl') { $AppToInstallCount = [array]::IndexOf($AppToInstall, 'ZS Integration PL', 0) + 1 }
+
+$AppToInstall2 = @()
+#$AppToInstall2 += 'Polish Localization'
+#$AppToInstall2 += 'Polish Language (Poland)'
+
+$AppToInstall2 = @()
+#$AppToInstall2 += 'Polish Localization_7.1.0.3_runtime_24.4.22295.23546.app'
+#$AppToInstallCount = 1
 
 #Write-Host $AppToInstall
 #Write-Host $AppToInstallCount

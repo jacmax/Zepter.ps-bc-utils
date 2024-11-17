@@ -380,6 +380,18 @@ foreach ($file in $sqlBackupFiles) {
                         $licenseFile = $SecretSettings.containerLicenseFileBC200;
                         break;
                     }
+                    '230' {
+                        $licenseFile = $SecretSettings.containerLicenseFileBC230;
+                        break;
+                    }
+                    '240' {
+                        $licenseFile = $SecretSettings.containerLicenseFileBC240;
+                        break;
+                    }
+                    '250' {
+                        $licenseFile = $SecretSettings.containerLicenseFileBC250;
+                        break;
+                    }
                     Default {
                         $licenseFile = $SecretSettings.containerLicenseFile;
                         break;

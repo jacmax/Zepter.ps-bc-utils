@@ -34,4 +34,5 @@ docker stop cz-bc250
 docker stop fr-bc250
 docker stop de-bc250
 docker stop at-bc250
-# Read-Host -Prompt 'Press any key to continue. . .'
+
+Read-Host -Prompt 'Press any key to continue. . .'
