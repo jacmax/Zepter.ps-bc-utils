@@ -330,6 +330,9 @@ foreach ($file in $sqlBackupFiles) {
         $env:DOCKER_CONTEXT = 'desktop-windows'
 
         $container = $country.ToLower() + '-live'
+        if (($country -eq 'ZPL') -and ($version -eq '250')) {
+            $container = $country.ToLower() + '-live-' + $version
+        }
         Write-Host "Container $container is checking" -ForegroundColor Green
         $containers = docker images $container
         if ($containers.count -gt 1) {
@@ -367,6 +370,7 @@ foreach ($file in $sqlBackupFiles) {
                 & Docker-NewImg-Sqlfile -ZepterCountryParam $country.ToLower()
             }
             else {
+                $ContainerVersionParam = '20.0'
                 switch ($version) {
                     '100' {
                         $licenseFile = $SecretSettings.containerLicenseFileBC100;
@@ -382,6 +386,7 @@ foreach ($file in $sqlBackupFiles) {
                     }
                     '230' {
                         $licenseFile = $SecretSettings.containerLicenseFileBC230;
+                        $ContainerVersionParam = '23.0'
                         break;
                     }
                     '240' {
@@ -390,6 +395,7 @@ foreach ($file in $sqlBackupFiles) {
                     }
                     '250' {
                         $licenseFile = $SecretSettings.containerLicenseFileBC250;
+                        $ContainerVersionParam = '25.0'
                         break;
                     }
                     Default {
@@ -400,7 +406,7 @@ foreach ($file in $sqlBackupFiles) {
                 Write-Host ">>> Start update docker" -ForegroundColor Yellow
                 Write-Host "Docker start $container"
                 & Docker start $container
-                & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower()
+                & Docker-Import-NAVEncryptionKey -ZepterCountryParam $country.ToLower() -ContainerVersionParam $ContainerVersionParam
                 & Start-Sleep -Seconds 20
                 & Set-Docker-For-Restart $container
                 & Docker restart $container

@@ -1,3 +1,4 @@
+& "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine -Verbose
 $env:DOCKER_CONTEXT = 'desktop-linux'
 #Start-Sleep -Seconds 30
@@ -13,6 +14,7 @@ docker stop zsi-live
 docker stop zmk-live
 docker stop zcz-live
 docker stop zfr-live
+docker stop zpl-live
 
 docker stop zbg-live
 docker stop zch-live
@@ -32,7 +34,9 @@ docker stop zby-live
 docker stop w1-bc250
 docker stop cz-bc250
 docker stop fr-bc250
-docker stop de-bc250
-docker stop at-bc250
+#docker stop de-bc250
+#docker stop at-bc250
+
+docker stop w1-bc260
 
 Read-Host -Prompt 'Press any key to continue. . .'

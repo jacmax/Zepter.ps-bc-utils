@@ -3,9 +3,10 @@ function App-SwitchCountryTarget {
         [validateset('ZS Common',
             'ZS Sales Contract',
             'ZS Payment',
+            'ZS Commission',
             'ZS Holding Report')]
         [String] $TargetExt = '',
-        [validateset('', 'CZ', 'RU')]
+        [validateset('', 'CZ', 'RU', 'PL')]
         [String] $TargetCountry = '',
         [validateset('', 'CLOUD')]
         [String] $TargetSystem = '',

@@ -96,6 +96,7 @@ function CompileExtension {
 
     Remove-Item -Path "$($Target)$('\')$($SymbolFolder)\Zepter IT_ZS*.app" -force
     foreach ($Dependency in $AppJson.dependencies) {
+        #Write-Host $Dependency.publisher - $Dependency.name
         if ($Dependency.publisher -eq 'Zepter IT') {
             $CharArray = $Dependency.version.Split('.')
             #$Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.' + $CharArray[2] + '.*'
@@ -318,7 +319,7 @@ foreach ($extension in $extensions) {
         App-SwitchBCSystemTarget -TargetExt $extension.Name -BCSystem $BCSystem
         # }
 
-        if (($extension.Name -in 'ZS Common', 'ZS Sales Contract', 'ZS Payment', 'ZS Holding Report') -and ($BCSystem -in 'BC240', 'BC250')) {
+        if (($extension.Name -in 'ZS Common', 'ZS Sales Contract', 'ZS Payment', 'ZS Commission', 'ZS Holding Report') -and ($BCSystem -in 'BC240', 'BC250')) {
             Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
             App-SwitchCountryTarget -TargetExt $extension.Name -BCSystem $BCSystem
         }
@@ -352,6 +353,11 @@ foreach ($extension in $extensions) {
         #     App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' -BCSystem $BCSystem
         #     if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
         # }
+        if ($extension.Name -eq 'ZS Commission') {
+            Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
+            App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'PL' -BCSystem $BCSystem
+            if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
+        }
         # if ($extension.Name -eq 'ZS Integration CZ') {
         #     Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
         #     App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' -BCSystem $BCSystem
