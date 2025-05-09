@@ -8,6 +8,7 @@ Switch ($BCSystem) {
     'BC250' { $SecretSettings.Version = '25.0' }
     'BC240' { $SecretSettings.Version = '24.0' }
     'BC230' { $SecretSettings.Version = '23.0' }
+    'BC200' { $SecretSettings.Version = '20.0' }
     '' { $SecretSettings.Version = '20.0' }
 }
 $SecretSettings | ConvertTo-Json -depth 32 | set-content (Join-Path $PSScriptRoot "_SecretSettings.json")
@@ -101,7 +102,7 @@ function CompileExtension {
             $CharArray = $Dependency.version.Split('.')
             #$Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.' + $CharArray[2] + '.*'
             $Dependency.version = $CharArray[0] + '.' + $CharArray[1] + '.*' + '.*'
-            #Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
+            Write-Host $Dependency.publisher - $Dependency.name - $Dependency.version
             if (Test-Path "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')") {
                 Copy-Item "$($AppFolder)$($Dependency.publisher)$('_')$($Dependency.name)$('_*')$($Dependency.version)$('.app')" -Destination "$($Target)$('\')$($SymbolFolder)"
             }
@@ -293,6 +294,8 @@ $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Commission
 $extension."Quantity Dependency" += 1
 $extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Service'
 $extension."Quantity Dependency" += 1
+$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Courier'
+$extension."Quantity Dependency" += 1
 #$extension = $extensions | Where-Object -Property Name -eq -Value 'ZS Integration AT'
 #$extension."Quantity Dependency" += 0
 
@@ -353,7 +356,7 @@ foreach ($extension in $extensions) {
         #     App-SwitchCountryTarget -TargetExt $extension.Name  -TargetSystem 'CLOUD' -BCSystem $BCSystem
         #     if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }
         # }
-        if ($extension.Name -eq 'ZS Commission') {
+        if (($extension.Name -eq 'ZS Commission') -and ($BCSystem -in 'BC250')) {
             Copy-Item -Path $AppJsonFileBakName -Destination $AppJsonFile.Fullname
             App-SwitchCountryTarget -TargetExt $extension.Name -TargetCountry 'PL' -BCSystem $BCSystem
             if (-not (CompileExtension -Target $Target -AppFolder $AppFolder)) { Exit }

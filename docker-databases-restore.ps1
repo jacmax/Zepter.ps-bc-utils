@@ -330,9 +330,7 @@ foreach ($file in $sqlBackupFiles) {
         $env:DOCKER_CONTEXT = 'desktop-windows'
 
         $container = $country.ToLower() + '-live'
-        if (($country -eq 'ZPL') -and ($version -eq '250')) {
-            $container = $country.ToLower() + '-live-' + $version
-        }
+
         Write-Host "Container $container is checking" -ForegroundColor Green
         $containers = docker images $container
         if ($containers.count -gt 1) {

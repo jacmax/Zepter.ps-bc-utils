@@ -22,7 +22,8 @@ function App-SwitchCountryTarget {
             $AppJsonFile = Get-ChildItem -Path $Target 'app.json'
             $AppJson = Get-ObjectFromJSON $AppJsonFile.FullName
             if (($AppJson.application -in "20.0.0.0", "23.0.0.0", "24.0.0.0", "25.0.0.0") -and $AppJson.name -eq $TargetExt) {
-                Write-Host $AppJson.name $TargetExt -ForegroundColor Green
+                Write-Host '==='
+                Write-Host $AppJson.name $TargetExt -ForegroundColor Blue
                 if (-not ( Get-Member -InputObject $AppJson -Name "preprocessorSymbols" )) {
                     Add-Member -InputObject $AppJson NoteProperty "preprocessorSymbols" Object[]
                     $AppJson.preprocessorSymbols = @()
